@@ -18,7 +18,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   final List<Widget> _pages = const [
     Center(child: DashboardScreen()),
-    Searchingpage(),
+   Center(child: Searchingpage()),
     Center(child: Text('Notification page')),
     Center(child: Text('Profile page')),
   ];
