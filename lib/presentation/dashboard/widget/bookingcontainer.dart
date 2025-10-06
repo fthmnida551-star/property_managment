@@ -46,7 +46,7 @@ class BookingConatainerWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(7),
             child: Image.asset(
-              AssetResource.building1,
+              AssetResource.bookingbuilding1,
               height: 50,
               width: 50,
               fit: BoxFit.cover,

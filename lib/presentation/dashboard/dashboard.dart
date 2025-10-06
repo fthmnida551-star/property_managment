@@ -121,7 +121,7 @@ class DashboardScreen extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
-                      child: SvgPicture.asset(AssetResource.total),
+                      child: SvgPicture.asset(AssetResource.totalproperty),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
