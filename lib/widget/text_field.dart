@@ -20,7 +20,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
       width: 350.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(width: 1, color: AppColors.OpacitygreyColor),
+        border: BoxBorder.all(width: 1, color: AppColors.opacitygreyColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,7 +30,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
             hintText: widget.text,
             hintStyle: TextStyle(
               fontSize: 18.sp,
-              color: AppColors.OpacitygrayColorText,
+              color: AppColors.opacitygrayColorText,
             ),
             suffixIcon: widget.suffixIcon,
             prefixIcon: widget.priffixIcon,
