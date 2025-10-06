@@ -33,7 +33,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                 ),
               ),
               Text(
-                'Booking Details',
+                'Add Landlord details',
                 style: TextStyle(color: AppColors.white, fontSize: 19.sp),
               ),
             ],
@@ -43,7 +43,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
-          children: [
+          children: [          
             SizedBox(height: 20),
             TextFieldContainer(text: 'Name'),
             divider,
@@ -56,7 +56,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             GreenButton(
               text: 'Save',
               onTap: () {
-               
+                print('button clicked');
               },
             ),
             SizedBox(height: 20,)

@@ -9,9 +9,9 @@ class AppColors {
   static const bookingNow = Color(0xffA09B9B);
   static const booked=Color(0xff11AC52);
   
-  static Color get OpacitygreyColor=>
+  static Color get opacitygreyColor=>
   const Color(0xff000000).withOpacity(0.30);
-  static Color get OpacitygrayColorText=>
+  static Color get opacitygrayColorText=>
   const Color(0xff000000) .withOpacity(0.60);
 
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:property_managment/presentation/booking_details.dart';
+import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 

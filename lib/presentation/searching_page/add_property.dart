@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
@@ -70,10 +71,13 @@ class _AddPropertyState extends State<AddProperty> {
             GreenButton(
               text: 'Next',
               onTap: () {
-                print('button clicked');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddLandlordDetails()),
+                );
               },
             ),
-            SizedBox(height: 20,)
+            SizedBox(height: 20),
           ],
         ),
       ),
