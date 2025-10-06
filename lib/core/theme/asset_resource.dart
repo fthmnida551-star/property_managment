@@ -12,5 +12,10 @@ class AssetResource {
   static const contact = 'assets/svg/contact.svg';
   static const total = 'assets/svg/totalproperty.svg';
   static const vacant = 'assets/svg/vacantproperty.svg';
-  
+
+  //propertydetails-----------
+  static const location='asset/propertydetails/location.png'; 
+  static const property='asset/propertydetails/building.png';
+  static const maintenanceIcon='asset/propertydetails/maintenance_icon.svg';
+   static const car='asset/propertydetails/car_icon.svg';
 }

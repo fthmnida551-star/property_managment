@@ -10,6 +10,8 @@ class AppColors {
   static const booked = Color(0xff11AC52);
   static const yellowcolor = Color(0XFFF2BB16);
   static const redcolor = Color(0XFFE73C3C);
+  static const whitecolor=Color(0XFFFFF8F8);
+
 
   static Color get opacitygreyColor =>
       const Color(0xff000000).withOpacity(0.30);
