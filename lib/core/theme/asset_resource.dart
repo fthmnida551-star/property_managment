@@ -7,4 +7,10 @@ class AssetResource {
   static const search = 'assets/properties/searching_icon.svg';
   static const notification = 'assets/properties/notification_icon.svg';
   static const profile = 'assets/properties/profile_icon.svg';
+  static const building1 = 'assets/dashboard/building1.png';
+  static const booked = 'assets/svg/bookedproperty.svg';
+  static const contact = 'assets/svg/contact.svg';
+  static const total = 'assets/svg/totalproperty.svg';
+  static const vacant = 'assets/svg/vacantproperty.svg';
+  
 }
