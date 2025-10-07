@@ -13,9 +13,9 @@ class AddUserScreen extends StatefulWidget {
 
 class _AddUserScreenState extends State<AddUserScreen> {
   final List<String> _roles = [
-    'Add Property',
-    'View Property',
-    'view Booking Details',
+    'Manager',
+    'Agent',
+    'Staff',
   ];
   String? _selectedRole;
 
