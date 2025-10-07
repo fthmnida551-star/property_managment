@@ -4,6 +4,8 @@ import 'package:property_managment/presentation/adduser-screen.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
+import 'presentation/propertydetails/propertydetails.dart';
+
 
 void main() {
   runApp(const MyApp());

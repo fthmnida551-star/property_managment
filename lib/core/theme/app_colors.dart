@@ -21,4 +21,13 @@ class AppColors {
       const Color(0XFF0000001C).withOpacity(0.11);
   static Color get opacitygreyColor2 =>
       const Color(0XFFA09B9B80).withOpacity(0.50);
+
+      // profile Screen
+      // Common colors
+  static const Color whiteColor = Color(0xFFFFFFFF);
+  static const Color blackColor = Color(0xFF000000);
+  static const Color greencolor = Color(0xFF008069);
+  // Opacity color
+  static Color get opacityGrey =>
+      const Color(0xFF000000).withOpacity(0.3);
 }

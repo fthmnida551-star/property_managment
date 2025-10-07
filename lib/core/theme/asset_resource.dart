@@ -18,4 +18,11 @@ class AssetResource {
   static const property='assets/propertydetails/building.png';
   static const maintenanceIcon='assets/propertydetails/maintenance_icon.svg';
    static const car='assets/propertydetails/car_icon.svg';
+
+
+// profile screen
+
+ static const profilepic='asset/profile/profile.png';
+  static const edit="asset/edit.svg";
+
 }
