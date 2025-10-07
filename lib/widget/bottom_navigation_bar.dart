@@ -7,6 +7,7 @@ import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
+  
   const BottomNavigationWidget({super.key});
 
   @override

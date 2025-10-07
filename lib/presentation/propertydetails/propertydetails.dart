@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/widget/green_button.dart';
+import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class PropertydetailsScreen extends StatefulWidget {
   const PropertydetailsScreen({super.key});
@@ -11,7 +12,6 @@ class PropertydetailsScreen extends StatefulWidget {
 
 class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -191,16 +191,22 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.bed, color: AppColors.black),
+                                          Icon(
+                                            Icons.bed,
+                                            color: AppColors.black,
+                                          ),
                                           Text(' BHK'),
                                         ],
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 8.0),
+                                        padding: const EdgeInsets.only(
+                                          right: 8.0,
+                                        ),
                                         child: Text('2'),
                                       ),
                                     ],
@@ -238,7 +244,9 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                                         ],
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 10.0),
+                                        padding: const EdgeInsets.only(
+                                          right: 10.0,
+                                        ),
                                         child: Text(' 2'),
                                       ),
                                     ],
@@ -341,7 +349,12 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.greenColor,
               shape: RoundedRectangleBorder(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
 
 class PropertyContainer extends StatefulWidget {
@@ -15,7 +16,10 @@ class _PropertyContainerState extends State<PropertyContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('click container');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
+        );
       },
       child: Container(
         height: 400.h,

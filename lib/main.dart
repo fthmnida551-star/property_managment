@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-        home:PropertydetailsScreen(), 
+        home:BottomNavigationWidget(), 
         debugShowCheckedModeBanner: false,
         );
       },
