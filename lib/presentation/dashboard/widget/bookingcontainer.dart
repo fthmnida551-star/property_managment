@@ -5,7 +5,7 @@ import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 
-class BookingConatainerWidget extends StatelessWidget {
+class BookingConatainerWidget extends StatefulWidget {
   final Widget child;
   final Color? color;
   final String? imagepath1;
@@ -23,15 +23,20 @@ class BookingConatainerWidget extends StatelessWidget {
   });
 
   @override
+  State<BookingConatainerWidget> createState() => _BookingConatainerWidgetState();
+}
+
+class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 75.h,
-      padding: padding ?? EdgeInsets.all(12),
+      padding: widget.padding ?? EdgeInsets.all(12),
 
       decoration: BoxDecoration(
         border: BoxBorder.all(color: AppColors.opacitygreyColor),
-        color: color ?? AppColors.white,
-        borderRadius: borderRadius ?? BorderRadius.circular(12),
+        color: widget.color ?? AppColors.white,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: AppColors.black,
