@@ -8,9 +8,9 @@ class AssetResource {
   static const notification = 'assets/svg/notificationsign.svg';
   static const bookingbuilding1 = 'assets/dashboard/building1.png';
   static const booked = 'assets/svg/bookedproperty.svg';
-  static const vacant = 'vassets/svg/vacantproperty.svg';
+  static const vacant = 'assets/svg/vacantproperty.svg';
   static const totalproperty = 'assets/svg/totalproperty.svg';
   static const contact ='assets/svg/contact.svg';
   static const profile ='assets/svg/profilesign.svg';
-
+  static const applogo='assets/svg/applogo.svg';
 }

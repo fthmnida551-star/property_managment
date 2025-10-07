@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/presentation/adduser-screen.dart';
+import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/presentation/landlord_details.dart';
 
 
 void main() {
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-        home:AddUserScreen(), 
+        home:DashboardScreen(), 
         debugShowCheckedModeBanner: false,
         );
       },
