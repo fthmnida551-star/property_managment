@@ -25,4 +25,8 @@ class AssetResource {
  static const profilepic='asset/profile/profile.png';
   static const edit="asset/edit.svg";
 
+  // logo
+
+   static const name="assets/auth/logo.png";
+
 }

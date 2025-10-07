@@ -30,4 +30,17 @@ class AppColors {
   // Opacity color
   static Color get opacityGrey =>
       const Color(0xFF000000).withOpacity(0.3);
+
+
+      // login page
+       
+  
+  static const Color greyColor = Color(0xFF808080);
+
+  
+  static Color get opacityGreyy => Colors.black.withOpacity(0.5);
+  static Color get OpacitygreyColor=>
+  const Color(0xff000000).withOpacity(0.30);
+  static Color get OpacitygrayColorText=>
+  const Color(0xff000000) .withOpacity(0.60);
 }

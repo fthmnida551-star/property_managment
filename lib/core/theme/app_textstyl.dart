@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 
-import 'app_colors.dart';
 
 
 class AppTextstyle {
