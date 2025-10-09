@@ -33,7 +33,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // prevent keyboard push
+      resizeToAvoidBottomInset: false,
       body: ValueListenableBuilder<int>(
         valueListenable: _currentIndex,
         builder: (context, index, _) => _pages[index],
@@ -42,7 +42,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(50), // ✅ correct syntax
+            borderRadius: BorderRadius.circular(50), 
             child: BottomNavigationBar(
               currentIndex: _currentIndex.value,
               onTap: (newIndex) => _currentIndex.value = newIndex,

@@ -6,6 +6,7 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? child;
   const AppbarWidget({super.key, this.child});
 
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:property_managment/presentation/adduser-screen.dart';
+
+
 import 'package:property_managment/presentation/booking_details.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
@@ -8,6 +9,9 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/date_picker.dart';
 
 import 'presentation/propertydetails/propertydetails.dart';
+
+import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/presentation/users_screen.dart';
 
 
 void main() {
@@ -25,7 +29,11 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-        home: AddLandlordDetails (), 
+
+        // home: AddLandlordDetails (), 
+
+        home:DashboardScreen(), 
+
         debugShowCheckedModeBanner: false,
         );
       },

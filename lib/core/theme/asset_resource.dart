@@ -6,12 +6,15 @@ class AssetResource {
   static const home = 'assets/svg/homesign.svg';
   static const search = 'assets/svg/searchsign.svg';
   static const notification = 'assets/svg/notificationsign.svg';
+// <<<<<<< HEAD
   static const profile = 'assets/svg/profilesign.svg';
   static const building1 = 'assets/dashboard/building1.png';
+// =======
+  static const bookingbuilding1 = 'assets/dashboard/building1.png';
+// >>>>>>> jafna_dev
   static const booked = 'assets/svg/bookedproperty.svg';
-  static const contact = 'assets/svg/contact.svg';
-  static const total = 'assets/svg/totalproperty.svg';
   static const vacant = 'assets/svg/vacantproperty.svg';
+// <<<<<<< HEAD
 
   //propertydetails-----------
   static const location='assets/propertydetails/location.png'; 
@@ -29,4 +32,10 @@ class AssetResource {
 
    static const name="assets/auth/logo.png";
 
+// =======
+  static const totalproperty = 'assets/svg/totalproperty.svg';
+  static const contact ='assets/svg/contact.svg';
+  // static const profile ='assets/svg/profilesign.svg';
+  static const appLogo ='assets/svg/logo_for_dashboard.svg';
+// >>>>>>> jafna_dev
 }
