@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/users_screen.dart';
 
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-        home:UsersScreen(), 
+        home:DashboardScreen(), 
         debugShowCheckedModeBanner: false,
         );
       },

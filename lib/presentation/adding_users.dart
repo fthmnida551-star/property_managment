@@ -76,15 +76,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       
 
 
-      // bottomNavigationBar: Padding(
-      //   padding: const EdgeInsets.all(20),
-      //   child: GreenButton(
-      //     text: 'Submit',
-      //     onTap: () {
-      //       print('Selected Role: $_selectedRole');
-      //     },
-      //   ),
-      // ),
+      
     );
   }
 }

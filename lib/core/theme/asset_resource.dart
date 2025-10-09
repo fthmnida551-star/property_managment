@@ -12,5 +12,5 @@ class AssetResource {
   static const totalproperty = 'assets/svg/totalproperty.svg';
   static const contact ='assets/svg/contact.svg';
   static const profile ='assets/svg/profilesign.svg';
-  static const applogo='assets/svg/applogo.svg';
+  static const appLogo ='assets/svg/logo_for_dashboard.svg';
 }

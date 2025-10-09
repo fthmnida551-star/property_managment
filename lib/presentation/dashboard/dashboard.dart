@@ -17,32 +17,17 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor:Colors.white,
       appBar: AppbarWidget(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20,top: 30),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10.h),
-              Text(
-                'Hi',
-                style: AppTextstyle.propertysmallTextstyle(
-                  context,
-                  fontSize: 14.sp,
-                  fontColor: AppColors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Nidha c',
-                style: AppTextstyle.propertyMediumTextstyle(
-                  context,
-                  fontSize: 16.sp,
-                  fontColor: AppColors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              SvgPicture.asset(AssetResource.appLogo,),
+              Text('Property Mangement',style: AppTextstyle.propertyMediumTextstyle(context,fontColor: AppColors.black,fontSize: 12.sp),),
+              
             ],
           ),
         ),
+        
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
