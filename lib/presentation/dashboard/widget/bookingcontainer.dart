@@ -29,34 +29,8 @@ class BookingConatainerWidget extends StatefulWidget {
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Container(
-      height: 75.h,
-      padding: widget.padding ?? EdgeInsets.all(12),
+  
 
-      decoration: BoxDecoration(
-        border: BoxBorder.all(color: AppColors.opacitygreyColor),
-        color: widget.color ?? AppColors.white,
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black,
-            spreadRadius: 0.5,
-            blurRadius: 0.5,
-            offset: Offset.infinite,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: Image.asset(
-              AssetResource.building1,
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
-=======
     return GestureDetector(
       onTap: () {
     
@@ -75,7 +49,6 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
               spreadRadius: 0.5,
               blurRadius: 0.5,
               offset: Offset.infinite,
->>>>>>> jafna_dev
             ),
           ],
         ),
