@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/booking_details.dart';
 import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
@@ -351,7 +352,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
         child: GreenButton(
           text: 'Booking Now',
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProperty()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetails()));
           },
         ),
       ),

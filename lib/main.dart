@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-        home: AddLandlordDetails (), 
+        home: BottomNavigationWidget (), 
         debugShowCheckedModeBanner: false,
         );
       },

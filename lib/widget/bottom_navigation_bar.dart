@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/presentation/profile/profile.dart';
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -21,7 +22,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     Center(child: DashboardScreen()),
    Center(child: Searchingpage()),
     Center(child: Text('Notification page')),
-    Center(child: Text('Profile page')),
+    Center(child: Profilescreen()),
   ];
 
   @override
