@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 
-class ContainerWidget extends StatelessWidget {
+class ContainerWidget extends StatefulWidget {
   final Widget child;
   final Color? color;
   final double? height;
@@ -18,10 +18,15 @@ class ContainerWidget extends StatelessWidget {
   });
 
   @override
+  State<ContainerWidget> createState() => _ContainerWidgetState();
+}
+
+class _ContainerWidgetState extends State<ContainerWidget> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 130.h,
-      width: width ?? 169.w,
+      height: widget.height ?? 130.h,
+      width: widget.width ?? 169.w,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -30,10 +35,10 @@ class ContainerWidget extends StatelessWidget {
             spreadRadius: 0.5.r,
           ),
         ],
-        color: color ?? AppColors.white,
-        borderRadius: borderRadius ?? BorderRadius.circular(12),
+        color: widget.color ?? AppColors.white,
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
       ),
-      child: child,
+      child: widget.child,
     );
   }
 }

@@ -29,55 +29,62 @@ class BookingConatainerWidget extends StatefulWidget {
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 75.h,
-      padding: widget.padding ?? EdgeInsets.all(12),
+  
 
-      decoration: BoxDecoration(
-        border: BoxBorder.all(color: AppColors.opacitygreyColor),
-        color: widget.color ?? AppColors.white,
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black,
-            spreadRadius: 0.5,
-            blurRadius: 0.5,
-            offset: Offset.infinite,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: Image.asset(
-              AssetResource.building1,
-              height: 50,
-              width: 50,
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () {
+    
+      },
+      child: Container(
+        height: 75.h,
+        padding: widget.padding ?? EdgeInsets.all(12),
+      
+        decoration: BoxDecoration(
+          border: BoxBorder.all(color: AppColors.opacitygreyColor),
+          color: widget.color ?? AppColors.white,
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black,
+              spreadRadius: 0.5,
+              blurRadius: 0.5,
+              offset: Offset.infinite,
             ),
-          ),
-          SizedBox(width: 15),
-          Column(
-            children: [
-              Text(
-                'Sruthi Hassan',
-                style: AppTextstyle.propertyMediumTextstyle(
-                  context,
-                  fontColor: AppColors.black,
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(7),
+              child: Image.asset(
+                AssetResource.bookingbuilding1,
+                height: 50,
+                width: 50,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(width: 15),
+            Column(
+              children: [
+                Text(
+                  'Sruthi Hassan',
+                  style: AppTextstyle.propertyMediumTextstyle(
+                    context,
+                    fontColor: AppColors.black,
+                  ),
                 ),
-              ),
-
-              Row(
-                children: [
-                  SvgPicture.asset(AssetResource.contact),
-                  SizedBox(width: 5),
-                  Text('+987654578'),
-                ],
-              ),
-            ],
-          ),
-        ],
+      
+                Row(
+                  children: [
+                    SvgPicture.asset(AssetResource.contact),
+                    SizedBox(width: 5),
+                    Text('+987654578'),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
