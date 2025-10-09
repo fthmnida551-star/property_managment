@@ -6,7 +6,10 @@ import 'package:property_managment/presentation/propertydetails/propertydetails.
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
 
 class PropertyContainer extends StatefulWidget {
-  const PropertyContainer({super.key});
+  final String text;
+  final Color? color;
+  final Color? textColor;
+  const PropertyContainer({super.key,required this.text,this.color,this.textColor});
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
 }
@@ -71,16 +74,16 @@ class _PropertyContainerState extends State<PropertyContainer> {
                     width: 99.75.w,
                     height: 35.h,
                     decoration: BoxDecoration(
-                      color: AppColors.bookingNow,
+                      color:widget.color?? AppColors.propertyContainer,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.black),
+                      border: Border.all(color: AppColors.bookingNow),
                     ),
                     child: Center(
                       child: Text(
-                        'Booking Now',
+                        widget.text,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppColors.black,
+                          color: widget.textColor?? AppColors.black,
                         ),
                       ),
                     ),

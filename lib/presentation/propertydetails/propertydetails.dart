@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
+import 'package:property_managment/widget/green_button.dart';
 
 class PropertydetailsScreen extends StatefulWidget {
   const PropertydetailsScreen({super.key});
@@ -346,30 +348,11 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
       // --- Bottom Booking Button ---
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BottomNavigationWidget()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.greenColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-            child: Text(
-              'Booking Now',
-              style: TextStyle(
-                fontSize: 18,
-                color: AppColors.whitecolor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+        child: GreenButton(
+          text: 'Booking Now',
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddProperty()));
+          },
         ),
       ),
     );

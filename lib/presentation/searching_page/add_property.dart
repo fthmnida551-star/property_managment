@@ -25,7 +25,7 @@ class _AddPropertyState extends State<AddProperty> {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('move to back slide');
+                  Navigator.pop(context);
                 },
                 child: Icon(
                   Icons.keyboard_arrow_left_outlined,

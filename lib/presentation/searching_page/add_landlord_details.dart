@@ -4,6 +4,7 @@ import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/checkbox.dart';
+import 'package:property_managment/widget/date_picker.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
@@ -28,7 +29,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('move to back slide');
+                  Navigator.pop(context);
                 },
                 child: Icon(
                   Icons.keyboard_arrow_left_outlined,
@@ -66,7 +67,8 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
               divider,
               TextFieldContainer(text: 'Email'),
               divider,
-              TextFieldContainer(text: 'Date'),
+              // CalendarDatePicker(initialDate: , firstDate:DateTime(200), lastDate: DateTime(2100), onDateChanged: ),
+            CalendarPickerContainer(hintText: 'date')
             ],
             Spacer(),
             GreenButton(
@@ -74,7 +76,9 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (contex) => BottomNavigationWidget()),
+                  MaterialPageRoute(
+                    builder: (contex) => BottomNavigationWidget(),
+                  ),
                 );
               },
             ),
