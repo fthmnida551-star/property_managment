@@ -14,8 +14,8 @@ class AssetResource {
   static const vacant = 'assets/svg/vacantproperty.svg';
 
   //propertydetails-----------
-  static const location='asset/propertydetails/location.png'; 
-  static const property='asset/propertydetails/building.png';
-  static const maintenanceIcon='asset/propertydetails/maintenance_icon.svg';
-   static const car='asset/propertydetails/car_icon.svg';
+  static const location='assets/propertydetails/location.png'; 
+  static const property='assets/propertydetails/building.png';
+  static const maintenanceIcon='assets/propertydetails/maintenance_icon.svg';
+    static const apartment='assets/propertydetails/image.png';
 }

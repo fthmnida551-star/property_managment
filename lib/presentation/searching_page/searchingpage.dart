@@ -119,10 +119,7 @@ class _SearchingpageState extends State<Searchingpage> {
             ),
             // Propert Containers
             SizedBox(height: 15.h),
-            PropertyContainer(),
-            PropertyContainer(),
-            PropertyContainer(),
-            PropertyContainer(),
+            PropertyContainer(text: 'aaaa')
           ],
         ),
       ),

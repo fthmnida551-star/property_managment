@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
+import 'package:property_managment/presentation/propertydetails/widget/row.dart';
+import 'package:property_managment/presentation/searching_page/add_property.dart';
+import 'package:property_managment/widget/green_button.dart';
 
 class PropertydetailsScreen extends StatefulWidget {
   const PropertydetailsScreen({super.key});
   @override
   State<PropertydetailsScreen> createState() => _PropertydetailsScreenState();
 }
+
 class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
   @override
   Widget build(BuildContext context) {
@@ -20,10 +25,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 250,
-                  child: Image.asset(
-                    AssetResource.property,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset(AssetResource.property, fit: BoxFit.cover),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
@@ -31,7 +33,39 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Icon(Icons.arrow_back, color: AppColors.whitecolor),
-                      Icon(Icons.more_vert, color: AppColors.whitecolor),
+                      PopupMenuButton(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: AppColors.whitecolor,
+                        ),
+
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit, color: AppColors.black),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, color: AppColors.black),
+                                Text('Delete'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.person, color: AppColors.black),
+                                Text('Landlord'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -41,7 +75,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                   right: 0,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    decoration:  BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.whitecolor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -66,30 +100,24 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                       color: AppColors.black,
                     ),
                   ),
-                   SizedBox(height: 10),
-                 Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.black,
-                    ),
+                    style: TextStyle(fontSize: 15, color: AppColors.black),
                   ),
-                SizedBox(height: 15),
+                  SizedBox(height: 15),
                   // --- Location ---
                   Row(
                     children: [
-                      Icon(Icons.location_on, color: AppColors.black),
-                     SizedBox(width: 5),
+                      Icon(Icons.location_on_outlined, color: AppColors.black),
+                      SizedBox(width: 5),
                       Text(
                         'KARAVATTOM, MALAPPURAM',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: AppColors.black,
-                        ),
+                        style: TextStyle(fontSize: 15, color: AppColors.black),
                       ),
                     ],
                   ),
-                   SizedBox(height: 16),
+                  SizedBox(height: 16),
                   // --- Styled ExpansionTiles Section ---
                   ExpansionTileTheme(
                     data: ExpansionTileThemeData(
@@ -97,16 +125,6 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(color: Colors.black12, width: 1),
                       ),
-                      collapsedShape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: Colors.black12, width: 1),
-                      ),
-                      backgroundColor: Colors.white,
-                      collapsedBackgroundColor: Colors.white,
-                      tilePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      iconColor: Colors.black,
-                      collapsedIconColor: Colors.black,
                     ),
                     child: Column(
                       children: [
@@ -121,7 +139,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                             ),
                           ),
                           children: [
-                         Padding(
+                            Padding(
                               padding: EdgeInsets.only(bottom: 8.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
@@ -139,28 +157,23 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                   Row(
-                                    children: [                         
-                                  Icon(Icons.apartment, color: AppColors.black),
-                                  Text('  Flats/Apartments'),],),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                  Icon(Icons.check_circle_outline, color: AppColors.black),
-                                  Text('  Ready to move'),],),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                  Icon(Icons.account_circle, color: AppColors.black),
-                                  Text('  Owner'),],)
+                                children: [                               
+                                  RowWidget(text: 'Flats/Apartments', icons:Icons.apartment),
+                                  Divider(thickness: 2,color: AppColors.black,),                               
+                                  RowWidget(text:'Ready to move', icons: Icons.check_circle_outline),
+                                  Divider(thickness: 2,color: AppColors.black,),
+                                  RowWidget(text:'Owner', icons:Icons.account_circle),
                                 ],
                               ),
                             ),
-                         SizedBox(height: 8),
-                         Text(
+                            SizedBox(height: 8),
+                            Text(
                               'Property Details',
-                              style: TextStyle(fontSize: 20, color: AppColors.black),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: AppColors.black,
+                                 fontWeight: FontWeight.w500,
+                              ),
                             ),
                             SizedBox(height: 8),
                             // Property Details Box
@@ -169,69 +182,30 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                                 border: Border.all(color: AppColors.black),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child:  Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.bed, color: AppColors.black),
-                                      Text(' BHK'),
-                                      SizedBox(width: 250),                         
-                                      Text('2'),
-                                    ],
-                                  ),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.check_box_outline_blank, color: AppColors.black),
-                                      Text(' Carpet Area'),
-                                      SizedBox(width: 150),
-                                      Text('1380 Sqft'),
-                                    ],
-                                  ),
-                                  Divider(thickness: 1),
-                                  Row(
-                                    children: [
-                                       Icon(Icons.bathtub, color: AppColors.black),
-                                      Text(' Bathrooms'),
-                                      SizedBox(width: 200),
-                                      Text(' 2'),
-                                    ],
-                                  ),
+                                children: [                                
+                                  DetailsTable(text: 'BHK', details: '2', icons:Icons.bed),
+                                  Divider(thickness: 2,color: AppColors.black,),
+                                   DetailsTable(text: 'Carpet Area', details: '1380 Sqft', icons:Icons.check_box_outline_blank),
+                                  Divider(thickness: 1,color: AppColors.black,),                             
+                                  DetailsTable(text: 'Bathrooms', details: '2', icons:Icons.bathtub),                                 
                                 ],
                               ),
                             ),
-                     SizedBox(height: 8),
-                         Text(
+                            SizedBox(height: 8),
+                            Text(
                               "Amenities",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                fontSize: 18,                              
+                              ),
                             ),
-                        SizedBox(height: 8),
-                            // Amenities Rows
-                            Row(
-                              children: [                               
-                                 Icon(Icons.directions_car, color: AppColors.black),
-                               SizedBox(width: 5),
-                                 Text(
-                                  'Car Parking',
-                                  style: TextStyle(fontSize: 15, color: AppColors.black),
-                                ),
-                              ],
-                            ),
-                             SizedBox(height: 6),
-                            Row(
-                              children: [                               
-                                 Icon(Icons.currency_bitcoin, color: AppColors.black),
-                               SizedBox(width: 5),
-                             Text(
-                                  'Maintenance (Monthly) 2000',
-                                  style: TextStyle(fontSize: 15, color: AppColors.black),
-                                ),
-                              ],
-                            ),
+                            SizedBox(height: 8),                          
+                            RowWidget(text:'Car Parking', icons: Icons.directions_car),
+                             RowWidget(text:'Maintenance (Monthly) 2000', icons: Icons.currency_bitcoin),
                           ],
                         ),
-                         SizedBox(height: 12),
+                        SizedBox(height: 12),
                         // --- Description Dropdown ---
                         ExpansionTile(
                           title: Text(
@@ -247,13 +221,13 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               padding: EdgeInsets.only(bottom: 8.0),
                               child: Text(
                                 'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
-                               'Project : Impact Milestone-Premium residential Apartment\n'
+                                'Project : Impact Milestone-Premium residential Apartment\n'
                                 'Flat Type: 2 BHK Spacious Living & Dining\n'
                                 'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
                                 'car parking: Yes\n'
                                 'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
                                 'Status : Ready To Move',
-                                style: TextStyle(fontSize: 15,),
+                                style: TextStyle(fontSize: 15),
                               ),
                             ),
                           ],
@@ -261,7 +235,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                       ],
                     ),
                   ),
-                 SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Image.asset(
@@ -275,28 +249,16 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
           ],
         ),
       ),
-      // --- Bottom Booking Button ---
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.greenColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-            child: Text(
-              'Booking Now',
-              style: TextStyle(
-                fontSize: 18,
-                color: AppColors.whitecolor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+        child: GreenButton(
+          text: 'Booking Now',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddProperty()),
+            );
+          },
         ),
       ),
     );

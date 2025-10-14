@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
 
 class PropertyContainer extends StatefulWidget {
-  const PropertyContainer({super.key});
+  final String text;
+  final Color? color;
+  final Color? textColor;
+  final bool isShow;
+  const PropertyContainer({
+    super.key,
+    required this.text,
+    this.color,
+    this.textColor,
+    this.isShow = true,
+  });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
 }
@@ -15,7 +26,10 @@ class _PropertyContainerState extends State<PropertyContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('click container');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
+        );
       },
       child: Container(
         height: 400.h,
@@ -25,7 +39,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
@@ -61,27 +75,29 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 IconRow(icon: Icons.bathtub_outlined, value: '2'),
                 IconRow(icon: Icons.crop_square_outlined, value: '2'),
                 Text('866 ft', style: TextStyle(fontSize: 13.sp)),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: 99.75.w,
-                    height: 35.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.bookingNow,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.black),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Booking Now',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: AppColors.black,
+                widget.isShow
+                    ? Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          width: 99.75.w,
+                          height: 35.h,
+                          decoration: BoxDecoration(
+                            color: widget.color ?? AppColors.propertyContainer,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.bookingNow),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.text,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: widget.textColor ?? AppColors.black,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ],

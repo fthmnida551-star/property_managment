@@ -45,7 +45,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   border: Border.all(color: Colors.grey.shade400),
                 ),
                 child: DropdownButtonFormField<String>(
-                  value: _selectedRole,
+                  initialValue: _selectedRole,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     labelText: 'Role',

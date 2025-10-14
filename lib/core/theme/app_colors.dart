@@ -18,7 +18,7 @@ class AppColors {
   static Color get opacitygrayColorText =>
       const Color(0xff000000).withOpacity(0.60);
   static Color get opacitygreyColor1 =>
-      const Color(0XFF0000001C).withOpacity(0.11);
+      const Color(0Xff0000001c).withOpacity(0.11);
   static Color get opacitygreyColor2 =>
-      const Color(0XFFA09B9B80).withOpacity(0.50);
+      const Color(0Xffa09b9b80).withOpacity(0.50);
 }
