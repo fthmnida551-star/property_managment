@@ -17,6 +17,9 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   Widget divider = SizedBox(height: 10);
+  TextEditingController namectlr = TextEditingController();
+  TextEditingController contactCtlr = TextEditingController();
+  TextEditingController emailCtlr = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,27 +51,20 @@ class _BookingDetailsState extends State<BookingDetails> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            TextFieldContainer(text: 'Name'),
+            TextFieldContainer(text: 'Name', controllerName: namectlr),
             divider,
-            TextFieldContainer(text: 'Contact'),
+            TextFieldContainer(text: 'Contact', controllerName: contactCtlr),
             divider,
-            TextFieldContainer(text: 'Email'),
+            TextFieldContainer(text: 'Email', controllerName: emailCtlr),
             divider,
-            CalendarPickerContainer(
-              hintText: 'Date',
-              onDateSelected: (selectedDate) {
-                print("Selected date: $selectedDate");
-              },
-            ),
+            CalendarPickerContainer(hintText: 'Date'),
             Spacer(),
             GreenButton(
               text: 'Save',
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) =>GrowContainer(),
-                  ),
+                  MaterialPageRoute(builder: (context) => GrowContainer()),
                 );
               },
             ),

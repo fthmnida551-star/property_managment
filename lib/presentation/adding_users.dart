@@ -14,7 +14,9 @@ class AddUserScreen extends StatefulWidget {
 class _AddUserScreenState extends State<AddUserScreen> {
   final List<String> _roles = ['Manager', 'Agent', 'Staff'];
   String? _selectedRole;
-
+  TextEditingController namectrlr = TextEditingController();
+  TextEditingController emailctrlr = TextEditingController();
+  TextEditingController passWordctrlr = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          TextFieldContainer(text: 'Name'),
+          TextFieldContainer(text: 'Name', controllerName: ,),
           const SizedBox(height: 20),
           TextFieldContainer(text: 'E-mail'),
           const SizedBox(height: 20),

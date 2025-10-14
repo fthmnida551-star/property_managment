@@ -6,7 +6,14 @@ class TextFieldContainer extends StatefulWidget {
   final String text;
   final Icon? suffixIcon;
   final Icon? priffixIcon;
-  const TextFieldContainer({super.key, required this.text,this.suffixIcon,this.priffixIcon});
+  final TextEditingController controllerName;
+  const TextFieldContainer({
+    super.key,
+    required this.text,
+    this.suffixIcon,
+    this.priffixIcon,
+    required this.controllerName
+  });
 
   @override
   State<TextFieldContainer> createState() => _TextFieldContainerState();
