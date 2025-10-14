@@ -184,7 +184,8 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [                                
+                                children: [   
+                                                               
                                   DetailsTable(text: 'BHK', details: '2', icons:Icons.bed),
                                   Divider(thickness: 2,color: AppColors.black,),
                                    DetailsTable(text: 'Carpet Area', details: '1380 Sqft', icons:Icons.check_box_outline_blank),
