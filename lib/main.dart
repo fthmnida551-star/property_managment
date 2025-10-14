@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/presentation/adduser-screen.dart';
+import 'package:property_managment/presentation/auth/filter.dart';
+import 'package:property_managment/presentation/auth/login.dart';
+import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
+
 
 
 
