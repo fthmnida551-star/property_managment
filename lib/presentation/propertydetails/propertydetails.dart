@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
+import 'package:property_managment/presentation/propertydetails/widget/row.dart';
 
 class PropertydetailsScreen extends StatefulWidget {
   const PropertydetailsScreen({super.key});
@@ -167,21 +169,12 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                   Row(
-                                    children: [                         
-                                  Icon(Icons.apartment, color: AppColors.black),
-                                  Text('  Flats/Apartments'),],),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                  Icon(Icons.check_circle_outline, color: AppColors.black),
-                                  Text('  Ready to move'),],),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                  Icon(Icons.account_circle, color: AppColors.black),
-                                  Text('  Owner'),],)
+                                children: [                                
+                                  RowWidget(text:'Flats/Apartments', icons: Icons.apartment),
+                                  Divider(thickness: 1),
+                                  RowWidget(text:'Ready to move', icons: Icons.check_circle_outline),
+                                  Divider(thickness: 1),
+                                  RowWidget(text:'Owner', icons: Icons.account_circle),
                                 ],
                               ),
                             ),
@@ -199,33 +192,12 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.bed, color: AppColors.black),
-                                      Text(' BHK'),
-                                      SizedBox(width: 250),                         
-                                      Text('2'),
-                                    ],
-                                  ),
-                                  Divider(thickness: 2),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.check_box_outline_blank, color: AppColors.black),
-                                      Text(' Carpet Area'),
-                                      SizedBox(width: 150),
-                                      Text('1380 Sqft'),
-                                    ],
-                                  ),
+                                children: [                            
+                                  DetailsTable(text: 'BHK', details: '2', icons:Icons.bed),
                                   Divider(thickness: 1),
-                                  Row(
-                                    children: [
-                                       Icon(Icons.bathtub, color: AppColors.black),
-                                      Text(' Bathrooms'),
-                                      SizedBox(width: 200),
-                                      Text(' 2'),
-                                    ],
-                                  ),
+                                    DetailsTable(text: 'Carpet Area', details: '1380 Sqft', icons:Icons.check_box_outline_blank),
+                                  Divider(thickness: 1),
+                                  DetailsTable(text: 'Bathrooms', details: '2', icons:Icons.bathtub),
                                 ],
                               ),
                             ),
@@ -235,28 +207,8 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                         SizedBox(height: 8),
-                            // Amenities Rows
-                            Row(
-                              children: [                               
-                                 Icon(Icons.directions_car, color: AppColors.black),
-                               SizedBox(width: 5),
-                                 Text(
-                                  'Car Parking',
-                                  style: TextStyle(fontSize: 15, color: AppColors.black),
-                                ),
-                              ],
-                            ),
-                             SizedBox(height: 6),
-                            Row(
-                              children: [                               
-                                 Icon(Icons.currency_bitcoin, color: AppColors.black),
-                               SizedBox(width: 5),
-                             Text(
-                                  'Maintenance (Monthly) 2000',
-                                  style: TextStyle(fontSize: 15, color: AppColors.black),
-                                ),
-                              ],
-                            ),
+                            RowWidget(text:'Car Parking' , icons:Icons.directions_car),
+                            RowWidget(text:'Maintenance (Monthly) 2000' , icons:Icons.currency_bitcoin),                 
                           ],
                         ),
                         SizedBox(height: 12),
