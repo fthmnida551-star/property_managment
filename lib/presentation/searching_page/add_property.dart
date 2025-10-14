@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
@@ -51,10 +53,21 @@ class _AddPropertyState extends State<AddProperty> {
                 width: 368,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: AppColors.bookingNow,
+                  color: AppColors.searchbar,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.add_a_photo_outlined),
+                child: Center(
+                  child: Container(
+                    height:50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.greenColor,
+                      borderRadius: BorderRadius.circular(40),
+
+                    ),
+                    child:Center(child: SvgPicture.asset(AssetResource.camera)),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20),

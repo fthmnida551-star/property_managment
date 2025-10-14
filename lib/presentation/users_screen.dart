@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
+import 'package:property_managment/presentation/adding_users.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
 
@@ -22,7 +23,7 @@ class _UsersScreenState extends State<UsersScreen> {
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
-          padding: const EdgeInsets.only(left: 10,top: 30),
+          padding: const EdgeInsets.only(left: 10, top: 30),
           child: Row(
             children: [
               InkWell(
@@ -37,7 +38,10 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
               Text(
                 'Users',
-                style: AppTextstyle.propertyLargeTextstyle(context,fontColor: AppColors.white),
+                style: AppTextstyle.propertyLargeTextstyle(
+                  context,
+                  fontColor: AppColors.white,
+                ),
               ),
             ],
           ),
@@ -85,13 +89,20 @@ class _UsersScreenState extends State<UsersScreen> {
               },
             ),
           ),
-          Center(child: GreenButton(text: 'Add User', onTap: (){})),
-          SizedBox(height: 30,)
-          
+          Center(
+            child: GreenButton(
+              text: 'Add User',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddUserScreen()),
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 30),
         ],
-        
       ),
-     
     );
   }
 }

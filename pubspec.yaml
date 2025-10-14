@@ -67,6 +67,8 @@ flutter:
     - assets/properties/
     - assets/svg/
     - assets/propertydetails/
+    - assets/auth/
+    - assets/profile/
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

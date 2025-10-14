@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/presentation/profile/widget/list_tile_container.dart';
@@ -54,7 +54,7 @@ class _ProfilescreenState extends State<Profilescreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(42.5),
               ),
-              child: Image.asset(AssetResource.profile),
+              child: Image.asset(AssetResource.profilepic,height: 50.h,width: 50.w,),
             ),
             title: Text(
               'Nidha C',

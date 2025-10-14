@@ -12,11 +12,7 @@ class AddUserScreen extends StatefulWidget {
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
-  final List<String> _roles = [
-    'Manager',
-    'Agent',
-    'Staff',
-  ];
+  final List<String> _roles = ['Manager', 'Agent', 'Staff'];
   String? _selectedRole;
 
   @override
@@ -29,16 +25,15 @@ class _AddUserScreenState extends State<AddUserScreen> {
         ),
       ),
       body: Column(
-        
         children: [
-          SizedBox(height: 20,),
+          SizedBox(height: 20),
           TextFieldContainer(text: 'Name'),
           const SizedBox(height: 20),
           TextFieldContainer(text: 'E-mail'),
           const SizedBox(height: 20),
           Container(
             height: 50.h,
-           width: 350.w,
+            width: 350.w,
             padding: const EdgeInsets.symmetric(horizontal: 15),
             margin: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
@@ -66,17 +61,17 @@ class _AddUserScreenState extends State<AddUserScreen> {
           const SizedBox(height: 20),
           TextFieldContainer(text: 'Password'),
           Spacer(),
-          Center(child: GreenButton(text: 'Submit', onTap: (){})),
-          SizedBox(height: 30,)
-          
-
+          Center(
+            child: GreenButton(
+              text: 'Submit',
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          SizedBox(height: 30),
         ],
-        
       ),
-      
-
-
-      
     );
   }
 }

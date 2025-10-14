@@ -9,7 +9,14 @@ class PropertyContainer extends StatefulWidget {
   final String text;
   final Color? color;
   final Color? textColor;
-  const PropertyContainer({super.key,required this.text,this.color,this.textColor});
+  final bool isShow;
+  const PropertyContainer({
+    super.key,
+    required this.text,
+    this.color,
+    this.textColor,
+    this.isShow=true,
+  });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
 }
@@ -68,13 +75,13 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 IconRow(icon: Icons.bathtub_outlined, value: '2'),
                 IconRow(icon: Icons.crop_square_outlined, value: '2'),
                 Text('866 ft', style: TextStyle(fontSize: 13.sp)),
-                Align(
+               widget.isShow? Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
                     width: 99.75.w,
                     height: 35.h,
                     decoration: BoxDecoration(
-                      color:widget.color?? AppColors.propertyContainer,
+                      color: widget.color ?? AppColors.propertyContainer,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: AppColors.bookingNow),
                     ),
@@ -83,12 +90,12 @@ class _PropertyContainerState extends State<PropertyContainer> {
                         widget.text,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: widget.textColor?? AppColors.black,
+                          color: widget.textColor ?? AppColors.black,
                         ),
                       ),
                     ),
                   ),
-                ),
+                ):SizedBox(),
               ],
             ),
           ],

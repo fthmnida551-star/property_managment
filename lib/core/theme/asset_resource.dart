@@ -4,38 +4,40 @@ class AssetResource {
   static const filteringImage = 'assets/properties/mage_filter.svg';
   static const roundeTick = 'assets/properties/rounderd_tick.svg';
   static const home = 'assets/svg/homesign.svg';
+  static const homeOutline = 'assets/svg/HomeOutline.svg';
   static const search = 'assets/svg/searchsign.svg';
   static const notification = 'assets/svg/notificationsign.svg';
-// <<<<<<< HEAD
+  // <<<<<<< HEAD
   static const profile = 'assets/svg/profilesign.svg';
   static const building1 = 'assets/dashboard/building1.png';
-// =======
+  static const camera = 'assets/properties/camera_photo.svg';
+  static const tick = 'assets/properties/tick_of_save.png';
+  // =======
   static const bookingbuilding1 = 'assets/dashboard/building1.png';
-// >>>>>>> jafna_dev
+  // >>>>>>> jafna_dev
   static const booked = 'assets/svg/bookedproperty.svg';
   static const vacant = 'assets/svg/vacantproperty.svg';
-// <<<<<<< HEAD
+  // <<<<<<< HEAD
 
   //propertydetails-----------
-  static const location='assets/propertydetails/location.png'; 
-  static const property='assets/propertydetails/building.png';
-  static const maintenanceIcon='assets/propertydetails/maintenance_icon.svg';
-   static const car='assets/propertydetails/car_icon.svg';
+  static const location = 'assets/propertydetails/location.png';
+  static const property = 'assets/propertydetails/building.png';
+  static const maintenanceIcon = 'assets/propertydetails/maintenance_icon.svg';
+  static const car = 'assets/propertydetails/car_icon.svg';
 
+  // profile screen
 
-// profile screen
-
- static const profilepic='asset/profile/profile.png';
-  static const edit="asset/edit.svg";
+  static const profilepic = 'assets/profile/profile.png';
+  static const edit = "asset/edit.svg";
 
   // logo
 
-   static const name="assets/auth/logo.png";
+  static const name = "assets/auth/logo.png";
 
-// =======
+  // =======
   static const totalproperty = 'assets/svg/totalproperty.svg';
-  static const contact ='assets/svg/contact.svg';
+  static const contact = 'assets/svg/contact.svg';
   // static const profile ='assets/svg/profilesign.svg';
-  static const appLogo ='assets/svg/logo_for_dashboard.svg';
-// >>>>>>> jafna_dev
+  static const appLogo = 'assets/svg/logo_for_dashboard.svg';
+  // >>>>>>> jafna_dev
 }
