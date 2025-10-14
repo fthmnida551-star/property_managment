@@ -124,6 +124,7 @@ class _SearchingpageState extends State<Searchingpage> {
             PropertyContainer(text: 'Booking Now'),
             PropertyContainer(text: 'Booked',textColor: AppColors.white,color: AppColors.booked,),
           
+            PropertyContainer(text: 'aaaa')
           ],
         ),
       ),

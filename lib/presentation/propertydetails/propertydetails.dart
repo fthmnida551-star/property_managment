@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/presentation/animated_container.dart';
-import 'package:property_managment/presentation/booking_details.dart';
-import 'package:property_managment/presentation/dashboard/dashboard.dart';
-import 'package:property_managment/presentation/searching_page/add_property.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
-import 'package:property_managment/widget/green_button.dart';
 
 class PropertydetailsScreen extends StatefulWidget {
   const PropertydetailsScreen({super.key});
@@ -35,7 +29,39 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Icon(Icons.arrow_back, color: AppColors.whitecolor),
-                      Icon(Icons.more_vert, color: AppColors.whitecolor),
+                      PopupMenuButton(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: AppColors.whitecolor,
+                        ),
+
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit, color: AppColors.black),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, color: AppColors.black),
+                                Text('Delete'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.person, color: AppColors.black),
+                                Text('Landlord'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -45,6 +71,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                   right: 0,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  
                     decoration: BoxDecoration(
                       color: AppColors.whitecolor,
                       borderRadius: BorderRadius.only(
@@ -73,14 +100,17 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                   SizedBox(height: 10),
                   Text(
                     'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
-                    style: TextStyle(fontSize: 16, color: AppColors.black),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.black,
+                    ),
                   ),
                   SizedBox(height: 15),
                   // --- Location ---
                   Row(
                     children: [
                       Icon(Icons.location_on, color: AppColors.black),
-                      SizedBox(width: 5),
+                     SizedBox(width: 5),
                       Text(
                         'KARAVATTOM, MALAPPURAM',
                         style: TextStyle(fontSize: 15, color: AppColors.black),
@@ -101,14 +131,8 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                       ),
                       backgroundColor: Colors.white,
                       collapsedBackgroundColor: Colors.white,
-                      tilePadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      childrenPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                      tilePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       iconColor: Colors.black,
                       collapsedIconColor: Colors.black,
                     ),
@@ -144,45 +168,27 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.apartment,
-                                        color: AppColors.black,
-                                      ),
-                                      Text('  Flats/Apartments'),
-                                    ],
-                                  ),
+                                   Row(
+                                    children: [                         
+                                  Icon(Icons.apartment, color: AppColors.black),
+                                  Text('  Flats/Apartments'),],),
                                   Divider(thickness: 2),
                                   Row(
                                     children: [
-                                      Icon(
-                                        Icons.check_circle_outline,
-                                        color: AppColors.black,
-                                      ),
-                                      Text('  Ready to move'),
-                                    ],
-                                  ),
+                                  Icon(Icons.check_circle_outline, color: AppColors.black),
+                                  Text('  Ready to move'),],),
                                   Divider(thickness: 2),
                                   Row(
                                     children: [
-                                      Icon(
-                                        Icons.account_circle,
-                                        color: AppColors.black,
-                                      ),
-                                      Text('  Owner'),
-                                    ],
-                                  ),
+                                  Icon(Icons.account_circle, color: AppColors.black),
+                                  Text('  Owner'),],)
                                 ],
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
                               'Property Details',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: AppColors.black,
-                              ),
+                              style: TextStyle(fontSize: 20, color: AppColors.black),
                             ),
                             SizedBox(height: 8),
                             // Property Details Box
@@ -195,64 +201,29 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.bed,
-                                            color: AppColors.black,
-                                          ),
-                                          Text(' BHK'),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 8.0,
-                                        ),
-                                        child: Text('2'),
-                                      ),
+                                      Icon(Icons.bed, color: AppColors.black),
+                                      Text(' BHK'),
+                                      SizedBox(width: 250),                         
+                                      Text('2'),
                                     ],
                                   ),
                                   Divider(thickness: 2),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.check_box_outline_blank,
-                                            color: AppColors.black,
-                                          ),
-                                          Text(' Carpet Area'),
-                                        ],
-                                      ),
-
+                                      Icon(Icons.check_box_outline_blank, color: AppColors.black),
+                                      Text(' Carpet Area'),
+                                      SizedBox(width: 150),
                                       Text('1380 Sqft'),
                                     ],
                                   ),
                                   Divider(thickness: 1),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.bathtub,
-                                            color: AppColors.black,
-                                          ),
-                                          Text(' Bathrooms'),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          right: 10.0,
-                                        ),
-                                        child: Text(' 2'),
-                                      ),
+                                       Icon(Icons.bathtub, color: AppColors.black),
+                                      Text(' Bathrooms'),
+                                      SizedBox(width: 200),
+                                      Text(' 2'),
                                     ],
                                   ),
                                 ],
@@ -261,43 +232,28 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                             SizedBox(height: 8),
                             Text(
                               "Amenities",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(height: 8),
+                        SizedBox(height: 8),
                             // Amenities Rows
                             Row(
-                              children: [
-                                Icon(
-                                  Icons.directions_car,
-                                  color: AppColors.black,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
+                              children: [                               
+                                 Icon(Icons.directions_car, color: AppColors.black),
+                               SizedBox(width: 5),
+                                 Text(
                                   'Car Parking',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColors.black,
-                                  ),
+                                  style: TextStyle(fontSize: 15, color: AppColors.black),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 6),
+                             SizedBox(height: 6),
                             Row(
-                              children: [
-                                Icon(
-                                  Icons.currency_bitcoin,
-                                  color: AppColors.black,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
+                              children: [                               
+                                 Icon(Icons.currency_bitcoin, color: AppColors.black),
+                               SizedBox(width: 5),
+                             Text(
                                   'Maintenance (Monthly) 2000',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColors.black,
-                                  ),
+                                  style: TextStyle(fontSize: 15, color: AppColors.black),
                                 ),
                               ],
                             ),
@@ -347,14 +303,27 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
           ],
         ),
       ),
-      // --- Bottom Booking Button ---
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0),
-        child: GreenButton(
-          text: 'Booking Now',
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>BookingDetails()));
-          },
+        child: SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.greenColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+            ),
+            child: Text(
+              'Booking Now',
+              style: TextStyle(
+                fontSize: 18,
+                color: AppColors.whitecolor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );

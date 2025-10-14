@@ -17,7 +17,6 @@ class _RowWidgetState extends State<RowWidget> {
       children: [
         Icon(widget.icons, color: AppColors.black),
         Text(widget.text),
-        
       ],
     );
   }
