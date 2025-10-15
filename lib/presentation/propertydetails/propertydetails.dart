@@ -181,7 +181,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                             SizedBox(height: 8),
                             Text(
                               'Property Details',
-                              style: TextStyle(fontSize: 20, color: AppColors.black),
+                              style: TextStyle(fontSize: 20, color: AppColors.black ,fontWeight: FontWeight.w500,),
                             ),
                             SizedBox(height: 8),
                             // Property Details Box
@@ -204,7 +204,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                             SizedBox(height: 8),
                             Text(
                               "Amenities",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: TextStyle(fontSize: 16),
                             ),
                         SizedBox(height: 8),
                             RowWidget(text:'Car Parking' , icons:Icons.directions_car),
