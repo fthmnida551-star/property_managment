@@ -17,7 +17,7 @@ class _DetailsTableState extends State<DetailsTable> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
+        Row( 
           children: [
             Icon(widget.icons, color: AppColors.black),
             Text(widget.text),
