@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+
 
 class AppColors {
   static const greenColor = Color(0xff008069);
@@ -47,4 +49,7 @@ class AppColors {
   static const Color ntfctBlue = Color(0xFF1163B4);
   static const Color ntfctnYellow = Color(0xFFABBC0E);
   
+      // const Color(0Xff0000001c).withOpacity(0.11);
+  // static Color get opacitygreyColor2 =>
+  //     const Color(0Xffa09b9b80).withOpacity(0.50);
 }

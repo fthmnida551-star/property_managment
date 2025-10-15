@@ -40,4 +40,7 @@ class AssetResource {
   // static const profile ='assets/svg/profilesign.svg';
   static const appLogo = 'assets/svg/logo_for_dashboard.svg';
   // >>>>>>> jafna_dev
+
+    static const apartment='assets/propertydetails/image.png';
 }
+

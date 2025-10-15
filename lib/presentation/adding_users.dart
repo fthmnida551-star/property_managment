@@ -29,9 +29,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          TextFieldContainer(text: 'Name', controllerName: ,),
+          TextFieldContainer(text: 'Name', controllerName:namectrlr ,),
           const SizedBox(height: 20),
-          TextFieldContainer(text: 'E-mail'),
+          TextFieldContainer(text: 'E-mail', controllerName: emailctrlr,),
           const SizedBox(height: 20),
           Container(
             height: 50.h,
@@ -61,7 +61,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          TextFieldContainer(text: 'Password'),
+          TextFieldContainer(text: 'Password', controllerName: passWordctrlr,),
           Spacer(),
           Center(
             child: GreenButton(

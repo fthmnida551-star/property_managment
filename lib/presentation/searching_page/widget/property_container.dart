@@ -16,6 +16,7 @@ class PropertyContainer extends StatefulWidget {
     this.color,
     this.textColor,
     this.isShow=true,
+
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
@@ -39,7 +40,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
               ),
@@ -75,6 +76,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 IconRow(icon: Icons.bathtub_outlined, value: '2'),
                 IconRow(icon: Icons.crop_square_outlined, value: '2'),
                 Text('866 ft', style: TextStyle(fontSize: 13.sp)),
+
                widget.isShow? Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
@@ -96,6 +98,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
                     ),
                   ),
                 ):SizedBox(),
+
               ],
             ),
           ],

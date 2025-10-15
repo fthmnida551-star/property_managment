@@ -18,7 +18,9 @@ class AddLandlordDetails extends StatefulWidget {
 class _AddLandlordDetailsState extends State<AddLandlordDetails> {
   Widget divider = SizedBox(height: 10);
   bool isOwnProperty = false;
-
+  TextEditingController nameCtlr = TextEditingController();
+  TextEditingController emailCtlr = TextEditingController();
+  TextEditingController contactCtlr = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,14 +63,14 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
 
             if (!isOwnProperty) ...[
               SizedBox(height: 20),
-              TextFieldContainer(text: 'Name'),
+              TextFieldContainer(text: 'Name', controllerName: nameCtlr,),
               divider,
-              TextFieldContainer(text: 'Contact'),
+              TextFieldContainer(text: 'Contact', controllerName: contactCtlr,),
               divider,
-              TextFieldContainer(text: 'Email'),
+              TextFieldContainer(text: 'Email', controllerName: emailCtlr,),
               divider,
               // CalendarDatePicker(initialDate: , firstDate:DateTime(200), lastDate: DateTime(2100), onDateChanged: ),
-            CalendarPickerContainer(hintText: 'date')
+              CalendarPickerContainer(hintText: 'date'),
             ],
             Spacer(),
             GreenButton(
@@ -77,7 +79,8 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (contex) => BottomNavigationWidget(currentIndex: 1,),
+                    builder: (contex) =>
+                        BottomNavigationWidget(currentIndex: 1),
                   ),
                 );
               },

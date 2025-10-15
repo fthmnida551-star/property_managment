@@ -24,7 +24,6 @@ class _DetailsTableState extends State<DetailsTable> {
           ],
         ),
         Padding(padding: const EdgeInsets.only(right: 8.0), child: Text(widget.details)),
-        
       ],
     );
   }
