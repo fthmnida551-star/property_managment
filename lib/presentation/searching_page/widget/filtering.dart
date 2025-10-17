@@ -5,7 +5,13 @@ import 'package:property_managment/core/theme/app_colors.dart';
 class FilteringContainer extends StatefulWidget {
   final String text;
   final double width;
-  const FilteringContainer({super.key, required this.text,required this.width});
+  final VoidCallback onTap;
+  const FilteringContainer({
+    super.key,
+    required this.text,
+    required this.width,
+    required this.onTap
+  });
 
   @override
   State<FilteringContainer> createState() => _FilteringContainerState();
@@ -17,9 +23,7 @@ class _FilteringContainerState extends State<FilteringContainer> {
     return Padding(
       padding: const EdgeInsets.all(1.0),
       child: GestureDetector(
-         onTap: () {
-                  print('open filtering');
-                },
+       onTap:  widget.onTap,
         child: Container(
           width: widget.width,
           height: 32.h,
@@ -32,7 +36,7 @@ class _FilteringContainerState extends State<FilteringContainer> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               SizedBox(width: 10),
+              SizedBox(width: 10),
               Text(
                 widget.text,
                 style: TextStyle(fontSize: 12.sp, color: AppColors.black),

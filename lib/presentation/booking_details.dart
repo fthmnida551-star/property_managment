@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/presentation/animated_container.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/date_picker.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';

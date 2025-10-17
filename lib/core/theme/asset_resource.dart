@@ -3,8 +3,7 @@ class AssetResource {
   static const building = 'assets/properties/building_picture.png';
   static const filteringImage = 'assets/properties/mage_filter.svg';
   static const roundeTick = 'assets/properties/rounderd_tick.svg';
-  static const home = 'assets/svg/homesign.svg';
-  static const homeOutline = 'assets/svg/HomeOutline.svg';
+  static const homeOutline = 'assets/svg/Homesign.svg';
   static const search = 'assets/svg/searchsign.svg';
   static const notification = 'assets/svg/notificationsign.svg';
   // <<<<<<< HEAD

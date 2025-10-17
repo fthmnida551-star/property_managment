@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +15,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+  @override
+  @override
+void initState() {
+  super.initState();
+
+  Future.delayed(const Duration(seconds: 3), () {
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BottomNavigationWidget(currentIndex: 0),
+      ),
+    );
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {

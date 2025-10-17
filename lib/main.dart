@@ -3,19 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/presentation/adduser-screen.dart';
 import 'package:property_managment/presentation/auth/filter.dart';
 import 'package:property_managment/presentation/auth/login.dart';
+import 'package:property_managment/presentation/booked_details/booked_details.dart';
+import 'package:property_managment/presentation/propertydetails/popup_mssg_cntnr.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
-
-
-
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
-
-
-
-
-
-
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +29,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home:PropertydetailsScreen(),
+          home:LoginPage(),
         );
       },
     );
