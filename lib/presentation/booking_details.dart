@@ -14,6 +14,10 @@ class BookingDetails extends StatefulWidget {
 
 class _BookingDetailsState extends State<BookingDetails> {
   Widget divider = SizedBox(height: 10);
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController contactCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController dateCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,13 +49,13 @@ class _BookingDetailsState extends State<BookingDetails> {
         child: Column(
           children: [          
             SizedBox(height: 20),
-            TextFieldContainer(text: 'Name'),
+            TextFieldContainer(text: 'Name', controllerName: nameCtrl),
             divider,
-            TextFieldContainer(text: 'Contact'),
+            TextFieldContainer(text: 'Contact', controllerName: contactCtrl,),
             divider,
-            TextFieldContainer(text: 'Email'),
+            TextFieldContainer(text: 'Email', controllerName: emailCtrl,),
             divider,
-            TextFieldContainer(text: 'Date'),         
+            TextFieldContainer(text: 'Date', controllerName: dateCtrl,),         
             Spacer(),
             GreenButton(
               text: 'Save',

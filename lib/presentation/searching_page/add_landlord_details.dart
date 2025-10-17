@@ -17,7 +17,11 @@ class AddLandlordDetails extends StatefulWidget {
 class _AddLandlordDetailsState extends State<AddLandlordDetails> {
   Widget divider = SizedBox(height: 10);
   bool isOwnProperty = false;
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController contactCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
 
+TextEditingController dateCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +64,13 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
 
             if (!isOwnProperty) ...[
               SizedBox(height: 20),
-              TextFieldContainer(text: 'Name'),
+              TextFieldContainer(text: 'Name', controllerName: nameCtrl,),
               divider,
-              TextFieldContainer(text: 'Contact'),
+              TextFieldContainer(text: 'Contact', controllerName: contactCtrl,),
               divider,
-              TextFieldContainer(text: 'Email'),
+              TextFieldContainer(text: 'Email', controllerName: emailCtrl,),
               divider,
-              TextFieldContainer(text: 'Date'),
+              TextFieldContainer(text: 'Date', controllerName: dateCtrl,),
             ],
             Spacer(),
             GreenButton(

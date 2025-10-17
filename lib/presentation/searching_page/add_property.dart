@@ -15,6 +15,12 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   Widget divider = SizedBox(height: 10);
+  TextEditingController propertyCtrl = TextEditingController();
+  TextEditingController priceCtrl = TextEditingController();
+  TextEditingController detailsCtrl = TextEditingController();
+  TextEditingController descriptionCtrl = TextEditingController();
+  TextEditingController locationCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,15 +64,15 @@ class _AddPropertyState extends State<AddProperty> {
               ),
             ),
             SizedBox(height: 20),
-            TextFieldContainer(text: 'Property Type'),
+            TextFieldContainer(text: 'Property Type', controllerName: propertyCtrl),
             divider,
-            TextFieldContainer(text: 'Price'),
+            TextFieldContainer(text: 'Price', controllerName: priceCtrl),
             divider,
-            TextFieldContainer(text: 'Details'),
+            TextFieldContainer(text: 'Details', controllerName: detailsCtrl),
             divider,
-            TextFieldContainer(text: 'Description'),
+            TextFieldContainer(text: 'Description', controllerName: descriptionCtrl),
             divider,
-            TextFieldContainer(text: 'Location'),
+            TextFieldContainer(text: 'Location', controllerName: locationCtrl),
             Spacer(),
             GreenButton(
               text: 'Next',

@@ -18,7 +18,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
     'view Booking Details',
   ];
   String? _selectedRole;
-
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController passwordCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +35,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TextFieldContainer(text: 'Name'),
+              TextFieldContainer(text: 'Name', controllerName: nameCtrl,),
               const SizedBox(height: 20),
-              TextFieldContainer(text: 'E-mail'),
+              TextFieldContainer(text: 'E-mail', controllerName: emailCtrl),
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -63,7 +65,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               ),
               const SizedBox(height: 20),
 
-              TextFieldContainer(text: 'Password'),
+              TextFieldContainer(text: 'Password', controllerName: passwordCtrl,),
               const SizedBox(height: 200),
 
               GreenButton(
