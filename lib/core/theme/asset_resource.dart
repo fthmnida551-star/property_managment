@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AssetResource {
   AssetResource._();
   static const building = 'assets/properties/building_picture.png';
@@ -27,9 +29,12 @@ class AssetResource {
 
   // profile screen
 
-  static const profilepic = 'assets/profile/profile.png';
-  static const edit = "asset/edit.svg";
-
+  static const profilepic = 'assetss/profile/profilepic.png';
+  //static const edit = "assets/svg/edit.svg";
+  static const notificationpic="assets/profile/notification-pic.png";
+  static const moonpic="assets/profile/moon-pic.png";
+  static const arrowpic="assets/profile/back-arrowpic.png";
+  static const editpic="assets/profile/edit-pic.png";
   // logo
 
   static const name = "assets/auth/logo.png";
