@@ -29,8 +29,8 @@ class _AddPropertyState extends State<AddProperty> {
   final ImagePicker _picker = ImagePicker();
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery, // Change to ImageSource.camera for camera
-      imageQuality: 80, // optional compression
+      source: ImageSource.gallery, 
+      // imageQuality: 80, 
     );
 
     if (pickedFile != null) {

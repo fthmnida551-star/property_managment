@@ -23,7 +23,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     Center(child: DashboardScreen()),
     Center(child: Searchingpage()),
     Center(child: Notificationscreen()),
-    Center(child: Profilescreen()),
+    // Center(child: Profilescreen()),
   ];
 
   @override
