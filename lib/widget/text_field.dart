@@ -20,6 +20,7 @@ class TextFieldContainer extends StatefulWidget {
 }
 
 class _TextFieldContainerState extends State<TextFieldContainer> {
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +33,9 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          controller: widget.controllerName,
           decoration: InputDecoration(
+            // fillColor: Colors.red,filled: true,
             border: InputBorder.none,
             hintText: widget.text,
             hintStyle: TextStyle(
