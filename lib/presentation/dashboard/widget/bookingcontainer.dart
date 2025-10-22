@@ -29,9 +29,9 @@ class BookingConatainerWidget extends StatefulWidget {
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-    
+        
       },
       child: Container(
         height: 75.h,
