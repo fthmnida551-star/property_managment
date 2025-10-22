@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
@@ -23,7 +24,10 @@ class _AddUserScreenState extends State<AddUserScreen> {
       appBar: AppbarWidget(
         child: Padding(
           padding: const EdgeInsets.all(6.0),
-          child: Icon(Icons.keyboard_arrow_left, size: 30.sp),
+        
+          child: GestureDetector( onTap: () {
+            Navigator.pop(context);
+          },child: Icon(Icons.keyboard_arrow_left, size: 30.sp,color: AppColors.white,)),
         ),
       ),
       body: Column(

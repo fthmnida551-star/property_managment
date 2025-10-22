@@ -9,6 +9,11 @@ import 'package:property_managment/presentation/propertydetails/propertydetails.
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
+import 'package:property_managment/presentation/dashboard/dashboard.dart';
+import 'package:property_managment/presentation/splashscreen.dart';
+import 'package:property_managment/presentation/users_screen.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -28,8 +33,8 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home:LoginPage(),
+        home:Splashscreen() ,
+        debugShowCheckedModeBanner: false,
         );
       },
     );

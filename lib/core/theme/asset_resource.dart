@@ -5,7 +5,7 @@ class AssetResource {
   static const building = 'assets/properties/building_picture.png';
   static const filteringImage = 'assets/properties/mage_filter.svg';
   static const roundeTick = 'assets/properties/rounderd_tick.svg';
-  static const homeOutline = 'assets/svg/Homesign.svg';
+  static const homeOutline = 'assets/svg/homesign.svg';
   static const search = 'assets/svg/searchsign.svg';
   static const notification = 'assets/svg/notificationsign.svg';
   // <<<<<<< HEAD
@@ -40,11 +40,8 @@ class AssetResource {
 
   // =======
   static const totalproperty = 'assets/svg/totalproperty.svg';
-  static const contact = 'assets/svg/contact.svg';
+  static const contact ='assets/svg/contact.svg';
   // static const profile ='assets/svg/profilesign.svg';
-  static const appLogo = 'assets/svg/logo_for_dashboard.svg';
-  // >>>>>>> jafna_dev
-
-    static const apartment='assets/propertydetails/image.png';
+  static const appLogo ='assets/svg/logo_for_dashboard.svg';
+  static const logo ='assets/svg/applogo.svg';
 }
-
