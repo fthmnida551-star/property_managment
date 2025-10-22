@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/presentation/profile/widget/list_tile_container.dart';
+import 'package:property_managment/presentation/profile/edit_profile.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
-import 'package:property_managment/widget/text_field.dart';
 
 class Profilescreen extends StatefulWidget {
   const Profilescreen({super.key});
@@ -14,24 +13,27 @@ class Profilescreen extends StatefulWidget {
 }
 
 class _ProfilescreenState extends State<Profilescreen> {
-  
-  bool  isSwitched = false;
+  bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
-    debugPrint("jhgjhfhfjhgkjkg");
     return Scaffold(
       // ✅ Custom AppBar
       appBar: AppbarWidget(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Profile',
-              style: TextStyle(
-                color: AppColors.whiteColor,
-                fontSize: 21,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              children: [
+                SizedBox(width: 10),
+                const Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: 21,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
             Image.asset(
               AssetResource.moonpic,
@@ -104,7 +106,12 @@ class _ProfilescreenState extends State<Profilescreen> {
                   // ✅ Edit Icon
                   GestureDetector(
                     onTap: () {
-                      // TODO: Add edit action
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfileScreen(),
+                        ),
+                      );
                     },
                     child: Image.asset(
                       AssetResource.editpic,
@@ -121,8 +128,13 @@ class _ProfilescreenState extends State<Profilescreen> {
             // ✅ Custom Text Widget
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-             
-              child: _buildListTile( title: 'User', onTap: (){}, image: '',isSwitched: isSwitched),
+
+              child: _buildListTile(
+                title: 'User',
+                onTap: () {},
+                image: '',
+                isSwitched: isSwitched,
+              ),
             ),
 
             // ✅ Example ListTile
@@ -130,13 +142,6 @@ class _ProfilescreenState extends State<Profilescreen> {
               image: AssetResource.notificationpic,
               title: "Notification",
               isSwitched: isSwitched,
-              
-              // onTap: () {
-              //   setState(() {
-              //     isSwitched=!isSwitched;
-              //     print("isSwitched is $isSwitched");
-              //   });
-              // },
             ),
           ],
         ),
@@ -145,38 +150,37 @@ class _ProfilescreenState extends State<Profilescreen> {
   }
 
   // ✅ Reusable ListTile
- Widget _buildListTile({
+  Widget _buildListTile({
     required String image,
     required String title,
-     VoidCallback? onTap,
-    required bool isSwitched
-    
+    VoidCallback? onTap,
+    required bool isSwitched,
   }) {
     final bool hasSwitch = title == 'Notification';
-    
-    return ListTile(
-    onTap: () {
-      if (hasSwitch) {
-        setState(() {
-          this.isSwitched = !this.isSwitched;
-        });
 
-        // ✅ Show SnackBar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              this.isSwitched
-                  ? 'Notifications turned ON'
-                  : 'Notifications turned OFF',
+    return ListTile(
+      onTap: () {
+        if (hasSwitch) {
+          setState(() {
+            this.isSwitched = !this.isSwitched;
+          });
+
+          // ✅ Show SnackBar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                this.isSwitched
+                    ? 'Notifications turned ON'
+                    : 'Notifications turned OFF',
+              ),
+              duration: const Duration(seconds: 1),
             ),
-            duration: const Duration(seconds: 1),
-          ),
-        );
-      } else {
-        onTap?.call();
-      }
-    },
-      leading:image.isNotEmpty ? Image.asset(image):null,
+          );
+        } else {
+          onTap?.call();
+        }
+      },
+      leading: image.isNotEmpty ? Image.asset(image) : null,
       title: Text(
         title,
         style: const TextStyle(
@@ -185,32 +189,31 @@ class _ProfilescreenState extends State<Profilescreen> {
         ),
       ),
       trailing: hasSwitch
-      ? Switch(
-        value: this.isSwitched,
-        onChanged: (value){
-          setState(() {
-            this.isSwitched= value;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                value
-                ? 'Notifications turned ON'
-                : 'Notifications turned OFF',
-              ),
-              duration: const Duration(seconds: 1),
-              ),
-              );
-            },
-            activeColor: AppColors.blackColor,
-        )
-        :const Icon(Icons.arrow_forward_ios, size: 16),
-        tileColor: AppColors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: AppColors.opacityGrey, width: 0.2),
-        ),
-      );
-    //);
+          ? Switch(
+              value: this.isSwitched,
+              onChanged: (value) {
+                setState(() {
+                  this.isSwitched = value;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      value
+                          ? 'Notifications turned ON'
+                          : 'Notifications turned OFF',
+                    ),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              activeColor: AppColors.blackColor,
+            )
+          : const Icon(Icons.arrow_forward_ios, size: 16),
+      tileColor: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: AppColors.opacityGrey, width: 1,style: BorderStyle.solid,strokeAlign: BorderSide.strokeAlignOutside),
+      ),
+    );
   }
-}  
+}

@@ -18,41 +18,44 @@ class BookedDetails extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            PropertyContainer(text: 'abc', isShow: false),
-
-            Row(
-              children: [
-                Icon(Icons.person, color: Colors.green),
-                SizedBox(width: 8),
-                Text('Name\n Hrishilal'),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.phone, color: Colors.green),
-                SizedBox(width: 8),
-                Text('Mobile No'),
-                Text('+91 960592260'),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.mail, color: Colors.green),
-                SizedBox(width: 8),
-                Text('Email\n Hrishilal@gmail.com'),
-              ],
-            ),
-            Row(
-              children: [
-                Icon(Icons.calendar_month, color: Colors.green),
-                SizedBox(width: 8),
-                Text('Date\n 2-3-2025'),
-              ],
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              PropertyContainer(text: 'abc', isShow: false),
+          
+              Row(
+                children: [
+                  Icon(Icons.person, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Name\n Hrishilal'),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.phone, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Mobile No'),
+                  Text('+91 960592260'),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.mail, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Email\n Hrishilal@gmail.com'),
+                ],
+              ),
+              Row(
+                children: [
+                  Icon(Icons.calendar_month, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('Date\n 2-3-2025'),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

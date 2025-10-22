@@ -3,8 +3,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/profile/profile.dart';
 
 import 'package:property_managment/widget/appbar_widget.dart';
+import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -28,7 +30,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.only(left: 10.0),
               child: GestureDetector(
                 onTap: () {
-                  print('Back Arrow');
+                  Navigator.pop(context);
                 },
                 child: Icon(Icons.keyboard_arrow_left),
               ),
@@ -85,14 +87,17 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                 ),
               ],
             ),
-             SizedBox(height: 80,),
+            SizedBox(height: 80),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0,right: 15),
-              child: TextFieldContainer(text: 'Email', controllerName: emailCtrl),
+              padding: const EdgeInsets.only(left: 20.0, right: 15),
+              child: TextFieldContainer(
+                text: 'Email',
+                controllerName: emailCtrl,
+              ),
             ),
             SizedBox(height: 18),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0,right: 15,),
+              padding: const EdgeInsets.only(left: 20.0, right: 15),
               child: Container(
                 height: 50.h,
                 width: 350.w,
@@ -104,9 +109,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(
-                   8
-                  ),
+                  padding: const EdgeInsets.all(8),
                   child: TextField(
                     obscureText: obscurePassword,
                     decoration: InputDecoration(
@@ -116,7 +119,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                         fontSize: 18.sp,
                         color: AppColors.opacitygrayColorText,
                       ),
-              
+
                       suffixIcon: IconButton(
                         icon: obscurePassword
                             ? Icon(Icons.visibility_off_outlined)
@@ -132,6 +135,17 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                 ),
               ),
             ),
+            Spacer(),
+            GreenButton(
+              text: 'submit',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profilescreen()),
+                );
+              },
+            ),
+            SizedBox(height: 30),
           ],
         ),
       ),

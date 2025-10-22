@@ -232,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
+  interactive_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: interactive_bottom_sheet
+      sha256: "5b78bddd0f9dbd60abddca422c68bdf17dbdeb7566c38451af32d68ac1854231"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   intl:
     dependency: "direct main"
     description:
