@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
-import 'package:property_managment/presentation/notification_screen/notification_container.dart';
+import 'package:property_managment/presentation/notification_screen/widget/notification_container.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Notificationscreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
     return Scaffold(
       appBar: AppbarWidget(child: Padding(
         padding: const EdgeInsets.only(left: 10),
-        child: Text('Notification',style: TextStyle(color: AppColors.white),),
+        child: Text('Notification',style: TextStyle(color: AppColors.white,fontWeight: FontWeight.bold,fontSize: 21),),
       ),),
       body:SingleChildScrollView(
         child: Column(

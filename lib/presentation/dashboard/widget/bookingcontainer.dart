@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/presentation/booked_details/booked_details.dart';
+import 'package:property_managment/presentation/dashboard/booked_details/booked_details.dart';
 
 class BookingConatainerWidget extends StatefulWidget {
   final Widget child;
@@ -31,7 +31,7 @@ class BookingConatainerWidget extends StatefulWidget {
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Navigator.push(
           context,

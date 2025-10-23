@@ -49,45 +49,50 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            CheckboxWithListenable(
-              text: 'Own Property',
-              value: isOwnProperty,
-              onChanged: (newValue) {
-                setState(() {
-                  isOwnProperty = newValue ?? false;
-                });
-              },
-            ),
-
-            if (!isOwnProperty) ...[
-              SizedBox(height: 20),
-              TextFieldContainer(text: 'Name', controllerName: nameCtlr,),
-              divider,
-              TextFieldContainer(text: 'Contact', controllerName: contactCtlr,),
-              divider,
-              TextFieldContainer(text: 'Email', controllerName: emailCtlr,),
-              divider,
-              // CalendarDatePicker(initialDate: , firstDate:DateTime(200), lastDate: DateTime(2100), onDateChanged: ),
-              CalendarPickerContainer(hintText: 'date'),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              CheckboxWithListenable(
+                text: 'Own Property',
+                value: isOwnProperty,
+                onChanged: (newValue) {
+                  setState(() {
+                    isOwnProperty = newValue ?? false;
+                  });
+                },
+              ),
+          
+              if (!isOwnProperty) ...[
+                SizedBox(height: 20),
+                TextFieldContainer(text: 'Name', controllerName: nameCtlr,),
+                divider,
+                TextFieldContainer(text: 'Contact', controllerName: contactCtlr,),
+                divider,
+                TextFieldContainer(text: 'Email', controllerName: emailCtlr,),
+                divider,
+                // CalendarDatePicker(initialDate: , firstDate:DateTime(200), lastDate: DateTime(2100), onDateChanged: ),
+                CalendarPickerContainer(hintText: 'date'),
+              ],
+             
+             
             ],
-            Spacer(),
-            GreenButton(
-              text: 'Submit',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (contex) =>
-                        BottomNavigationWidget(currentIndex: 1),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-          ],
+          ),
         ),
+      ),
+      bottomNavigationBar:  Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GreenButton(
+                  text: 'Submit',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (contex) =>
+                            BottomNavigationWidget(currentIndex: 1),
+                      ),
+                    );
+                  },
+                ),
       ),
     );
   }

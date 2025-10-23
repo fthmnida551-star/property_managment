@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/presentation/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 void dltAlert(BuildContext context) {
   showDialog(
@@ -19,12 +21,12 @@ void dltAlert(BuildContext context) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Center(
-                   child: Text(
+                Center(
+                  child: Text(
                     'Delete',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                   ),
-                 ),
+                  ),
+                ),
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => Navigator.pop(context),
@@ -34,9 +36,12 @@ void dltAlert(BuildContext context) {
             const SizedBox(height: 10),
 
             Center(
-              child: Text('Are you sure you want to delete this property?',style: TextStyle(fontSize: 15),),
+              child: Text(
+                'Are you sure you want to delete this property?',
+                style: TextStyle(fontSize: 15),
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -44,7 +49,10 @@ void dltAlert(BuildContext context) {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Searchingpage()),
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BottomNavigationWidget(currentIndex: 1),
+                      ),
                     );
                   },
                   child: Container(
@@ -69,12 +77,7 @@ void dltAlert(BuildContext context) {
 
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PropertydetailsScreen(),
-                      ),
-                    );
+                    Navigator.pop(context);
                   },
                   child: Container(
                     height: 50.h,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
 
@@ -10,13 +11,14 @@ class PropertyContainer extends StatefulWidget {
   final Color? color;
   final Color? textColor;
   final bool isShow;
+  final VoidCallback? onTap;
   const PropertyContainer({
     super.key,
     required this.text,
     this.color,
     this.textColor,
-    this.isShow=true,
-
+    this.isShow = true,
+    this.onTap,
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
@@ -26,12 +28,18 @@ class _PropertyContainerState extends State<PropertyContainer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: widget.onTap??  () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
+          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen()),
         );
-      },
+      }, 
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
+      //   );
+      // },
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
@@ -77,28 +85,29 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 IconRow(icon: Icons.crop_square_outlined, value: '2'),
                 Text('866 ft', style: TextStyle(fontSize: 13.sp)),
 
-               widget.isShow? Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: 99.75.w,
-                    height: 35.h,
-                    decoration: BoxDecoration(
-                      color: widget.color ?? AppColors.propertyContainer,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.bookingNow),
-                    ),
-                    child: Center(
-                      child: Text(
-                        widget.text,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: widget.textColor ?? AppColors.black,
+                widget.isShow
+                    ? Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          width: 99.75.w,
+                          height: 35.h,
+                          decoration: BoxDecoration(
+                            color: widget.color ?? AppColors.propertyContainer,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.bookingNow),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.text,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: widget.textColor ?? AppColors.black,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ):SizedBox(),
-
+                      )
+                    : SizedBox(),
               ],
             ),
           ],
