@@ -27,14 +27,16 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: Image.asset(
-                      AssetResource.property,
-                      fit: BoxFit.cover,
-                    ),
+                 SizedBox(
+                  width: double.infinity,
+                  height: 250,
+                  child: PageView(
+                    children: [
+                      Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                      Image.asset(AssetResource.property, fit: BoxFit.cover),             
+                    ],
                   ),
+                ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
