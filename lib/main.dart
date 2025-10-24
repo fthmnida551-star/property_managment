@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/firebase_options.dart';
 import 'package:property_managment/presentation/adduser-screen.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/filter.dart';
@@ -18,7 +20,10 @@ import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 
-void main() {
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }

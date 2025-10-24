@@ -64,15 +64,18 @@ class _BookingDetailsState extends State<BookingDetails> {
           ),
         ),
       ),
-      bottomNavigationBar: GreenButton(
-              text: 'Save',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GrowContainer()),
-                );
-              },
-            ), 
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: GreenButton(
+                text: 'Save',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GrowContainer()),
+                  );
+                },
+              ),
+      ), 
     );
   }
 }
