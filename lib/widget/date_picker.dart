@@ -40,6 +40,7 @@ class _CalendarPickerContainerState extends State<CalendarPickerContainer> {
     }
   }
 
+  TextEditingController dateCtrl=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -48,7 +49,7 @@ class _CalendarPickerContainerState extends State<CalendarPickerContainer> {
         child: TextFieldContainer(
           text: widget.hintText,
           priffixIcon: const Icon(Icons.calendar_today),
-          suffixIcon: const Icon(Icons.arrow_drop_down),
+          suffixIcon: const Icon(Icons.arrow_drop_down), controllerName: dateCtrl,
         ),
       ),
     );

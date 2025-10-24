@@ -184,12 +184,29 @@ class _FilterSortPageState extends State<FilterSortPage> {
         );
 
       case 2:
-        return const Center(
-          child: Text(
-            "Price per Sqft filter coming soon...",
-            style: TextStyle(fontSize: 16),
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Choose a range below (sq ft)",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            RangeSlider(
+              values: sqftRange,
+              min: 500,
+              max: 10000,
+              divisions: 10,
+              labels: RangeLabels(
+                sqftRange.start.toInt().toString(),
+                "${sqftRange.end.toInt()}+",
+              ),
+              onChanged: (values) {
+                setState(() {
+                  sqftRange = values;
+                });
+              },
+            ),
+          ],
         );
+        
 
       case 3:
         return Column(

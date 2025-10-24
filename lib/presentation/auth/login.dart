@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
               /// ✅ Logo
               Center(
                 child: Image.asset(
-                  AssetResource.name, 
+                  AssetResource.name,
                   width: 184.4.w,
                   height: 78.7.h,
                   fit: BoxFit.contain,
@@ -43,7 +44,9 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: AppColors.greyColor.withOpacity(0.4)),
+                  border: Border.all(
+                    color: AppColors.greyColor.withOpacity(0.4),
+                  ),
                 ),
                 child: TextField(
                   style: TextStyle(
@@ -72,7 +75,9 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: AppColors.greyColor.withOpacity(0.4)),
+                  border: Border.all(
+                    color: AppColors.greyColor.withOpacity(0.4),
+                  ),
                 ),
                 child: TextField(
                   obscureText: _obscurePassword,
@@ -144,7 +149,15 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BottomNavigationWidget(currentIndex: 0),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Login",
                     style: AppTextstyle.propertyMediumTextstyle(
