@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
@@ -23,7 +24,12 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 250,
-                  child: Image.asset(AssetResource.property, fit: BoxFit.cover),
+                  child: PageView(
+                    children: [
+                      Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                      Image.asset(AssetResource.property, fit: BoxFit.cover),             
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
@@ -73,7 +79,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                   right: 0,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  
+
                     decoration: BoxDecoration(
                       color: AppColors.whitecolor,
                       borderRadius: BorderRadius.only(
@@ -102,19 +108,16 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                   SizedBox(height: 10),
                   Text(
                     'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.black,
-                    ),
+                    style: TextStyle(fontSize: 16, color: AppColors.black),
                   ),
                   SizedBox(height: 15),
                   // --- Location ---
                   Row(
                     children: [
                       Icon(Icons.location_on, color: AppColors.black),
-                     SizedBox(width: 5),
+                      SizedBox(width: 5),
                       Text(
-                        'KARAVATTOM, MALAPPURAM',
+                        'KARAVATTOM, TRIVANDRUM',
                         style: TextStyle(fontSize: 15, color: AppColors.black),
                       ),
                     ],
@@ -133,8 +136,14 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                       ),
                       backgroundColor: Colors.white,
                       collapsedBackgroundColor: Colors.white,
-                      tilePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      tilePadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      childrenPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       iconColor: Colors.black,
                       collapsedIconColor: Colors.black,
                     ),
@@ -156,7 +165,7 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  'Property Overview\nModern Apartment\nKARAVATTOM, MALAPPURAM',
+                                  'Property Overview\nModern Apartment\nKARAVATTOM, TRIVANDRUM',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ),
@@ -169,19 +178,32 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [                                
-                                  RowWidget(text:'Flats/Apartments', icons: Icons.apartment),
+                                children: [
+                                  RowWidget(
+                                    text: 'Flats/Apartments',
+                                    icons: Icons.apartment,
+                                  ),
                                   Divider(thickness: 1),
-                                  RowWidget(text:'Ready to move', icons: Icons.check_circle_outline),
+                                  RowWidget(
+                                    text: 'Ready to move',
+                                    icons: Icons.check_circle_outline,
+                                  ),
                                   Divider(thickness: 1),
-                                  RowWidget(text:'Owner', icons: Icons.account_circle),
+                                  RowWidget(
+                                    text: 'Owner',
+                                    icons: Icons.account_circle,
+                                  ),
                                 ],
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
                               'Property Details',
-                              style: TextStyle(fontSize: 20, color: AppColors.black ,fontWeight: FontWeight.w500,),
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             SizedBox(height: 8),
                             // Property Details Box
@@ -192,23 +214,38 @@ class _PropertydetailsScreenState extends State<PropertydetailsScreen> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [                            
-                                  DetailsTable(text: 'BHK', details: '2', icons:Icons.bed),
+                                children: [
+                                  DetailsTable(
+                                    text: 'BHK',
+                                    details: '2',
+                                    icons: Icons.bed,
+                                  ),
                                   Divider(thickness: 1),
-                                    DetailsTable(text: 'Carpet Area', details: '1380 Sqft', icons:Icons.check_box_outline_blank),
+                                  DetailsTable(
+                                    text: 'Carpet Area',
+                                    details: '1380 Sqft',
+                                    icons: Icons.check_box_outline_blank,
+                                  ),
                                   Divider(thickness: 1),
-                                  DetailsTable(text: 'Bathrooms', details: '2', icons:Icons.bathtub),
+                                  DetailsTable(
+                                    text: 'Bathrooms',
+                                    details: '2',
+                                    icons: Icons.bathtub,
+                                  ),
                                 ],
                               ),
                             ),
                             SizedBox(height: 8),
-                            Text(
-                              "Amenities",
-                              style: TextStyle(fontSize: 16),
+                            Text("Amenities", style: TextStyle(fontSize: 16)),
+                            SizedBox(height: 8),
+                            RowWidget(
+                              text: 'Car Parking',
+                              icons: Icons.directions_car,
                             ),
-                        SizedBox(height: 8),
-                            RowWidget(text:'Car Parking' , icons:Icons.directions_car),
-                            RowWidget(text:'Maintenance (Monthly) 2000' , icons:Icons.currency_bitcoin),                 
+                            RowWidget(
+                              text: 'Maintenance (Monthly) 2000',
+                              icons: Icons.currency_bitcoin,
+                            ),
                           ],
                         ),
                         SizedBox(height: 12),
