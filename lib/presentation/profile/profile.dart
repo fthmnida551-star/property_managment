@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/profile/adding_users.dart';
 import 'package:property_managment/presentation/profile/edit_profile.dart';
+import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Profilescreen extends StatefulWidget {
@@ -35,12 +37,12 @@ class _ProfilescreenState extends State<Profilescreen> {
                 ),
               ],
             ),
-            Image.asset(
-              AssetResource.moonpic,
-              height: 24,
-              width: 24,
-              color: Colors.white,
-            ),
+            // Image.asset(
+            //   AssetResource.moonpic,
+            //   height: 24,
+            //   width: 24,
+            //   color: Colors.white,
+            // ),
           ],
         ),
       ),
@@ -113,10 +115,14 @@ class _ProfilescreenState extends State<Profilescreen> {
                         ),
                       );
                     },
-                    child: Image.asset(
-                      AssetResource.editpic,
-                      height: 16,
-                      width: 16,
+                    child: SizedBox(
+                      height: 20,
+                      width: 40,
+                      child: Image.asset(
+                        AssetResource.editpic,
+                        height: 16,
+                        width: 16,
+                      ),
                     ),
                   ),
                 ],
@@ -130,8 +136,13 @@ class _ProfilescreenState extends State<Profilescreen> {
               padding: const EdgeInsets.symmetric(vertical: 10.0),
 
               child: _buildListTile(
-                title: 'User',
-                onTap: () {},
+                title: 'Users',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UsersScreen()),
+                  );
+                },
                 image: '',
                 isSwitched: isSwitched,
               ),
@@ -212,7 +223,12 @@ class _ProfilescreenState extends State<Profilescreen> {
       tileColor: AppColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: AppColors.opacityGrey, width: 0.2),
+        side: BorderSide(
+          color: AppColors.opacityGrey,
+          width: 1,
+          style: BorderStyle.solid,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        ),
       ),
     );
   }

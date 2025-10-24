@@ -119,7 +119,7 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 130),
+                      padding: const EdgeInsets.only(left: 100),
                       child: Text(
                         '130',
                         style: AppTextstyle.propertyLargeTextstyle(

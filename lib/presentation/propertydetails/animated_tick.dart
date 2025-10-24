@@ -21,7 +21,7 @@ class _GrowContainerState extends State<GrowContainer> {
         _size = 100; // final size
       });
     });
-    Future.delayed(const Duration(seconds: 8), () {
+    Future.delayed(const Duration(seconds: 6), () {
       if (!mounted) return;
       Navigator.push(
         context,
@@ -38,7 +38,7 @@ class _GrowContainerState extends State<GrowContainer> {
       backgroundColor: Colors.grey[200],
       body: Center(
         child: AnimatedContainer(
-          duration: const Duration(seconds: 7),
+          duration: const Duration(seconds: 5),
           curve: Curves.easeOutBack, // smooth and bouncy growth
           width: _size,
           height: _size,

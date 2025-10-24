@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,6 +9,7 @@ import 'package:property_managment/presentation/searching_page/add_landlord_deta
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProperty extends StatefulWidget {
   const AddProperty({super.key});
@@ -17,11 +20,26 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   Widget divider = SizedBox(height: 10);
-  TextEditingController propertyTypeCtlr=TextEditingController();
-  TextEditingController detailsCtlr=TextEditingController();
-  TextEditingController locationCtlr=TextEditingController();
-  TextEditingController descriptionCtlr=TextEditingController();
-  TextEditingController priceCtlr=TextEditingController();
+  TextEditingController propertyTypeCtlr = TextEditingController();
+  TextEditingController detailsCtlr = TextEditingController();
+  TextEditingController locationCtlr = TextEditingController();
+  TextEditingController descriptionCtlr = TextEditingController();
+  TextEditingController priceCtlr = TextEditingController();
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery, 
+      // imageQuality: 80, 
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,54 +68,101 @@ class _AddPropertyState extends State<AddProperty> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 368,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: AppColors.searchbar,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: _pickImage,
                   child: Container(
-                    height:50,
-                    width: 50,
+                    width: 368,
+                    height: 200,
                     decoration: BoxDecoration(
-                      color: AppColors.greenColor,
-                      borderRadius: BorderRadius.circular(40),
-
+                      color: AppColors.searchbar,
+                      borderRadius: BorderRadius.circular(8),
+                      border: BoxBorder.all(width: 1, color: AppColors.opacitygreyColor),
+                      image: _selectedImage != null
+                          ? DecorationImage(
+                              image: FileImage(_selectedImage!),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
                     ),
-                    child:Center(child: SvgPicture.asset(AssetResource.camera)),
+                    child: _selectedImage == null
+                        ? Center(
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: AppColors.greenColor,
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Center(
+                                child: SvgPicture.asset(AssetResource.camera),
+                              ),
+                            ),
+                          )
+                        : Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedImage = null; // remove image
+                                  });
+                                },
+                                child: const CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Colors.black54,
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            TextFieldContainer(text: 'Property Type', controllerName:propertyTypeCtlr ,),
-            divider,
-            TextFieldContainer(text: 'Price', controllerName:priceCtlr ,),
-            divider,
-            TextFieldContainer(text: 'Details', controllerName: detailsCtlr,),
-            divider,
-            TextFieldContainer(text: 'Description', controllerName: descriptionCtlr,),
-            divider,
-            TextFieldContainer(text: 'Location', controllerName: locationCtlr,),
-            Spacer(),
-            GreenButton(
-              text: 'Next',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddLandlordDetails()),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-          ],
+                
+              SizedBox(height: 20),
+              TextFieldContainer(
+                text: 'Property Type',
+                controllerName: propertyTypeCtlr,
+              ),
+              divider,
+              TextFieldContainer(text: 'Price', controllerName: priceCtlr),
+              divider,
+              TextFieldContainer(text: 'Details', controllerName: detailsCtlr),
+              divider,
+              TextFieldContainer(
+                text: 'Description',
+                controllerName: descriptionCtlr,
+              ),
+              divider,
+              TextFieldContainer(text: 'Location', controllerName: locationCtlr),
+              
+              
+              // SizedBox(height: 20),
+            ],
+          ),
         ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: GreenButton(
+                text: 'Next',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddLandlordDetails()),
+                  );
+                },
+              ),
       ),
     );
   }

@@ -57,7 +57,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.homeOutline),
+                    child: SvgPicture.asset(AssetResource.home),
                   ),
                   label: '',
                 ),

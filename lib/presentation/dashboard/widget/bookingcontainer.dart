@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/dashboard/booked_details/booked_details.dart';
 
 class BookingConatainerWidget extends StatefulWidget {
   final Widget child;
@@ -23,22 +24,24 @@ class BookingConatainerWidget extends StatefulWidget {
   });
 
   @override
-  State<BookingConatainerWidget> createState() => _BookingConatainerWidgetState();
+  State<BookingConatainerWidget> createState() =>
+      _BookingConatainerWidgetState();
 }
 
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
-  
-
-    return GestureDetector(
+    return InkWell(
       onTap: () {
-    
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BookedDetails()),
+        );
       },
       child: Container(
         height: 75.h,
         padding: widget.padding ?? EdgeInsets.all(12),
-      
+
         decoration: BoxDecoration(
           border: BoxBorder.all(color: AppColors.opacitygreyColor),
           color: widget.color ?? AppColors.white,
@@ -73,7 +76,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
                     fontColor: AppColors.black,
                   ),
                 ),
-      
+
                 Row(
                   children: [
                     SvgPicture.asset(AssetResource.contact),

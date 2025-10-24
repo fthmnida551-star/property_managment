@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
-import 'package:property_managment/presentation/animated_container.dart';
+import 'package:property_managment/presentation/propertydetails/animated_tick.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/date_picker.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
@@ -30,7 +29,7 @@ class _BookingDetailsState extends State<BookingDetails> {
             children: [
               GestureDetector(
                 onTap: () {
-                  print('move to back slide');
+                  Navigator.pop(context);
                 },
                 child: Icon(
                   Icons.keyboard_arrow_left_outlined,
@@ -48,30 +47,35 @@ class _BookingDetailsState extends State<BookingDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            TextFieldContainer(text: 'Name', controllerName: namectlr),
-            divider,
-            TextFieldContainer(text: 'Contact', controllerName: contactCtlr),
-            divider,
-            TextFieldContainer(text: 'Email', controllerName: emailCtlr),
-            divider,
-            CalendarPickerContainer(hintText: 'Date'),
-            Spacer(),
-            GreenButton(
-              text: 'Save',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GrowContainer()),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              TextFieldContainer(text: 'Name', controllerName: namectlr),
+              divider,
+              TextFieldContainer(text: 'Contact', controllerName: contactCtlr),
+              divider,
+              TextFieldContainer(text: 'Email', controllerName: emailCtlr),
+              divider,
+              CalendarPickerContainer(hintText: 'Date'),
+             
+            ],
+          ),
         ),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: GreenButton(
+                text: 'Save',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GrowContainer()),
+                  );
+                },
+              ),
+      ), 
     );
   }
 }
