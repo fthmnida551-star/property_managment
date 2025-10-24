@@ -21,6 +21,7 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
