@@ -29,7 +29,7 @@ class AssetResource {
 
   // profile screen
 
-  static const profilepic = 'assetss/profile/profilepic.png';
+  static const profilepic = 'assets/profile/profilepic.png';
   //static const edit = "assets/svg/edit.svg";
   static const notificationpic="assets/profile/notification-pic.png";
   static const moonpic="assets/profile/moon-pic.png";

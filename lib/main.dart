@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/presentation/adduser-screen.dart';
 import 'package:property_managment/presentation/auth/filter.dart';
 import 'package:property_managment/presentation/auth/login.dart';
+import 'package:property_managment/presentation/profile/edit_profile.dart';
+import 'package:property_managment/presentation/profile/profile.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home:PropertydetailsScreen(),
+          home:Profilescreen(),
         );
       },
     );
