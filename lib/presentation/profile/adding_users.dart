@@ -226,30 +226,27 @@ class _AddUserScreenState extends State<AddUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarWidget(
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.keyboard_arrow_left,
-                  size: 30.sp,
-                  color: AppColors.white,
-                ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.keyboard_arrow_left,
+                size: 30.sp,
+                color: AppColors.white,
               ),
-              Text(
-                'Add User',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                  fontSize: 21,
-                ),
+            ),
+            Text(
+              'Add User',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.white,
+                fontSize: 21,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -260,114 +257,136 @@ class _AddUserScreenState extends State<AddUserScreen> {
             child: Column(
               children: [
                 SizedBox(height: 20),
-                TextFieldContainer(
-                  text: 'Name',
-                  controllerName: namectrlr,
-                  validator: (String? p1) {
-                    if (p1 == null || p1.isEmpty) {
-                      return "Please enter your name";
-                    }
-                    if (!RegExp(r'^[A-Z]').hasMatch(p1)) {
-                      return "First letter must be capital";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFieldContainer(
-                  text: 'E-mail',
-                  controllerName: emailctrlr,
-                  validator: (String? p1) {
-                    if (p1 == null || p1.isEmpty) {
-                      return "Please enter your email";
-                    }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                        .hasMatch(p1)) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  height: 50.h,
-                  width: 350.w,
-                  // padding: const EdgeInsets.symmetric(horizontal: 15),
-                  // margin: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: Colors.grey.shade400),
-                  ),
-                  child: DropdownButtonFormField<String>(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please select your role";
+                Padding(
+                  padding: const EdgeInsets.only(left: 6,right: 5),
+                  child: TextFieldContainer(
+                    text: 'Name',
+                    controllerName: namectrlr,
+                    validator: (String? p1) {
+                      if (p1 == null || p1.isEmpty) {
+                        return "Please enter your name";
+                      }
+                      if (!RegExp(r'^[A-Z]').hasMatch(p1)) {
+                        return "First letter must be capital";
                       }
                       return null;
                     },
-                    value: _selectedRole,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Role',
-                    ),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: _roles
-                        .map((role) =>
-                            DropdownMenuItem(value: role, child: Text(role)))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedRole = value;
-                      });
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6,right: 5),
+                  child: TextFieldContainer(
+                    text: 'E-mail',
+                    controllerName: emailctrlr,
+                    validator: (String? p1) {
+                      if (p1 == null || p1.isEmpty) {
+                        return "Please enter your email";
+                      }
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(p1)) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
                     },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    height: 60.h,
+                    width: 360.w,
+                    
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      border:Border.all(
+                          width: 1,
+                          color: AppColors.opacitygreyColor,
+                        ),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please select your role";
+                        }
+                        return null;
+                      },
+                      value: _selectedRole,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Role',
+                      ),
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: _roles
+                          .map((role) =>
+                              DropdownMenuItem(value: role, child: Text(role)))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedRole = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
             
                 // ✅ Password Field with validation
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 15),
-                  child: Container(
-                    height: 50.h,
-                    width: 350.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        width: 1,
-                        color: AppColors.opacitygreyColor,
-                      ),
-                    ),
-                    child: TextFormField(
-                      controller: passWordctrlr,
-                      obscureText: obscurePassword,
-                      validator: (String? p1) {
-                        if (p1 == null || p1.isEmpty) {
-                          return "Please enter password";
-                        }
-                        if (p1.length < 8) {
-                          return "Password must be at least 8 characters long";
-                        }
-                        if (!RegExp(r'[!@#\$&*~_.,?-]').hasMatch(p1)) {
-                          return "Password must contain at least one special character";
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Password',
-                        hintStyle: TextStyle(
-                          fontSize: 18.sp,
-                          color: AppColors.opacitygrayColorText,
+                  padding: const EdgeInsets.only(left: 0.1, right: 0.1),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      height: 60.h,
+                      width: 360.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.opacitygreyColor,
                         ),
-                        suffixIcon: IconButton(
-                          icon: obscurePassword
-                              ? const Icon(Icons.visibility_off_outlined)
-                              : const Icon(Icons.visibility_outlined),
-                          onPressed: () {
-                            setState(() {
-                              obscurePassword = !obscurePassword;
-                            });
-                          },
+                      ),
+                      child: TextFormField(
+                        controller: passWordctrlr,
+                        obscureText: obscurePassword,
+                        validator: (String? p1) {
+                          if (p1 == null || p1.isEmpty) {
+                            return "Please enter password";
+                          }
+                          if (p1.length < 8) {
+                            return "Password must be at least 8 characters long";
+                          }
+                          if (!RegExp(r'[!@#\$&*~_.,?-]').hasMatch(p1)) {
+                            return "Password must contain at least one special character";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+       borderSide: BorderSide(
+        color: AppColors.opacitygreyColor,
+        width: 1,
+      ),
+      borderRadius: BorderRadius.circular(8),
+    ),
+                        
+                          hintText: 'Password',
+                          hintStyle: TextStyle(
+                            fontSize: 18.sp,
+                            color: AppColors.opacitygrayColorText,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: obscurePassword
+                                ? const Icon(Icons.visibility_off_outlined)
+                                : const Icon(Icons.visibility_outlined),
+                            onPressed: () {
+                              setState(() {
+                                obscurePassword = !obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
