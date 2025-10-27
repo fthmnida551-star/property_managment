@@ -14,7 +14,7 @@ class TextFieldContainer extends StatefulWidget {
     this.suffixIcon,
     this.priffixIcon,
     required this.controllerName,
-    required this.validator
+    required this.validator,
   });
 
   @override
@@ -24,34 +24,27 @@ class TextFieldContainer extends StatefulWidget {
 class _TextFieldContainerState extends State<TextFieldContainer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50.h,
-      width: 350.w,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(width: 1, color: AppColors.opacitygreyColor),
+    return TextFormField(
+  controller: widget.controllerName,
+  validator: widget.validator,
+  decoration: InputDecoration(
+    border: OutlineInputBorder(
+       borderSide: BorderSide(
+        color: AppColors.opacitygreyColor,
+        width: 1,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          controller: widget.controllerName,
-          // validator: (value) {
+      borderRadius: BorderRadius.circular(8),
+    ),
+    
+    hintText: widget.text,
+    hintStyle: TextStyle(
+      fontSize: 18.sp,
+      color: AppColors.opacitygrayColorText,
+    ),
+    suffixIcon: widget.suffixIcon,
+    prefixIcon: widget.priffixIcon,
+  ),
+);
 
-          // },
-          validator: widget.validator,
-          decoration: InputDecoration(
-            // fillColor: Colors.red,filled: true,
-            border: InputBorder.none,
-            hintText: widget.text,
-            hintStyle: TextStyle(
-              fontSize: 18.sp,
-              color: AppColors.opacitygrayColorText,
-            ),
-            suffixIcon: widget.suffixIcon,
-            prefixIcon: widget.priffixIcon,
-          ),
-        ),
-      ),
-    );
   }
 }
