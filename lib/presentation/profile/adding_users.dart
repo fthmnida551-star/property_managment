@@ -39,9 +39,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
         child: Column(
           children: [
             SizedBox(height: 20),
-            TextFieldContainer(text: 'Name', controllerName:namectrlr ,),
+            TextFieldContainer(text: 'Name', controllerName:namectrlr, validator: (String? p1) { 
+              if(p1==null || p1.isEmpty ){
+                return "Please enter your name";
+              }
+             
+             if (!RegExp(r'[A-Z]').hasMatch(p1)){ 
+              return "first letter mus be capital";
+             }
+             return null;
+   } ),
             const SizedBox(height: 20),
-            TextFieldContainer(text: 'E-mail', controllerName: emailctrlr,),
+            TextFieldContainer(text: 'E-mail', controllerName: emailctrlr, validator: (String? p1) {
+              
+              },),
             const SizedBox(height: 20),
             Container(
               height: 50.h,
@@ -71,7 +82,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            TextFieldContainer(text: 'Password', controllerName: passWordctrlr,),
+            TextFieldContainer(text: 'Password', controllerName: passWordctrlr, validator: (String? p1) {  },),
           ],
         ),
       ),

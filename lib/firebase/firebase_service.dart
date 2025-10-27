@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:property_managment/firebase_options.dart';
 
 class FirebaseService {
   static late final FirebaseFirestore fdb;
-  final String collectionName = "PersonData";
 
   initialize() async {
     await Firebase.initializeApp(
@@ -17,5 +18,15 @@ class FirebaseService {
     // firestore database initializing
     fdb = FirebaseFirestore.instance;
   
+  }
+  void addProperties(Map<String, dynamic> propertyData ) async {
+    await fdb
+        .collection("add Properties")
+        .add(propertyData)
+        .then((DocumentReference<Map<String, dynamic>> docRef) {
+      final String id = docRef.id;
+      log("Insert Data with $id");
+    });
+    // getAllPersonList();
   }
 }

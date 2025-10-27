@@ -49,7 +49,7 @@ class _CalendarPickerContainerState extends State<CalendarPickerContainer> {
         child: TextFieldContainer(
           text: widget.hintText,
           priffixIcon: const Icon(Icons.calendar_today),
-          suffixIcon: const Icon(Icons.arrow_drop_down), controllerName: dateCtrl,
+          suffixIcon: const Icon(Icons.arrow_drop_down), controllerName: dateCtrl, validator: (String? p1) {  },
         ),
       ),
     );
