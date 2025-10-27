@@ -1,13 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
-import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/presentation/profile/profile.dart';
-
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/green_button.dart';
@@ -124,7 +120,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                 padding: const EdgeInsets.only(left: 20.0, right: 15),
                 child: TextFieldContainer(
                   text: 'Email',
-                  controllerName: emailCtrl,
+                  controllerName: emailCtrl, validator: (String? p1) {  },
                 ),
               ),
               SizedBox(height: 18),

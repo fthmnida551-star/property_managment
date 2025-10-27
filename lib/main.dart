@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase_options.dart';
 import 'package:property_managment/presentation/adduser-screen.dart';
+import 'package:property_managment/presentation/auth/sign%20up.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/filter.dart';
 import 'package:property_managment/presentation/auth/login.dart';
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-        home:Splashscreen() ,
+        home:Signup() ,
         debugShowCheckedModeBanner: false,
         );
       },

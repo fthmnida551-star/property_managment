@@ -392,7 +392,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Button(
                                   width: 150,

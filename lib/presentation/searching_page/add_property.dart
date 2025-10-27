@@ -29,8 +29,8 @@ class _AddPropertyState extends State<AddProperty> {
   final ImagePicker _picker = ImagePicker();
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery, 
-      // imageQuality: 80, 
+      source: ImageSource.gallery,
+      // imageQuality: 80,
     );
 
     if (pickedFile != null) {
@@ -81,7 +81,10 @@ class _AddPropertyState extends State<AddProperty> {
                     decoration: BoxDecoration(
                       color: AppColors.searchbar,
                       borderRadius: BorderRadius.circular(8),
-                      border: BoxBorder.all(width: 1, color: AppColors.opacitygreyColor),
+                      border: BoxBorder.all(
+                        width: 1,
+                        color: AppColors.opacitygreyColor,
+                      ),
                       image: _selectedImage != null
                           ? DecorationImage(
                               image: FileImage(_selectedImage!),
@@ -128,26 +131,66 @@ class _AddPropertyState extends State<AddProperty> {
                   ),
                 ),
               ),
-                
+
               SizedBox(height: 20),
               TextFieldContainer(
                 text: 'Property Type',
                 controllerName: propertyTypeCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter  property type';
+                  }
+
+                  return null; // valid input
+                },
               ),
               divider,
-              TextFieldContainer(text: 'Price', controllerName: priceCtlr),
+              TextFieldContainer(
+                text: 'Price',
+                controllerName: priceCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter  property price';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Only numbers allowed';
+                  }
+                  return null;
+                },
+              ),
               divider,
-              TextFieldContainer(text: 'Details', controllerName: detailsCtlr),
+              TextFieldContainer(
+                text: 'Details',
+                controllerName: detailsCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter property details';
+                  }
+                  return null;
+                },
+              ),
               divider,
               TextFieldContainer(
                 text: 'Description',
                 controllerName: descriptionCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter property description';
+                  }
+                  return null;
+                },
               ),
               divider,
-              TextFieldContainer(text: 'Location', controllerName: locationCtlr),
-              
-              
-              // SizedBox(height: 20),
+              TextFieldContainer(
+                text: 'Location',
+                controllerName: locationCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the location';
+                  }
+                  return null;
+                },
+              ),
             ],
           ),
         ),
@@ -155,14 +198,14 @@ class _AddPropertyState extends State<AddProperty> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
-                text: 'Next',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddLandlordDetails()),
-                  );
-                },
-              ),
+          text: 'Next',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddLandlordDetails()),
+            );
+          },
+        ),
       ),
     );
   }

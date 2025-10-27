@@ -7,12 +7,14 @@ class TextFieldContainer extends StatefulWidget {
   final Icon? suffixIcon;
   final Icon? priffixIcon;
   final TextEditingController controllerName;
+  final String? Function(String?)? validator;
   const TextFieldContainer({
     super.key,
     required this.text,
     this.suffixIcon,
     this.priffixIcon,
-    required this.controllerName
+    required this.controllerName,
+    required this.validator
   });
 
   @override
@@ -20,7 +22,6 @@ class TextFieldContainer extends StatefulWidget {
 }
 
 class _TextFieldContainerState extends State<TextFieldContainer> {
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,6 +35,10 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: widget.controllerName,
+          // validator: (value) {
+
+          // },
+          validator: widget.validator,
           decoration: InputDecoration(
             // fillColor: Colors.red,filled: true,
             border: InputBorder.none,
