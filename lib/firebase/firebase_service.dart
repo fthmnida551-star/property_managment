@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:property_managment/firebase_options.dart';
 
 class FirebaseService {
@@ -21,7 +22,7 @@ class FirebaseService {
   }
   void addProperties(Map<String, dynamic> propertyData ) async {
     await fdb
-        .collection("add Properties")
+        .collection("PROPERTIES")
         .add(propertyData)
         .then((DocumentReference<Map<String, dynamic>> docRef) {
       final String id = docRef.id;
@@ -29,4 +30,12 @@ class FirebaseService {
     });
     // getAllPersonList();
   }
+
+  void addUsers(Map<String, dynamic> finaldetails) {
+  fdb.collection("STAFF").add(finaldetails).then((DocumentReference<Map<String,dynamic>> docRef){
+    final String id =docRef.id;
+    log("adding users");
+  });
+  }
+  
 }

@@ -22,7 +22,7 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 void main() async {
  WidgetsFlutterBinding.ensureInitialized();
-  
+  FirebaseService().initialize();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
