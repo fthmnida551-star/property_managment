@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
+import 'package:property_managment/presentation/searching_page/filter.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/presentation/searching_page/widget/filtering.dart';
 import 'package:property_managment/presentation/searching_page/widget/property_container.dart';
@@ -25,7 +27,7 @@ class _SearchingpageState extends State<Searchingpage> {
             SizedBox(width: 15),
             Text(
               'Properties',
-              style: TextStyle(color: AppColors.white, fontSize: 19.sp),
+              style: TextStyle(color: AppColors.white, fontSize: 21.sp,fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -67,9 +69,7 @@ class _SearchingpageState extends State<Searchingpage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => AddProperty(),
-                        ),
+                        MaterialPageRoute(builder: (context) => AddProperty()),
                       );
                     },
                     child: Icon(
@@ -91,7 +91,12 @@ class _SearchingpageState extends State<Searchingpage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: GestureDetector(
                       onTap: () {
-                        print('filtring');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FilterSortPage(),
+                          ),
+                        );
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,19 +115,89 @@ class _SearchingpageState extends State<Searchingpage> {
                     ),
                   ),
                   //(FilteringContainer only takes text,it means constructor is const)
-                  const FilteringContainer(text: 'Property Type', width: 121),
-                  const FilteringContainer(text: 'Price', width: 71),
-                  const FilteringContainer(text: 'Price Per Sqf', width: 120),
-                  const FilteringContainer(text: 'Area sqf', width: 96),
+                  FilteringContainer(
+                    text: 'Property Type',
+                    width: 121,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterSortPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  FilteringContainer(
+                    text: 'Price',
+                    width: 71,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterSortPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  FilteringContainer(
+                    text: 'Price Per Sqf',
+                    width: 120,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterSortPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  FilteringContainer(
+                    text: 'Area sqf',
+                    width: 96,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FilterSortPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
             // Propert Containers
             SizedBox(height: 15.h),
-            PropertyContainer(),
-            PropertyContainer(),
-            PropertyContainer(),
-            PropertyContainer(),
+            PropertyContainer(text: 'Booking Now'),
+            PropertyContainer(
+              text: 'Booked',
+              textColor: AppColors.white,
+              color: AppColors.booked,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookedPropertyScreen(),
+                  ),
+                );
+              },
+            ),
+            PropertyContainer(text: 'Booking Now'),
+            PropertyContainer(
+              text: 'Booked',
+              textColor: AppColors.white,
+              color: AppColors.booked,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookedPropertyScreen(),
+                  ),
+                );
+              }, 
+            ),
+
+            PropertyContainer(text: 'Booking Now'),
           ],
         ),
       ),
