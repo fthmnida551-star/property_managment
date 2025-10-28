@@ -52,11 +52,39 @@ class _BookingDetailsState extends State<BookingDetails> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              TextFieldContainer(text: 'Name', controllerName: namectlr),
+              TextFieldContainer(text: 'Name', controllerName: namectlr, validator: (String? value) {
+                 if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                      return 'First letter must be a capital letter';
+                    }
+                    return null;
+                },),
               divider,
-              TextFieldContainer(text: 'Contact', controllerName: contactCtlr),
+              TextFieldContainer(text: 'Contact', controllerName: contactCtlr, validator: (String? value) { 
+                 if (value == null || value.isEmpty) {
+                      return 'Please enter your contact number';
+                    }
+                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return 'Only numbers are allowed';
+                    }
+                    if (value.length != 10) {
+                      return 'Contact number must be 10 digits';
+                    }
+                    return null;
+               },),
               divider,
-              TextFieldContainer(text: 'Email', controllerName: emailCtlr),
+              TextFieldContainer(text: 'Email', controllerName: emailCtlr, validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                },),
               divider,
               CalendarPickerContainer(hintText: 'Date'),
              
