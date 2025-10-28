@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/core/theme/app_textstyl.dart';
+
+import 'package:property_managment/widget/checkbox.dart';
 
 class FilterSortPage extends StatefulWidget {
   const FilterSortPage({super.key});
@@ -10,213 +13,303 @@ class FilterSortPage extends StatefulWidget {
 
 class _FilterSortPageState extends State<FilterSortPage> {
   int selectedIndex = 0;
-  RangeValues priceRange = const RangeValues(1000, 10000);
-  RangeValues sqftRange = const RangeValues(500, 5000);
 
-  Map<String, bool> propertyTypes = {
-    'Apartment': false,
-    'Villa': false,
-    'Plot': false,
-    'Commercial': false,
-  };
+  // Range values
+  RangeValues _priceRange = const RangeValues(1000, 50000);
+  RangeValues _pricePerSqftRange = const RangeValues(200, 1500);
+  RangeValues _areaRange = const RangeValues(500, 5000);
+
+  // Checkbox values
+  bool apartment = false;
+  bool villa = false;
+  bool house = false;
+
+  final List<String> filterItems = [
+    'Property Type',
+    'Price',
+    'Price per Sqft',
+    'Area Sqft',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Filters & Sort",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.white,
-        elevation: 1,
-        foregroundColor:AppColors.black,
-      ),
-      body: SafeArea( // ✅ Prevents bottom overflow
+      backgroundColor: AppColors.white,
+      body: SafeArea(
         child: Row(
           children: [
-            // Left Side Menu
+            // Left Filter Menu
             Container(
-              width: 130,
-              color:AppColors.greyColor,
-              child: ListView(
-                children: [
-                  buildMenuItem("Property Type", 0),
-                  buildMenuItem("Price", 1),
-                  buildMenuItem("Price per Sqft", 2),
-                  buildMenuItem("Area Sqft", 3),
-                ],
+              width: 120,
+              color: AppColors.propertyContainer,
+              child: ListView.builder(
+                itemCount: filterItems.length,
+                itemBuilder: (context, index) {
+                  bool isSelected = index == selectedIndex;
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.white : AppColors.propertyContainer,
+                        border: Border(
+                          right: BorderSide(
+                            color: isSelected ? AppColors.greenColor : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        filterItems[index],
+                        style: AppTextstyle.propertysmallTextstyle(
+                          context,
+                          fontColor: AppColors.black,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
 
-            // Right Side Content
+            // Right Content Area
             Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: getFilterContent(),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                color: AppColors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Top Bar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Filters & Sort',
+                          style: AppTextstyle.propertyLargeTextstyle(
+                            context,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Icon(Icons.close),
+                      ],
                     ),
-                  ),
+                    const SizedBox(height: 25),
 
-                  // Buttons Section
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 16, right: 16, bottom: 20, top: 10), // ✅ Space above nav bar
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // Property Type Section
+                    if (selectedIndex == 0) ...[
+                      Text(
+                        'Select Property Type',
+                        style: AppTextstyle.propertyMediumTextstyle(
+                          context,
+                          fontColor: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      CheckboxWithListenable(
+                        text: 'Apartment',
+                        value: apartment,
+                        onChanged: (val) {
+                          setState(() {
+                            apartment = val ?? false;
+                          });
+                        },
+                      ),
+                      CheckboxWithListenable(
+                        text: 'Villa',
+                        value: villa,
+                        onChanged: (val) {
+                          setState(() {
+                            villa = val ?? false;
+                          });
+                        },
+                      ),
+                      CheckboxWithListenable(
+                        text: 'House',
+                        value: house,
+                        onChanged: (val) {
+                          setState(() {
+                            house = val ?? false;
+                          });
+                        },
+                      ),
+                    ],
+
+                    // Price Section
+                    if (selectedIndex == 1) ...[
+                      Text(
+                        'Select Price Range',
+                        style: AppTextstyle.propertyMediumTextstyle(
+                          context,
+                          fontColor: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      RangeSlider(
+                        values: _priceRange,
+                        min: 0,
+                        max: 100000,
+                        divisions: 10,
+                        activeColor: AppColors.greenColor,
+                        inactiveColor: AppColors.opacitygreyColor,
+                        labels: RangeLabels(
+                          '₹${_priceRange.start.toStringAsFixed(0)}',
+                          '₹${_priceRange.end.toStringAsFixed(0)}',
+                        ),
+                        onChanged: (values) {
+                          setState(() {
+                            _priceRange = values;
+                          });
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('₹0', style: AppTextstyle.propertysmallTextstyle(context)),
+                          Text('₹100000+', style: AppTextstyle.propertysmallTextstyle(context)),
+                        ],
+                      ),
+                    ],
+
+                    // Price Per Sqft Section
+                    if (selectedIndex == 2) ...[
+                      Text(
+                        'Price per Sqft',
+                        style: AppTextstyle.propertyMediumTextstyle(
+                          context,
+                          fontColor: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      RangeSlider(
+                        values: _pricePerSqftRange,
+                        min: 0,
+                        max: 3000,
+                        divisions: 15,
+                        activeColor: AppColors.greenColor,
+                        inactiveColor: AppColors.opacitygreyColor,
+                        labels: RangeLabels(
+                          '₹${_pricePerSqftRange.start.toStringAsFixed(0)}',
+                          '₹${_pricePerSqftRange.end.toStringAsFixed(0)}',
+                        ),
+                        onChanged: (values) {
+                          setState(() {
+                            _pricePerSqftRange = values;
+                          });
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('₹0', style: AppTextstyle.propertysmallTextstyle(context)),
+                          Text('₹3000+', style: AppTextstyle.propertysmallTextstyle(context)),
+                        ],
+                      ),
+                    ],
+
+                    // Area Sqft Section
+                    if (selectedIndex == 3) ...[
+                      Text(
+                        'Select Area Range (Sqft)',
+                        style: AppTextstyle.propertyMediumTextstyle(
+                          context,
+                          fontColor: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      RangeSlider(
+                        values: _areaRange,
+                        min: 0,
+                        max: 10000,
+                        divisions: 10,
+                        activeColor: AppColors.greenColor,
+                        inactiveColor: AppColors.opacitygreyColor,
+                        labels: RangeLabels(
+                          '${_areaRange.start.toStringAsFixed(0)}',
+                          '${_areaRange.end.toStringAsFixed(0)}+',
+                        ),
+                        onChanged: (values) {
+                          setState(() {
+                            _areaRange = values;
+                          });
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('0 sqft', style: AppTextstyle.propertysmallTextstyle(context)),
+                          Text('10000+ sqft', style: AppTextstyle.propertysmallTextstyle(context)),
+                        ],
+                      ),
+                    ],
+
+                    const Spacer(),
+
+                    // Bottom Buttons
+                    Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                propertyTypes.updateAll((key, value) => false);
-                                priceRange = const RangeValues(1000, 10000);
-                                sqftRange = const RangeValues(500, 5000);
+                                apartment = false;
+                                villa = false;
+                                house = false;
+                                _priceRange = const RangeValues(1000, 50000);
+                                _pricePerSqftRange = const RangeValues(200, 1500);
+                                _areaRange = const RangeValues(500, 5000);
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey.shade300,
+                              backgroundColor: AppColors.opacitygreyColor,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              minimumSize: const Size(double.infinity, 48),
                             ),
-                            child: const Text(
-                              "Clear",
-                              style: TextStyle(color: Colors.black),
+                            child: Text(
+                              'Clear All',
+                              style: AppTextstyle.propertyMediumTextstyle(
+                                context,
+                                fontColor: AppColors.black,
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              // Apply filters logic here
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.greenColor,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              minimumSize: const Size(double.infinity, 48),
                             ),
-                            child: const Text(
-                              "Apply",
-                              style: TextStyle(color: AppColors.white),
+                            child: Text(
+                              'Apply',
+                              style: AppTextstyle.propertyMediumTextstyle(context),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget buildMenuItem(String title, int index) {
-    bool selected = selectedIndex == index;
-    return InkWell(
-      onTap: () => setState(() => selectedIndex = index),
-      child: Container(
-        color: selected ? Colors.green.shade700 : Colors.transparent,
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-        child: Text(
-          title,
-          style: TextStyle(
-            color: selected ?AppColors.white :AppColors.black,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getFilterContent() {
-    switch (selectedIndex) {
-      case 0:
-        return ListView(
-          children: propertyTypes.keys.map((type) {
-            return CheckboxListTile(
-              title: Text(
-                type,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              value: propertyTypes[type],
-              onChanged: (value) {
-                setState(() {
-                  propertyTypes[type] = value!;
-                });
-              },
-            );
-          }).toList(),
-        );
-
-      case 1:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Select Price Range (₹)",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            RangeSlider(
-              values: priceRange,
-              min: 1000,
-              max: 10000,
-              divisions: 10,
-              labels: RangeLabels(
-                "₹${priceRange.start.toInt()}",
-                "₹${priceRange.end.toInt()}+",
-              ),
-              onChanged: (values) {
-                setState(() {
-                  priceRange = values;
-                });
-              },
-            ),
-          ],
-        );
-
-      case 2:
-        return const Center(
-          child: Text(
-            "Price per Sqft filter coming soon...",
-            style: TextStyle(fontSize: 16),
-          ),
-        );
-
-      case 3:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Choose a range below (sq ft)",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            RangeSlider(
-              values: sqftRange,
-              min: 500,
-              max: 10000,
-              divisions: 10,
-              labels: RangeLabels(
-                sqftRange.start.toInt().toString(),
-                "${sqftRange.end.toInt()}+",
-              ),
-              onChanged: (values) {
-                setState(() {
-                  sqftRange = values;
-                });
-              },
-            ),
-          ],
-        );
-
-      default:
-        return const SizedBox();
-    }
   }
 }
