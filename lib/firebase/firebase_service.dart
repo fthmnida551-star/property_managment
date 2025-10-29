@@ -2,8 +2,14 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:property_managment/firebase_options.dart';
+<<<<<<< HEAD
 import 'package:property_managment/modelClass/property_model.dart';
+=======
+import 'package:property_managment/modelClass/user_model.dart';
+List<UserModel> UsersList=[];
+>>>>>>> 00fc372257a0c666222614752b7b29aef0335547
 
 class FirebaseService {
   static late final FirebaseFirestore fdb;
@@ -28,7 +34,9 @@ class FirebaseService {
         .add(propertyData)
         .then((DocumentReference<Map<String, dynamic>> docRef) {
       final String id = docRef.id;
+
       log("Insert Data with $id");
+<<<<<<< HEAD
       getAllPropertyModel();
     // getAllPersonList();
     });}
@@ -46,3 +54,35 @@ class FirebaseService {
 
     }
    
+=======
+    });
+    getAllUsersList(
+      
+    );
+  }
+
+  void addUsers(Map<String, dynamic> finaldetails) {
+  fdb.collection("STAFF").add(finaldetails).then((DocumentReference<Map<String,dynamic>> docRef){
+    final String id =docRef.id;
+    log("adding users");
+  });
+  }
+  void getAllUsersList()async{
+
+    UsersList.clear();
+
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await fdb.collection('STAFF').get();
+    querySnapshot.docs.map((element) {
+      final String id = element.id;
+      final Map<String, dynamic> data = element.data();
+      UsersList.add(UserModel.fromMap(data, id));
+      
+     });
+     log("read userslist");
+
+  }
+}
+  
+
+>>>>>>> 00fc372257a0c666222614752b7b29aef0335547
