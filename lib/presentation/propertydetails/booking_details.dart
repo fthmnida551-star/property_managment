@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -8,13 +11,14 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
-  const BookingDetails({super.key});
-
+  BookingDetails({super.key});
+  
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
 }
 
 class _BookingDetailsState extends State<BookingDetails> {
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
   Widget divider = SizedBox(height: 10);
   TextEditingController namectlr = TextEditingController();
   TextEditingController contactCtlr = TextEditingController();
@@ -52,42 +56,53 @@ class _BookingDetailsState extends State<BookingDetails> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              TextFieldContainer(text: 'Name', controllerName: namectlr, validator: (String? value) {
-                 if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    if (!RegExp(r'^[A-Z]').hasMatch(value)) {
-                      return 'First letter must be a capital letter';
-                    }
-                    return null;
-                },),
+              TextFieldContainer(
+                text: 'Name',
+                controllerName: namectlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                    return 'First letter must be a capital letter';
+                  }
+                  return null;
+                },
+              ),
               divider,
-              TextFieldContainer(text: 'Contact', controllerName: contactCtlr, validator: (String? value) { 
-                 if (value == null || value.isEmpty) {
-                      return 'Please enter your contact number';
-                    }
-                    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-                      return 'Only numbers are allowed';
-                    }
-                    if (value.length != 10) {
-                      return 'Contact number must be 10 digits';
-                    }
-                    return null;
-               },),
+              TextFieldContainer(
+                text: 'Contact',
+                controllerName: contactCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your contact number';
+                  }
+                  if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                    return 'Only numbers are allowed';
+                  }
+                  if (value.length != 10) {
+                    return 'Contact number must be 10 digits';
+                  }
+                  return null;
+                },
+              ),
               divider,
-              TextFieldContainer(text: 'Email', controllerName: emailCtlr, validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
+              TextFieldContainer(
+                text: 'Email',
+                controllerName: emailCtlr,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
 
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                },),
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
               divider,
               CalendarPickerContainer(hintText: 'Date'),
-             
             ],
           ),
         ),
@@ -95,15 +110,26 @@ class _BookingDetailsState extends State<BookingDetails> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
-                text: 'Save',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GrowContainer()),
-                  );
-                },
-              ),
-      ), 
+          text: 'Save',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GrowContainer()),
+            );
+          },
+        ),
+      ),
     );
   }
+  void addProperties(Map<String, dynamic> propertyData) async {
+  await fdb.collection("PROPERTIES").add(propertyData).then((
+    DocumentReference<Map<String, dynamic>> docRef,
+  ) {
+    final String id = docRef.id;
+
+    log("Insert Data with $id");
+  });
 }
+}
+
+

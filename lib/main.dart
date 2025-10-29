@@ -20,10 +20,8 @@ import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+ WidgetsFlutterBinding.ensureInitialized();
   FirebaseService().initialize();
-
-
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
