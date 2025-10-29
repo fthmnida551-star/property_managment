@@ -22,6 +22,8 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 
 void main() async {
+ WidgetsFlutterBinding.ensureInitialized();
+  FirebaseService().initialize();
    WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
