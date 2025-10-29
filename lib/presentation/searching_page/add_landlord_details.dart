@@ -10,7 +10,8 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class AddLandlordDetails extends StatefulWidget {
-  const AddLandlordDetails({super.key});
+  final Map<String, dynamic> propertyMap;
+  const AddLandlordDetails({super.key,required this.propertyMap});
 
   @override
   State<AddLandlordDetails> createState() => _AddLandlordDetailsState();
@@ -106,7 +107,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                     },
                   ),
                   divider,
-                  TextFieldContainer(
+                  TextFieldContainer( 
                     text: 'Email',
                     controllerName: emailCtlr,
                     validator: (String? value) {
@@ -133,17 +134,19 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
         child: GreenButton(
           text: 'Submit',
           onTap: () {
-            if (_saveButtonMode == SaveButtonMode.save) {
+            
+            if (frmKey.currentState!.validate()) {
+              if (_saveButtonMode == SaveButtonMode.save) {
               Map<String, dynamic> finaldetails = {
-                "IS_OWN_PROPERTY" : isOwnProperty?"YES":"NO",
-                "OWNER_NAME" : nameCtlr,
-                "OWNER's_CONTACT":contactCtlr,
-                "OWNER'S_EMAIL":emailCtlr,
+                "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
+                "OWNER_NAME": nameCtlr.text.trim(),
+                "OWNER's_CONTACT":int.tryParse( contactCtlr.text.trim()),
+                "OWNER'S_EMAIL": emailCtlr.text.trim(),
               };
+
               FirebaseService().addProperties(finaldetails);
               _clearControllers();
             }
-            if (frmKey.currentState!.validate()) {
               Navigator.push(
                 context,
                 MaterialPageRoute(

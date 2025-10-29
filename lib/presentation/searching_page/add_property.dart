@@ -216,8 +216,11 @@ class _AddPropertyState extends State<AddProperty> {
         child: GreenButton(
           text: 'Next',
           onTap: () {
-            if (_saveButtonMode == SaveButtonMode.save) {
-              Map<String, dynamic> propertyDetailsAll = {
+            
+            if (formKey.currentState!.validate()) {
+              Map<String, dynamic> propertyDetailsAll = {};
+              if (_saveButtonMode == SaveButtonMode.save) {
+              propertyDetailsAll = {
                 "PROPERTY TYPE" : propertyTypeCtlr,
                 "PROPERTY PRICE" :priceCtlr,
                 "PROPERTY DETAILS":detailsCtlr,
@@ -225,13 +228,12 @@ class _AddPropertyState extends State<AddProperty> {
                 "PROPERTY LOCATION":locationCtlr,
 
               };
-              FirebaseService().addProperties(propertyDetailsAll);
+              
               clearController();
             }
-            if (formKey.currentState!.validate()) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddLandlordDetails()),
+                MaterialPageRoute(builder: (context) => AddLandlordDetails( propertyMap:propertyDetailsAll,)),
               );
             }
           },
