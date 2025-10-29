@@ -12,10 +12,10 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
     return UserModel(
       id,
-      map['USER_NAME'],
-      map['USER_EMAIL'],
-      map["USER_ROLE"],
-      map['USER_PASSWORD'],
+      map['USER_NAME']?? "",
+      map['USER_EMAIL']??"",
+      map["USER_ROLE"]??"",
+      map['USER_PASSWORD']??"",
       
     );
   }
