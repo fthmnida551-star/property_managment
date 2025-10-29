@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
@@ -13,7 +14,8 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class AddUserScreen extends StatefulWidget {
-  const AddUserScreen({super.key});
+  final UserModel? users;
+  const AddUserScreen({super.key,this.users});
 
   @override
   State<AddUserScreen> createState() => _AddUserScreenState();
