@@ -27,7 +27,6 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
   bool obscurePassword = true; // <-- ✅ You forgot to declare this variable
 
-  @override
   _clearControllers() {
     namectrlr.clear();
     emailctrlr.clear();
@@ -121,7 +120,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                     child: DropdownButtonFormField<String>(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please select your role";
+                          return "Please select your role"; 
                         }
                         return null;
                       },
@@ -129,6 +128,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Role',
+                        
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: _roles
@@ -223,12 +223,15 @@ class _AddUserScreenState extends State<AddUserScreen> {
             if (formkey.currentState!.validate()) {
                if (_saveButtonMode == SaveButtonMode.save) {
               Map<String, dynamic> finaldetails = {
-                "USER 's_NAME": namectrlr.text.trim(),
-                "USER's_EMAIL": int.tryParse(emailctrlr.text.trim()),
-                "USER'S_PASSWORD": passWordctrlr.text.trim(),
+                "USER_NAME": namectrlr.text.trim(),
+                "USER_EMAIL": int.tryParse(emailctrlr.text.trim()),
+                "USER_ROLE":_selectedRole,
+                "USER_PASSWORD": passWordctrlr.text.trim(),
+
               };
 
               FirebaseService().addUsers(finaldetails);
+              
               _clearControllers();
             }
               Navigator.pop(
