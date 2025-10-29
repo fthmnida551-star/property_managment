@@ -33,7 +33,7 @@ class _FilterSortPageState extends State<FilterSortPage> {
         elevation: 1,
         foregroundColor:AppColors.black,
       ),
-      body: SafeArea( // ✅ Prevents bottom overflow
+      body: SafeArea( 
         child: Row(
           children: [
             // Left Side Menu
