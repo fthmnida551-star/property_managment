@@ -4,12 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/firebase_options.dart';
-<<<<<<< HEAD
 import 'package:property_managment/modelClass/property_model.dart';
-=======
 import 'package:property_managment/modelClass/user_model.dart';
 List<UserModel> UsersList=[];
->>>>>>> 00fc372257a0c666222614752b7b29aef0335547
 
 class FirebaseService {
   static late final FirebaseFirestore fdb;
@@ -36,12 +33,11 @@ class FirebaseService {
       final String id = docRef.id;
 
       log("Insert Data with $id");
-<<<<<<< HEAD
-      getAllPropertyModel();
+      getAllProperty();
     // getAllPersonList();
     });}
 
-    void getAllPropertyModel() async {
+    void getAllProperty() async {
     PropertyList.clear();
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
         await fdb.collection('property details').get();
@@ -52,14 +48,11 @@ class FirebaseService {
     });
   }
 
-    }
+    // }
    
-=======
-    });
-    getAllUsersList(
-      
-    );
-  }
+    // });
+    // getAllUsersList() );
+  // }
 
   void addUsers(Map<String, dynamic> finaldetails) {
   fdb.collection("STAFF").add(finaldetails).then((DocumentReference<Map<String,dynamic>> docRef){
@@ -85,4 +78,3 @@ class FirebaseService {
 }
   
 
->>>>>>> 00fc372257a0c666222614752b7b29aef0335547
