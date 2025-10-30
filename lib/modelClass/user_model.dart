@@ -1,6 +1,6 @@
 
 class UserModel {
-  String? id;
+  final String id;
   final String name;
   final dynamic email;
   final String role;
