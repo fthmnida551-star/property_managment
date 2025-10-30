@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -185,5 +187,15 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
         ),
       ),
     );
+  }
+   void updatePerson(PersonModel editProfile) async {
+    final DocumentReference<Map<String, dynamic>> documentRef =
+        FirebaseFirestore.instance.collection("EDIT PROFILE").doc(editProfile.id);
+    await documentRef.update(editProfile.toJson()).then((value) {
+      log("Updated successfully");
+    }).onError((e, stack) {
+      log("Error is $e", name: "oxdo");
+    });
+    // getAllPersonList();
   }
 }

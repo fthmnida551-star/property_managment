@@ -8,7 +8,8 @@ import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Profilescreen extends StatefulWidget {
-  const Profilescreen({super.key});
+  final Map<String, dynamic> profileMap;
+  const Profilescreen({super.key, required this.profileMap});
 
   @override
   State<Profilescreen> createState() => _ProfilescreenState();
@@ -232,4 +233,5 @@ class _ProfilescreenState extends State<Profilescreen> {
       ),
     );
   }
+  
 }
