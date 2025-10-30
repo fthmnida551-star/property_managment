@@ -24,16 +24,7 @@ class FirebaseService {
     fdb = FirebaseFirestore.instance;
   }
 
-  void addProperties(Map<String, dynamic> propertyData) async {
-    await fdb.collection("PROPERTIES").add(propertyData).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-
-      log("Insert Data with $id");
-    });
-    // getAllUsersList();
-  }
+ 
 
   void addUsers(Map<String, dynamic> finaldetails) {
     fdb.collection("STAFF").add(finaldetails).then((

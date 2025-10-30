@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,9 +9,63 @@ import 'package:property_managment/presentation/dashboard/widget/bookingcontaine
 import 'package:property_managment/presentation/dashboard/widget/container_widget.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  int totalproperty =0;
+  int bookedproperty =0;
+  int vacantproperty =0;
+  Future<int> getUserCount() async {
+  try {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('PROPERTIES').get();
+
+    int count = snapshot.size;
+    print('Total properties: $count');
+    return count;
+  } catch (e) {
+    print('Error getting user count: $e');
+    return 0;
+  }
+  
+}
+Future<int> getBookedCount() async {
+  try {
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('BOOKING DETAILS').get();
+
+    int count = snapshot.size;
+    print('Booked: $count');
+    return count;
+  } catch (e) {
+    print('Error getting user count: $e');
+    return 0;
+  }
+  
+}
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadPropertyCount();
+  }
+  void _loadPropertyCount() async {
+    int count = await getUserCount();
+    int booked =await getBookedCount();
+    setState(() {
+      totalproperty = count;
+      bookedproperty =booked;
+      vacantproperty =totalproperty-bookedproperty;
+    });
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +110,7 @@ class DashboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5,),
                           Text(
-                            '100',
+                            '$bookedproperty',
                             style: AppTextstyle.propertyLargeTextstyle(
                               context,
                               fontColor: AppColors.greenColor,
@@ -85,7 +140,7 @@ class DashboardScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          '30',
+                          '$vacantproperty',
                           style: AppTextstyle.propertyLargeTextstyle(
                             context,
                             fontColor: AppColors.redcolor,
@@ -121,7 +176,7 @@ class DashboardScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 100),
                       child: Text(
-                        '130',
+                        "$totalproperty",
                         style: AppTextstyle.propertyLargeTextstyle(
                           context,
                           fontColor: AppColors.yellowcolor,
@@ -133,7 +188,7 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 5.h),
-
+      
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -168,5 +223,6 @@ class DashboardScreen extends StatelessWidget {
     
     );
   }
+
   
 }
