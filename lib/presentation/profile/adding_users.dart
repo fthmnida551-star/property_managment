@@ -41,7 +41,21 @@ class _AddUserScreenState extends State<AddUserScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.users != null){
+      namectrlr.text = widget.users!.name;
+      emailctrlr.text = widget.users!.email;
+      passWordctrlr.text = widget.users!.password;
+      _selectedRole = widget.users!.role;
+    }
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -57,6 +71,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               ),
             ),
             Text(
+             
               'Add User',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
