@@ -151,59 +151,7 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
 
                 SizedBox(height: 20),
-                // TextFieldContainer(
-                //   text: 'Property Type',
-                //   controllerName: propertyTypeCtlr,
-                //   validator: (String? value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter  property type';
-                //     }
-
-                //     return null; // valid input
-                //   },
-                // ),
-
-
-                // Container(
-                //   height: 55.h,
-                //   width: double.infinity,
-                //   padding: EdgeInsets.symmetric(horizontal: 12.w),
-                //   decoration: BoxDecoration(
-                //     border: Border.all(
-                //       color: AppColors.opacitygreyColor,
-                //       width: 1,
-                //     ),
-                //     borderRadius: BorderRadius.circular(8),
-                //   ),
-                //   child: DropdownButtonHideUnderline(
-                //     child: DropdownButton<String>(
-                //       isExpanded: true,
-                //       borderRadius: BorderRadius.circular(8),
-                //       value: _selectedValue,
-                //       hint: Text(
-                //         'Property Type',
-                //         style: TextStyle(
-                //           fontSize: 18.sp,
-                //           color: AppColors.opacitygrayColorText,
-                //         ),
-                //       ),
-                //       items: _items.map((String value) {
-                //         return DropdownMenuItem<String>(
-                //           value: value,
-                //           child: Text(value, style: TextStyle(fontSize: 18.sp)),
-                //         );
-                //       }).toList(),
-                //       onChanged: (String? newValue) {
-                //         setState(() {
-                //           _selectedValue = newValue;
-                //         });
-                //       },
-                //       icon: const Icon(Icons.arrow_drop_down),
-                //       dropdownColor: Colors.white,
-                //     ),
-                //   ),
-                // ),
-
+               
                  DropdownFormField(
                   hintText: 'Property Type',
                   items: _items,
