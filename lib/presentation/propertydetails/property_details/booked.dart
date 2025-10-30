@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
@@ -11,7 +12,10 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
-  const BookedPropertyScreen({super.key});
+  final String userName;
+  final PropertyModel property;
+  const BookedPropertyScreen({super.key, required this.userName, required this.property});
+  // const BookedPropertyScreen({super.key});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
 }
@@ -140,8 +144,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '₹ 79,00,000',
+                    Text('${widget.property.amount}',
+                      // '₹ 79,00,000',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -149,8 +153,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text(
-                      'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
+                    Text('${widget.property.name}\n${widget.property.bathrooms}\n${widget.property.sqft}',
+                      // 'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
                     SizedBox(height: 15),
@@ -159,8 +163,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       children: [
                         Icon(Icons.location_on, color: AppColors.black),
                         SizedBox(width: 5),
-                        Text(
-                          'KARAVATTOM, MALAPPURAM',
+                        Text('${widget.property.location}',
+                          // 'KARAVATTOM, MALAPPURAM',
                           style: TextStyle(
                             fontSize: 15,
                             color: AppColors.black,
@@ -212,7 +216,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Property Overview\nModern Apartment\nKARAVATTOM, MALAPPURAM',
+                                    'Property Overview\n${widget.property.name},\n${widget.property.location}',
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -227,19 +231,19 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     RowWidget(
-                                      text: 'Flats/Apartments',
+                                      text: '${widget.property.propertyType}',
                                       icons: Icons.apartment,
                                     ),
                                     Divider(thickness: 1),
                                     RowWidget(
-                                      text: 'Ready to move',
+                                      text:'${widget.property.readyToMove}',
                                       icons: Icons.check_circle_outline,
                                     ),
-                                    Divider(thickness: 1),
-                                    RowWidget(
-                                      text: 'Owner',
-                                      icons: Icons.account_circle,
-                                    ),
+                                    // Divider(thickness: 1),
+                                    // RowWidget(
+                                    //   text: 'Owner',
+                                    //   icons: Icons.account_circle,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -264,20 +268,20 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     DetailsTable(
-                                      text: 'BHK',
-                                      details: '2',
+                                      text: 'Bedrooms',
+                                      details:"${widget.property.bathrooms}",
                                       icons: Icons.bed,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Carpet Area',
-                                      details: '1380 Sqft',
+                                      details:"${widget.property.sqft}",
                                       icons: Icons.check_box_outline_blank,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Bathrooms',
-                                      details: '2',
+                                      details: "${widget.property.bathrooms}",
                                       icons: Icons.bathtub,
                                     ),
                                   ],
@@ -287,11 +291,11 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               Text("Amenities", style: TextStyle(fontSize: 16)),
                               SizedBox(height: 8),
                               RowWidget(
-                                text: 'Car Parking',
+                                text: "${widget.property.carParking}",
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: 'Maintenance (Monthly) 2000',
+                                text: "Maintenance (Monthly) ${widget.property.amount}",
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],
