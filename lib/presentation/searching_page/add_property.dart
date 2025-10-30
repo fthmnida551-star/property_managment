@@ -10,6 +10,7 @@ import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/presentation/searching_page/widget/dropdown._form_field.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
+import 'package:property_managment/widget/checkbox.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,11 +24,17 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   String? _selectedValue;
-  final List<String> _items = ['APARTMENT', 'FLAT', 'LAND', 'VILLA'];
+  final List<String> _items = ['APARTMENT', 'LAND', 'VILLA'];
   final formKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   TextEditingController propertyTypeCtlr = TextEditingController();
-  TextEditingController detailsCtlr = TextEditingController();
+  // TextEditingController detailsCtlr = TextEditingController();
+  TextEditingController detailsAbtPrprtyCtlr = TextEditingController();
+  TextEditingController bhkctlr = TextEditingController();
+  TextEditingController bathroomctlr = TextEditingController();
+  TextEditingController carpetAreactlr = TextEditingController();
+  TextEditingController carParkingCtlr = TextEditingController();
+  TextEditingController maintenancectlr = TextEditingController();
   TextEditingController locationCtlr = TextEditingController();
   TextEditingController descriptionCtlr = TextEditingController();
   TextEditingController priceCtlr = TextEditingController();
@@ -50,7 +57,7 @@ class _AddPropertyState extends State<AddProperty> {
 
   clearController() {
     propertyTypeCtlr.clear();
-    detailsCtlr.clear();
+
     locationCtlr.clear();
     descriptionCtlr.clear();
     priceCtlr.clear();
@@ -151,8 +158,8 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
 
                 SizedBox(height: 20),
-               
-                 DropdownFormField(
+
+                DropdownFormField(
                   hintText: 'Property Type',
                   items: _items,
                   value: _selectedValue,
@@ -165,8 +172,9 @@ class _AddPropertyState extends State<AddProperty> {
                   onChanged: (newValue) {
                     setState(() {
                       _selectedValue = newValue;
+                      propertyTypeCtlr.text = newValue!;
                     });
-                  },  //onSaved: (String? newValue) {  },
+                  }, //onSaved: (String? newValue) {  },
                 ),
 
                 divider,
@@ -184,19 +192,95 @@ class _AddPropertyState extends State<AddProperty> {
                   },
                 ),
                 divider,
-                TextFieldContainer(
-                  text: 'Details',
-                  controllerName: detailsCtlr,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter property details';
-                    }
-                    return null;
-                  },
-                ),
+                if (propertyTypeCtlr.text == _items[0])
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Details", style: TextStyle(fontSize: 20)),
+                         divider,
+                        TextFieldContainer(
+                          text: "About property",
+                          controllerName: detailsAbtPrprtyCtlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter about property';
+                            }
+                            return null;
+                          },
+                        ),
+                        divider,
+                        DropdownFormField(
+                          hintText: 'Property Type',
+                          items: _items,
+                          value: _selectedValue,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a property type';
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedValue = newValue;
+                            });
+                          }, //onSaved: (String? newValue) {  },
+                        ),
+                        divider,
+                        CheckboxWithListenable(text: 'Ready to move'),
+                        divider,
+                        TextFieldContainer(
+                          text: "BHK",
+                          controllerName: bhkctlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter about property';
+                            }
+                            return null;
+                          },
+                        ),
+                        divider,
+                        TextFieldContainer(
+                          text: "Bathrooms",
+                          controllerName: bathroomctlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the quantity';
+                            }
+                          },
+                        ),
+                        divider,
+                        TextFieldContainer(
+                          text: "Carpet Area(sqft)",
+                          controllerName: carpetAreactlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter sqft';
+                            }
+                          },
+                        ),
+                       
+                        divider,
+                        CheckboxWithListenable(text: 'Car parking'),
+                        TextFieldContainer(
+                          text: "maintenance(Monthly)",
+                          controllerName: maintenancectlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the amount of maintence';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 divider,
                 TextFieldContainer(
-                  text: 'Description',
+                  text: 'Description/Extra Details',
                   controllerName: descriptionCtlr,
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -227,14 +311,16 @@ class _AddPropertyState extends State<AddProperty> {
           text: 'Next',
           onTap: () {
             if (formKey.currentState!.validate()) {
-            
-
               Map<String, dynamic> propertyDetailsAll = {};
               if (_saveButtonMode == SaveButtonMode.save) {
                 propertyDetailsAll = {
                   "PROPERTY TYPE": _selectedValue,
                   "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-                  "PROPERTY DETAILS": detailsCtlr.text.trim(),
+                  // "PROPERTY DETAILS": detailsCtlr.text.trim(),
+                  "DETAILS ABOUT PROPERTY": detailsAbtPrprtyCtlr.text.trim(),
+                  "DETAILS BHK": bhkctlr.text.trim(),
+                  "DETAILS BATHROOM": bathroomctlr.text.trim(),
+                  "DETAILS MAINTENANCE": maintenancectlr.text.trim(),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
                   "PROPERTY LOCATION": locationCtlr.text.trim(),
                 };

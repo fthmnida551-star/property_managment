@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -20,6 +21,7 @@ class AddLandlordDetails extends StatefulWidget {
 }
 
 class _AddLandlordDetailsState extends State<AddLandlordDetails> {
+  FirebaseFirestore fdb =  FirebaseFirestore.instance;
   final frmKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   bool isOwnProperty = false;
@@ -149,7 +151,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                   ...ownerDetails,
                 };
                 log("asdfghjkl $finaldetails");
-                FirebaseService().addProperties(finaldetails);
+               addProperties(finaldetails);
                 _clearControllers();
               }
               Navigator.push(
@@ -163,5 +165,16 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
         ),
       ),
     );
+  }
+
+  void addProperties(Map<String, dynamic> propertyData) async {
+    await fdb.collection("PROPERTIES").add(propertyData).then((
+      DocumentReference<Map<String, dynamic>> docRef,
+    ) {
+      final String id = docRef.id;
+
+      log("Insert Data with $id");
+    });
+    // getAllUsersList();
   }
 }

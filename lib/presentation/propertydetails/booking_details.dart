@@ -160,8 +160,8 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-  void addbookingDetails(Map<String, dynamic> propertyData) async {
-    await fdb.collection("BOOKING DETAILS").add(propertyData).then((
+  void addbookingDetails(Map<String, dynamic> bookingData) async {
+    await fdb.collection("BOOKING DETAILS").add(bookingData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
       final String id = docRef.id;
