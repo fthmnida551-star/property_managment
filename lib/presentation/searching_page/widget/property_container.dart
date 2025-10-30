@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
@@ -12,6 +13,7 @@ class PropertyContainer extends StatefulWidget {
   final Color? textColor;
   final bool isShow;
   final VoidCallback? onTap;
+  // final PropertyModel property;
   const PropertyContainer({
     super.key,
     required this.text,
@@ -19,6 +21,7 @@ class PropertyContainer extends StatefulWidget {
     this.textColor,
     this.isShow = true,
     this.onTap,
+    // required this.property
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
@@ -29,10 +32,10 @@ class _PropertyContainerState extends State<PropertyContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap??  () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => PropertydetailsScreen(userName: '', property: ,)),//NotBookedPropertyScreen()),
+        // );
       }, 
       // onTap: () {
       //   Navigator.push(

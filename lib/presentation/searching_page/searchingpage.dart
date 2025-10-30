@@ -18,6 +18,7 @@ class Searchingpage extends StatefulWidget {
 }
 
 class _SearchingpageState extends State<Searchingpage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,7 +181,7 @@ class _SearchingpageState extends State<Searchingpage> {
                     builder: (context) => BookedPropertyScreen(),
                   ),
                 );
-              },
+              }, 
             ),
             PropertyContainer(text: 'Booking Now'),
             PropertyContainer(

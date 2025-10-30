@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -10,7 +12,8 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class AddLandlordDetails extends StatefulWidget {
-  const AddLandlordDetails({super.key});
+  final Map<String, dynamic> propertyMap;
+  const AddLandlordDetails({super.key, required this.propertyMap});
 
   @override
   State<AddLandlordDetails> createState() => _AddLandlordDetailsState();
@@ -133,17 +136,22 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
         child: GreenButton(
           text: 'Submit',
           onTap: () {
-            if (_saveButtonMode == SaveButtonMode.save) {
-              Map<String, dynamic> finaldetails = {
-                "IS_OWN_PROPERTY" : isOwnProperty?"YES":"NO",
-                "OWNER_NAME" : nameCtlr,
-                "OWNER's_CONTACT":contactCtlr,
-                "OWNER'S_EMAIL":emailCtlr,
-              };
-              FirebaseService().addProperties(finaldetails);
-              _clearControllers();
-            }
             if (frmKey.currentState!.validate()) {
+              if (_saveButtonMode == SaveButtonMode.save) {
+                Map<String, dynamic> ownerDetails = {
+                  "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
+                  "OWNER_NAME": nameCtlr.text.trim(),
+                  "OWNER_CONTACT": int.tryParse(contactCtlr.text.trim()),
+                  "OWNER_EMAIL": emailCtlr.text.trim(),
+                };
+                Map<String, dynamic> finaldetails = {
+                  ...widget.propertyMap,
+                  ...ownerDetails,
+                };
+                log("asdfghjkl $finaldetails");
+                FirebaseService().addProperties(finaldetails);
+                _clearControllers();
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(

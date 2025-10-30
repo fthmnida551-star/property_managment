@@ -18,11 +18,18 @@ import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/splashscreen.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
  WidgetsFlutterBinding.ensureInitialized();
-  FirebaseService().initialize();
+  // FirebaseService().initialize();
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // set settings
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+    );
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
@@ -41,8 +48,8 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-        home:Splashscreen() ,
-        debugShowCheckedModeBanner: false,
+          home: Splashscreen(),
+          debugShowCheckedModeBanner: false,
         );
       },
     );

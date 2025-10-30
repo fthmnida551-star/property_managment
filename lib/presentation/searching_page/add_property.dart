@@ -1,13 +1,14 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
+import 'package:property_managment/presentation/searching_page/widget/dropdown._form_field.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
@@ -21,6 +22,8 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
+  String? _selectedValue;
+  final List<String> _items = ['APARTMENT', 'FLAT', 'LAND', 'VILLA'];
   final formKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   TextEditingController propertyTypeCtlr = TextEditingController();
@@ -148,17 +151,24 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
 
                 SizedBox(height: 20),
-                TextFieldContainer(
-                  text: 'Property Type',
-                  controllerName: propertyTypeCtlr,
-                  validator: (String? value) {
+               
+                 DropdownFormField(
+                  hintText: 'Property Type',
+                  items: _items,
+                  value: _selectedValue,
+                  validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter  property type';
+                      return 'Please select a property type';
                     }
-
-                    return null; // valid input
+                    return null;
                   },
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedValue = newValue;
+                    });
+                  },  //onSaved: (String? newValue) {  },
                 ),
+
                 divider,
                 TextFieldContainer(
                   text: 'Price',
@@ -216,22 +226,27 @@ class _AddPropertyState extends State<AddProperty> {
         child: GreenButton(
           text: 'Next',
           onTap: () {
-            if (_saveButtonMode == SaveButtonMode.save) {
-              Map<String, dynamic> propertyDetailsAll = {
-                "PROPERTY TYPE" : propertyTypeCtlr,
-                "PROPERTY PRICE" :priceCtlr,
-                "PROPERTY DETAILS":detailsCtlr,
-                "PROPERTY DESCRIPTION":descriptionCtlr,
-                "PROPERTY LOCATION":locationCtlr,
-
-              };
-              FirebaseService().addProperties(propertyDetailsAll);
-              clearController();
-            }
             if (formKey.currentState!.validate()) {
+            
+
+              Map<String, dynamic> propertyDetailsAll = {};
+              if (_saveButtonMode == SaveButtonMode.save) {
+                propertyDetailsAll = {
+                  "PROPERTY TYPE": _selectedValue,
+                  "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
+                  "PROPERTY DETAILS": detailsCtlr.text.trim(),
+                  "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
+                  "PROPERTY LOCATION": locationCtlr.text.trim(),
+                };
+
+                clearController();
+              }
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddLandlordDetails()),
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AddLandlordDetails(propertyMap: propertyDetailsAll),
+                ),
               );
             }
           },
