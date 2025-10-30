@@ -1,21 +1,28 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/modelClass/user_model.dart';
+import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class AddUserScreen extends StatefulWidget {
-  const AddUserScreen({super.key});
+  final UserModel? users;
+  const AddUserScreen({super.key,this.users});
 
   @override
   State<AddUserScreen> createState() => _AddUserScreenState();
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
   final formkey = GlobalKey<FormState>();
   final List<String> _roles = ['Manager', 'Agent', 'Staff'];
   String? _selectedRole;
@@ -149,7 +156,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // ✅ Password Field with validation
+                
                 Padding(
                   padding: const EdgeInsets.only(left: 0.1, right: 0.1),
                   child: Padding(
@@ -218,32 +225,42 @@ class _AddUserScreenState extends State<AddUserScreen> {
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
           text: 'Submit',
-          onTap: () {
+          onTap: () async {
            
             if (formkey.currentState!.validate()) {
                if (_saveButtonMode == SaveButtonMode.save) {
-              Map<String, dynamic> finaldetails = {
+              Map<String, dynamic> userDetails = {
                 "USER_NAME": namectrlr.text.trim(),
-                "USER_EMAIL": int.tryParse(emailctrlr.text.trim()),
+                "USER_EMAIL": emailctrlr.text.trim(),
                 "USER_ROLE":_selectedRole,
                 "USER_PASSWORD": passWordctrlr.text.trim(),
 
               };
 
-              FirebaseService().addUsers(finaldetails);
+              await addUsers(userDetails);
+              
               
               _clearControllers();
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UsersScreen()),
+                  );
             }
-              Navigator.pop(
-                context,
-                MaterialPageRoute(
-                  builder: (contex) => BottomNavigationWidget(currentIndex: 1),
-                ),
-              );
+               
             }
           },
         ),
       ),
     );
   }
+
+ addUsers(Map<String, dynamic> finaldetails) {
+    fdb.collection("STAFF").add(finaldetails).then((
+      DocumentReference<Map<String, dynamic>> docRef,
+    ) {
+      final String id = docRef.id;
+      log("adding users");
+    });
+  }
+   
 }

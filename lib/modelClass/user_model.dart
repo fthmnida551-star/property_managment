@@ -6,16 +6,16 @@ class UserModel {
   final String role;
   final dynamic password;
 
-  UserModel(this.id, this.name, this.email, this.password,this.role);
+  UserModel(this.id, this.name, this.email, this.role,this.password);
 
   
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
     return UserModel(
       id,
-      map['USER_NAME'],
-      map['USER_EMAIL'],
-      map["USER_ROLE"],
-      map['USER_PASSWORD'],
+      map['USER_NAME']?? "",
+      map['USER_EMAIL']??"",
+      map["USER_ROLE"]??"",
+      map['USER_PASSWORD']??"",
       
     );
   }
