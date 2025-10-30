@@ -13,7 +13,7 @@ class PropertyContainer extends StatefulWidget {
   final Color? textColor;
   final bool isShow;
   final VoidCallback? onTap;
-  // final PropertyModel property;
+  final PropertyModel property;
   const PropertyContainer({
     super.key,
     required this.text,
@@ -21,7 +21,7 @@ class PropertyContainer extends StatefulWidget {
     this.textColor,
     this.isShow = true,
     this.onTap,
-    // required this.property
+    required this.property
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
