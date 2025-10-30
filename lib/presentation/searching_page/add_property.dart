@@ -24,20 +24,21 @@ class AddProperty extends StatefulWidget {
 
 class _AddPropertyState extends State<AddProperty> {
   String? _selectedValue;
-  final List<String> _items = ['APARTMENT', 'LAND', 'VILLA'];
+  final List<String> _items = ['APARTMENT', 'VILLA', 'LAND'];
   final formKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   TextEditingController propertyTypeCtlr = TextEditingController();
-  // TextEditingController detailsCtlr = TextEditingController();
-  TextEditingController detailsAbtPrprtyCtlr = TextEditingController();
+  TextEditingController priceCtlr = TextEditingController();
+  TextEditingController detailsAbtPrprtyCtlr01 = TextEditingController();
   TextEditingController bhkctlr = TextEditingController();
   TextEditingController bathroomctlr = TextEditingController();
   TextEditingController carpetAreactlr = TextEditingController();
-  TextEditingController carParkingCtlr = TextEditingController();
   TextEditingController maintenancectlr = TextEditingController();
-  TextEditingController locationCtlr = TextEditingController();
+  TextEditingController detailsAbtPrprtyCtlr2 = TextEditingController();
+  TextEditingController propertySqrftCtlr = TextEditingController();
+  TextEditingController aminitiesctlr = TextEditingController();
   TextEditingController descriptionCtlr = TextEditingController();
-  TextEditingController priceCtlr = TextEditingController();
+  TextEditingController locationCtlr = TextEditingController();
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   Future<void> _pickImage() async {
@@ -57,10 +58,17 @@ class _AddPropertyState extends State<AddProperty> {
 
   clearController() {
     propertyTypeCtlr.clear();
-
-    locationCtlr.clear();
-    descriptionCtlr.clear();
     priceCtlr.clear();
+    detailsAbtPrprtyCtlr01.clear();
+    bhkctlr.clear();
+    bathroomctlr.clear();
+    carpetAreactlr.clear();
+    maintenancectlr.clear();
+    detailsAbtPrprtyCtlr2.clear();
+    aminitiesctlr.clear();
+    propertySqrftCtlr.clear();
+    descriptionCtlr.clear();
+    locationCtlr.clear();
   }
 
   @override
@@ -174,7 +182,7 @@ class _AddPropertyState extends State<AddProperty> {
                       _selectedValue = newValue;
                       propertyTypeCtlr.text = newValue!;
                     });
-                  }, //onSaved: (String? newValue) {  },
+                  },
                 ),
 
                 divider,
@@ -192,7 +200,8 @@ class _AddPropertyState extends State<AddProperty> {
                   },
                 ),
                 divider,
-                if (propertyTypeCtlr.text == _items[0])
+                if (propertyTypeCtlr.text == _items[0] ||
+                    propertyTypeCtlr.text == _items[1])
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -201,10 +210,10 @@ class _AddPropertyState extends State<AddProperty> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Details", style: TextStyle(fontSize: 20)),
-                         divider,
+                        divider,
                         TextFieldContainer(
                           text: "About property",
-                          controllerName: detailsAbtPrprtyCtlr,
+                          controllerName: detailsAbtPrprtyCtlr01,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter about property';
@@ -226,8 +235,9 @@ class _AddPropertyState extends State<AddProperty> {
                           onChanged: (newValue) {
                             setState(() {
                               _selectedValue = newValue;
+                              propertyTypeCtlr.text = newValue!;
                             });
-                          }, //onSaved: (String? newValue) {  },
+                          },
                         ),
                         divider,
                         CheckboxWithListenable(text: 'Ready to move'),
@@ -238,6 +248,9 @@ class _AddPropertyState extends State<AddProperty> {
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter about property';
+                            }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Only numbers allowed';
                             }
                             return null;
                           },
@@ -250,6 +263,10 @@ class _AddPropertyState extends State<AddProperty> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the quantity';
                             }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Only numbers allowed';
+                            }
+                            return null;
                           },
                         ),
                         divider,
@@ -260,9 +277,13 @@ class _AddPropertyState extends State<AddProperty> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter sqft';
                             }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Only numbers allowed';
+                            }
+                            return null;
                           },
                         ),
-                       
+
                         divider,
                         CheckboxWithListenable(text: 'Car parking'),
                         TextFieldContainer(
@@ -271,6 +292,75 @@ class _AddPropertyState extends State<AddProperty> {
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the amount of maintence';
+                            }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Only numbers allowed';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                if (propertyTypeCtlr.text == _items[2])
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Details", style: TextStyle(fontSize: 20)),
+                        divider,
+                        TextFieldContainer(
+                          text: "About property",
+                          controllerName: detailsAbtPrprtyCtlr2,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter about property';
+                            }
+                            return null;
+                          },
+                        ),
+                        divider,
+                        DropdownFormField(
+                          hintText: 'Property Type',
+                          items: _items,
+                          value: _selectedValue,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a property type';
+                            }
+                            return null;
+                          },
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedValue = newValue;
+                              propertyTypeCtlr.text = newValue!;
+                            });
+                          },
+                        ),
+                        divider,
+                        TextFieldContainer(
+                          text: 'Property sqft',
+                          controllerName: propertySqrftCtlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter property sqft';
+                            }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Only numbers allowed';
+                            }
+                            return null;
+                          },
+                        ),
+                        divider,
+                        TextFieldContainer(
+                          text: "Aminities",
+                          controllerName: aminitiesctlr,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter Aminities ';
                             }
                             return null;
                           },
@@ -317,10 +407,22 @@ class _AddPropertyState extends State<AddProperty> {
                   "PROPERTY TYPE": _selectedValue,
                   "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
                   // "PROPERTY DETAILS": detailsCtlr.text.trim(),
-                  "DETAILS ABOUT PROPERTY": detailsAbtPrprtyCtlr.text.trim(),
-                  "DETAILS BHK": bhkctlr.text.trim(),
-                  "DETAILS BATHROOM": bathroomctlr.text.trim(),
-                  "DETAILS MAINTENANCE": maintenancectlr.text.trim(),
+                  "DETAILS ABOUT PROPERTY": detailsAbtPrprtyCtlr01.text.trim(),
+                  "DETAILS BHK": int.tryParse(bhkctlr.text.trim()),
+                  "DETAILS BATHROOM": int.tryParse(bathroomctlr.text.trim()),
+                  "DETAILS CARPET AREA": int.tryParse(
+                    carpetAreactlr.text.trim(),
+                  ),
+                  "DETAILS MAINTENANCE": int.tryParse(
+                    maintenancectlr.text.trim(),
+                  ),
+                  "DETAILS ABOUNT PROPERTY": detailsAbtPrprtyCtlr2.text.trim(),
+                  "DETAILS PROPERTY SQFT": int.tryParse(
+                    propertySqrftCtlr.text.trim(),
+                  ),
+                  "DETAILS PROPERTY AMINITIES": int.tryParse(
+                    aminitiesctlr.text.trim(),
+                  ),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
                   "PROPERTY LOCATION": locationCtlr.text.trim(),
                 };
