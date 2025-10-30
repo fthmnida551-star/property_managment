@@ -70,7 +70,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
             Column(
               children: [
                 Text(
-                  'Sruthi Hassan',
+                  'Giridhar',
                   style: AppTextstyle.propertyMediumTextstyle(
                     context,
                     fontColor: AppColors.black,
