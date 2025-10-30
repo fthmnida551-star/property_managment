@@ -20,7 +20,6 @@ import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 void main() async {
  WidgetsFlutterBinding.ensureInitialized();
   // FirebaseService().initialize();
@@ -49,8 +48,13 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
+<<<<<<< HEAD
         home:LoginPage() ,
         debugShowCheckedModeBanner: false,
+=======
+          home: Splashscreen(),
+          debugShowCheckedModeBanner: false,
+>>>>>>> 15110477a4a982da8d7afc868e3eac9d953fcf0a
         );
       },
     );
