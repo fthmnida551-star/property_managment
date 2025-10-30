@@ -32,12 +32,12 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BookedDetails()),
-        );
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => BookedDetails()),
+      //   );
+      // },
       child: Container(
         height: 75.h,
         padding: widget.padding ?? EdgeInsets.all(12),
