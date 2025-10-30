@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
+import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/presentation/profile/adding_users.dart';
 import 'package:property_managment/presentation/profile/widget/delete_alert.dart';
@@ -91,13 +92,7 @@ class _UsersScreenState extends State<UsersScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 30, top: 20),
-          //   child: Text(
-          //     'Users',
-          //     style: AppTextstyle.propertyLargeTextstyle(context),
-          //   ),
-          // ),
+         
           Expanded(
             child: ListView.builder(
               itemCount: UsersList.length,
@@ -154,19 +149,19 @@ class _UsersScreenState extends State<UsersScreen> {
                         },
                         icon: const Icon(Icons.edit),
                       ),
-                    
-                    IconButton(
-  onPressed: () {
-    deleteAlert(
-      context,
-      onConfirm: () {
-        deleteUser(item.id);
-      },
-    );
-  },
-  icon: const Icon(Icons.delete),
-),
-                    ]
+
+                      IconButton(
+                        onPressed: () {
+                          deleteAlert(
+                            context,
+                            onConfirm: () {
+                              deleteUser(item.id);
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ],
                   ),
                 );
               },
