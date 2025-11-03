@@ -143,7 +143,8 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                 Map<String, dynamic> ownerDetails = {
                   "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
                   "OWNER_NAME": nameCtlr.text.trim(),
-                  "OWNER_CONTACT": int.tryParse(contactCtlr.text.trim()),
+                  // "OWNER_CONTACT": int.tryParse(contactCtlr.text.trim()),
+                  "OWNER_CONTACT":contactCtlr.text.trim(),
                   "OWNER_EMAIL": emailCtlr.text.trim(),
                 };
                 Map<String, dynamic> finaldetails = {
@@ -174,7 +175,10 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       final String id = docRef.id;
 
       log("Insert Data with $id");
+      
+
     });
-    // getAllUsersList();
+   
+    
   }
 }

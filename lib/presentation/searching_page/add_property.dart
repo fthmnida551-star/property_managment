@@ -27,14 +27,16 @@ class _AddPropertyState extends State<AddProperty> {
   final List<String> _items = ['APARTMENT', 'VILLA', 'LAND'];
   final formKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
+  bool readytoMove = false;
+  bool carparking=false;
   TextEditingController propertyTypeCtlr = TextEditingController();
   TextEditingController priceCtlr = TextEditingController();
-  TextEditingController detailsAbtPrprtyCtlr01 = TextEditingController();
+  TextEditingController buildingNamectlr = TextEditingController();
   TextEditingController bhkctlr = TextEditingController();
   TextEditingController bathroomctlr = TextEditingController();
   TextEditingController carpetAreactlr = TextEditingController();
   TextEditingController maintenancectlr = TextEditingController();
-  TextEditingController detailsAbtPrprtyCtlr2 = TextEditingController();
+  TextEditingController building = TextEditingController();
   TextEditingController propertySqrftCtlr = TextEditingController();
   TextEditingController aminitiesctlr = TextEditingController();
   TextEditingController descriptionCtlr = TextEditingController();
@@ -59,17 +61,18 @@ class _AddPropertyState extends State<AddProperty> {
   clearController() {
     propertyTypeCtlr.clear();
     priceCtlr.clear();
-    detailsAbtPrprtyCtlr01.clear();
+    buildingNamectlr.clear();
     bhkctlr.clear();
     bathroomctlr.clear();
     carpetAreactlr.clear();
     maintenancectlr.clear();
-    detailsAbtPrprtyCtlr2.clear();
     aminitiesctlr.clear();
     propertySqrftCtlr.clear();
     descriptionCtlr.clear();
     locationCtlr.clear();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -212,35 +215,26 @@ class _AddPropertyState extends State<AddProperty> {
                         Text("Details", style: TextStyle(fontSize: 20)),
                         divider,
                         TextFieldContainer(
-                          text: "About property",
-                          controllerName: detailsAbtPrprtyCtlr01,
+                          text: "Building name",
+                          controllerName: buildingNamectlr,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter about property';
+                              return 'Please enter your building name';
                             }
                             return null;
                           },
                         ),
+                       
                         divider,
-                        DropdownFormField(
-                          hintText: 'Property Type',
-                          items: _items,
-                          value: _selectedValue,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select a property type';
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedValue = newValue;
-                              propertyTypeCtlr.text = newValue!;
-                            });
-                          },
+                       
+                        CheckboxWithListenable(text: 'Ready to move',
+                        value: readytoMove,
+                  onChanged: (newValue) {
+                    setState(() {
+                      readytoMove = newValue ?? false;
+                    });
+                  },
                         ),
-                        divider,
-                        CheckboxWithListenable(text: 'Ready to move'),
                         divider,
                         TextFieldContainer(
                           text: "BHK",
@@ -285,7 +279,12 @@ class _AddPropertyState extends State<AddProperty> {
                         ),
 
                         divider,
-                        CheckboxWithListenable(text: 'Car parking'),
+                        CheckboxWithListenable(text: 'Car parking', value: carparking,
+                  onChanged: (newValue) {
+                    setState(() {
+                      carparking = newValue ?? false;
+                    });
+                  },),
                         TextFieldContainer(
                           text: "maintenance(Monthly)",
                           controllerName: maintenancectlr,
@@ -311,35 +310,6 @@ class _AddPropertyState extends State<AddProperty> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Details", style: TextStyle(fontSize: 20)),
-                        divider,
-                        TextFieldContainer(
-                          text: "About property",
-                          controllerName: detailsAbtPrprtyCtlr2,
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter about property';
-                            }
-                            return null;
-                          },
-                        ),
-                        divider,
-                        DropdownFormField(
-                          hintText: 'Property Type',
-                          items: _items,
-                          value: _selectedValue,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select a property type';
-                            }
-                            return null;
-                          },
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedValue = newValue;
-                              propertyTypeCtlr.text = newValue!;
-                            });
-                          },
-                        ),
                         divider,
                         TextFieldContainer(
                           text: 'Property sqft',
@@ -406,21 +376,22 @@ class _AddPropertyState extends State<AddProperty> {
                 propertyDetailsAll = {
                   "PROPERTY TYPE": _selectedValue,
                   "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-                  // "PROPERTY DETAILS": detailsCtlr.text.trim(),
-                  "DETAILS ABOUT PROPERTY": detailsAbtPrprtyCtlr01.text.trim(),
-                  "DETAILS BHK": int.tryParse(bhkctlr.text.trim()),
-                  "DETAILS BATHROOM": int.tryParse(bathroomctlr.text.trim()),
-                  "DETAILS CARPET AREA": int.tryParse(
+                  "BUILDING NAME": buildingNamectlr.text.trim(),
+                   "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+                  " BHK": int.tryParse(bhkctlr.text.trim()),
+                  " BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+                  " CARPET AREA": int.tryParse(
                     carpetAreactlr.text.trim(),
                   ),
-                  "DETAILS MAINTENANCE": int.tryParse(
+                  'CARPARKING':carparking? "yes": "no",
+                  " MAINTENANCE": int.tryParse(
                     maintenancectlr.text.trim(),
                   ),
-                  "DETAILS ABOUNT PROPERTY": detailsAbtPrprtyCtlr2.text.trim(),
-                  "DETAILS PROPERTY SQFT": int.tryParse(
+                 
+                  " PROPERTY SQFT": int.tryParse(
                     propertySqrftCtlr.text.trim(),
                   ),
-                  "DETAILS PROPERTY AMINITIES": int.tryParse(
+                  "  AMINITIES": int.tryParse(
                     aminitiesctlr.text.trim(),
                   ),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),

@@ -12,9 +12,9 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
-  final String userName;
+ 
   final PropertyModel property;
-  const BookedPropertyScreen({super.key, required this.userName, required this.property});
+  const BookedPropertyScreen({super.key, required this.property});
   // const BookedPropertyScreen({super.key});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
@@ -139,12 +139,13 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                 ],
               ),
               // --- Property Content Section ---
+              if(widget.property.propertyType == 'apartment')
               Padding(
                 padding: EdgeInsets.all(26.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${widget.property.amount}',
+                    Text('${widget.property.price}',
                       // '₹ 79,00,000',
                       style: TextStyle(
                         fontSize: 26,
@@ -295,7 +296,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: "Maintenance (Monthly) ${widget.property.amount}",
+                                text: "Maintenance (Monthly) ${widget.property.price}",
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],
@@ -439,7 +440,10 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                     ),
                   ],
                 ),
+
+                
               ),
+
             ],
           ),
         ),
