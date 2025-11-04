@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -167,6 +166,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       final String id = docRef.id;
 
       log("Insert Data with $id");
+       docRef.update({'BOOKING_ID': id});
     });
   }
 }

@@ -61,7 +61,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.phone_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                   Text("${bookedProperty.phone}"),
+                   Text("${bookedProperty.contact}"),
                   // Text('Mobile No\n+91 960592260'),
                 ],
               ),

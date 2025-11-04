@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
@@ -14,8 +15,7 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 class NotBookedPropertyScreen extends StatefulWidget {
    final String userName;
   final PropertyModel property;
-  final BookingModel bookedProperty;
-  const NotBookedPropertyScreen({super.key, required this.userName, required this.property, required this.bookedProperty});
+  const NotBookedPropertyScreen({super.key, required this.userName, required this.property, });
  
   // const NotBookedPropertyScreen({super.key});
   @override
@@ -23,6 +23,8 @@ class NotBookedPropertyScreen extends StatefulWidget {
 }
 
 class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
+   
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -103,7 +105,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context);
+                                  showLandlordPopup(context,widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -146,7 +148,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${widget.property.amount}',
+                    Text('${widget.property.price}',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -268,7 +270,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                   children: [
                                     DetailsTable(
                                       text: 'Bedrooms',
-                                      details: '${widget.property.bedrooms}',
+                                      details: '${widget.property.bhk}',
                                       icons: Icons.bed,
                                     ),
                                     Divider(thickness: 1),
@@ -294,7 +296,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: 'Maintenance (Monthly) ${widget.property.amount}',
+                                text: 'Maintenance (Monthly) ${widget.property.price}',
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],
@@ -374,4 +376,5 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
-}
+
+   }
