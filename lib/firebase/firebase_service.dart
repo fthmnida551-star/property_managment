@@ -43,8 +43,9 @@ void addNewProperty() async {
   BookingModel newProperty =BookingModel(
     name: "faiha",
     email: "faiha@gmail.com",
-    phone: 9988776655,
-    date: 30-10-2025,
+    contact: '9988776655',
+    date: 30-10-2025, 
+    id: '',
   );
 
   await firebaseService. getBookedProperty(newProperty);
