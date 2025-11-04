@@ -32,10 +32,10 @@ class _PropertyContainerState extends State<PropertyContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap??  () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => PropertydetailsScreen(userName: '', property: ,)),//NotBookedPropertyScreen()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property ,)),//NotBookedPropertyScreen()),
+        );
       }, 
       // onTap: () {
       //   Navigator.push(
@@ -87,7 +87,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if(widget.property.propertyType != "LAND")
-                // IconRow(icon: Icons.bed_outlined, value: '${widget.property.bhk}', property: widget.property,),
+                
                  Row(
                   children: [
                     Icon(Icons.bed_outlined,size: 20.sp,),

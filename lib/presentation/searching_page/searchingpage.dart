@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -231,6 +233,10 @@ class _SearchingpageState extends State<Searchingpage> {
       for (var element in querySnapshot.docs) {
         // final String id = element.id;
         final Map<String, dynamic> data = element.data();
+        data.keys.forEach((element) => log(element));
+        log("Document keys: ${data.keys}");
+        log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
+        log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
 
         // Make sure PropertyModel.fromJson can handle the ID
         propertyDetailsList.add(PropertyModel.fromMap(data));
