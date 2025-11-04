@@ -144,7 +144,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('${widget.property.amount}',
+                    Text('${widget.property.price}',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -266,7 +266,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                   children: [
                                     DetailsTable(
                                       text: 'Bedrooms',
-                                      details: '${widget.property.bedrooms}',
+                                      details: '${widget.property.bhk}',
                                       icons: Icons.bed,
                                     ),
                                     Divider(thickness: 1),
@@ -292,7 +292,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: 'Maintenance (Monthly) ${widget.property.amount}',
+                                text: 'Maintenance (Monthly) ${widget.property.price}',
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],

@@ -166,6 +166,7 @@ class _BookingDetailsState extends State<BookingDetails> {
       final String id = docRef.id;
 
       log("Insert Data with $id");
+       docRef.update({'BOOKING_ID': id});
     });
   }
 }

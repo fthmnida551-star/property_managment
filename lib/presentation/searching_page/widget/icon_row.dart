@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 
 class IconRow extends StatefulWidget {
   final IconData icon;
   final String value;
+final PropertyModel property;
 
   const IconRow({
     super.key,
     required this.icon,
     required this.value,
+    required this.property,
   });
 
   @override
