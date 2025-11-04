@@ -41,7 +41,7 @@ class BookingModel {
   /// Convert the object into JSON (for API or local storage)
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
+      'faiha': name,
       'email': email,
       'contact': phone,
       'date': date,

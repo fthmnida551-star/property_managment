@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
@@ -13,8 +14,9 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
   final String userName;
+  final BookingModel bookedProperty;
   final PropertyModel property;
-  const BookedPropertyScreen({super.key, required this.userName, required this.property});
+  const BookedPropertyScreen({super.key, required this.userName, required this.property, required this.bookedProperty});
   // const BookedPropertyScreen({super.key});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
@@ -60,7 +62,6 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             Icons.more_vert,
                             color: AppColors.whitecolor,
                           ),
-
                           itemBuilder: (BuildContext context) => [
                             PopupMenuItem(
                               child: InkWell(
@@ -368,28 +369,32 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             children: [
                               Icon(Icons.person, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Name\n Hrishilal'),
+                              // Text('Name\n Hrishilal'),
+                              Text("${widget.bookedProperty.name}"),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.phone, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Mobile No'),
-                              Text('+91 960592260'),
+                               Text("${widget.bookedProperty.phone}"),
+                              // Text('Mobile No'),
+                              // Text('+91 960592260'),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.mail, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Email\n Hrishilal@gmail.com'),
+                               Text("${widget.bookedProperty.email}"),
+                              // Text('Email\n Hrishilal@gmail.com'),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.calendar_month, color: Colors.green),
                               SizedBox(width: 8),
+                               Text("${widget.bookedProperty.date}"),
                               Text('Date\n 2-3-2025'),
                             ],
                           ),
