@@ -90,14 +90,14 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 // IconRow(icon: Icons.bed_outlined, value: '${widget.property.bhk}', property: widget.property,),
                  Row(
                   children: [
-                    Icon(Icons.bed_outlined,size: 19.sp,),
+                    Icon(Icons.bed_outlined,size: 20.sp,),
                     Center(child: Text('${widget.property.bhk}')),
                   ],
                 ),
                 if(widget.property.propertyType != "LAND")
                 Row(
                   children: [
-                    Icon(Icons.bathtub_outlined,size: 19.sp,),
+                    Icon(Icons.bathtub_outlined,size: 18.sp,),
                     Center(child: Text('${widget.property.bathrooms}')),
                   ],
                 ),
