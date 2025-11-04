@@ -155,7 +155,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (contex) => BottomNavigationWidget(currentIndex: 1),
+                  builder: (contex) => BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
                 ),
               );
             }
