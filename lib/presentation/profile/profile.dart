@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/presentation/profile/adding_users.dart';
 import 'package:property_managment/presentation/profile/edit_profile.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
+import 'package:property_managment/presentation/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Profilescreen extends StatefulWidget {
-  final Map<String, dynamic> profileMap;
-  const Profilescreen({super.key, required this.profileMap});
+
+  final UserModel loginUser;
+  const Profilescreen({super.key, required this.loginUser});
 
   @override
   State<Profilescreen> createState() => _ProfilescreenState();
@@ -27,7 +30,7 @@ class _ProfilescreenState extends State<Profilescreen> {
           children: [
             Row(
               children: [
-                SizedBox(width: 10),
+                SizedBox(width: 15),
                 const Text(
                   'Profile',
                   style: TextStyle(
@@ -44,6 +47,17 @@ class _ProfilescreenState extends State<Profilescreen> {
             //   width: 24,
             //   color: Colors.white,
             // ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () {
+                  logoutAlert(context);
+                  // Navigator.pop(context);
+                },
+                child: Icon(Icons.logout,color: AppColors.white,),
+              )
+              
+            ),
           ],
         ),
       ),
@@ -86,7 +100,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Nidha C",
+                          widget.loginUser.name,
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -95,7 +109,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          "Staff1@company.com",
+                          widget.loginUser.email,
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 17.sp,
@@ -112,7 +126,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditProfileScreen(),
+                          builder: (context) => EditProfileScreen(loginUser: widget.loginUser),
                         ),
                       );
                     },

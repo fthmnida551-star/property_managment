@@ -6,21 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+  final UserModel loginUser;
+  const EditProfileScreen({super.key, required this.loginUser});
 
   @override
   State<EditProfileScreen> createState() => _EditprofileScreenState();
 }
 
 class _EditprofileScreenState extends State<EditProfileScreen> {
+  final _formkey = GlobalKey< FormState >();
   bool obscurePassword = false;
+  TextEditingController nameCtlr = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
+  TextEditingController roleCtrl = TextEditingController();
+  TextEditingController passwordCtrl = TextEditingController();
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   Future<void> _pickImage() async {
@@ -34,6 +40,15 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
         _selectedImage = File(pickedFile.path);
       });
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailCtrl.text = widget.loginUser.email;
+    passwordCtrl.text = widget.loginUser.password;
+
   }
 
   @override
@@ -71,104 +86,152 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
       body: Padding(
         padding: const EdgeInsets.only(right: 10.0, top: 15.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        // borderRadius: BorderRadius.circular(50),
+                        border: Border.all(color: AppColors.OpacitygreyColor),
+                         image: _selectedImage != null
+                            ? DecorationImage(
+                                image: FileImage(_selectedImage!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                      child: _selectedImage != null
+                          ? null
+                          : Icon(Icons.person, color: AppColors.OpacitygreyColor),
+                      // Image.asset(AssetResource.profilepic),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 5,
+                      child: InkWell(
+                        onTap: () => _pickImage(),
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: AppColors.greenColor,
+                            shape: BoxShape.circle,
+                          ),
+                        
+                          child: const Icon(
+                            Icons.add,
+                            color: AppColors.white,
+                            size: 20.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 80),
+                 Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 15),
+                  child: TextFieldContainer(
+                    text: 'Name',
+                    controllerName: nameCtlr, validator: (String? value) {
+                     if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      if (!RegExp(r'^[A-Z]').hasMatch(value)) {
+                        return 'First letter must be a capital letter';
+                      }
+                      return null;}
+                  ),
+                ),
+                SizedBox(height: 18),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 15),
+                  child: TextFieldContainer(
+                    text: 'Email',
+                    controllerName: emailCtrl, validator: (String? value) {
+                     if(value==null || value.isEmpty){
+                      return 'Please enter your email';
+                     }
+                     if(!value.contains('@')){
+                      return 'Please enter a valid email address';
+                     }
+                     return null;
+                      },
+                  ),
+                ),
+                // SizedBox(height: 18),
+                // Padding(
+                //   padding: const EdgeInsets.all(8),
+                //    child: TextFieldContainer(
+                //     text: "Role" ,
+                //     controllerName: roleCtrl, validator: (String?value){
+                //       if(value==null || value.isEmpty){
+                //         return 'Please select your role';
+                //       }
+                //       return null;
+                //     }),
+                //   ),
+                SizedBox(height: 18),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 15),
+                  child: Container(
+                    height: 50.h,
+                    width: 350.w,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      // borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: AppColors.OpacitygreyColor),
-                       image: _selectedImage != null
-                          ? DecorationImage(
-                              image: FileImage(_selectedImage!),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                    ),
-                    child: _selectedImage != null
-                        ? null
-                        : Icon(Icons.person, color: AppColors.OpacitygreyColor),
-                    // Image.asset(AssetResource.profilepic),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 5,
-                    child: InkWell(
-                      onTap: () => _pickImage(),
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: AppColors.greenColor,
-                          shape: BoxShape.circle,
-                        ),
-                      
-                        child: const Icon(
-                          Icons.add,
-                          color: AppColors.white,
-                          size: 20.0,
-                        ),
+                      borderRadius: BorderRadius.circular(8),
+                      border: BoxBorder.all(
+                        width: 1,
+                        color: AppColors.opacitygreyColor,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 80),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 15),
-                child: TextFieldContainer(
-                  text: 'Email',
-                  controllerName: emailCtrl, validator: (String? p1) {  },
-                ),
-              ),
-              SizedBox(height: 18),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 15),
-                child: Container(
-                  height: 50.h,
-                  width: 350.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: BoxBorder.all(
-                      width: 1,
-                      color: AppColors.opacitygreyColor,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: TextField(
-                      obscureText: obscurePassword,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Change Password',
-                        hintStyle: TextStyle(
-                          fontSize: 18.sp,
-                          color: AppColors.opacitygrayColorText,
-                        ),
-
-                        suffixIcon: IconButton(
-                          icon: obscurePassword
-                              ? Icon(Icons.visibility_off_outlined)
-                              : Icon(Icons.visibility_outlined),
-                          onPressed: () {
-                            setState(() {
-                              obscurePassword = !obscurePassword;
-                            });
-                          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: TextFormField(
+                        controller: passwordCtrl,
+                         validator: (String? value){
+                          if (value==null || value.isEmpty){
+                            return 'Please enter your password';
+                          }
+                          if(value.length < 8){
+                            return 'password must be at laest 8 characters';
+                          }
+                          return null;
+                         },
+                        obscureText: obscurePassword,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Change Password',
+                          hintStyle: TextStyle(
+                            fontSize: 18.sp,
+                            color: AppColors.opacitygrayColorText,
+                          ),
+            
+                          suffixIcon: IconButton(
+                            icon: obscurePassword
+                                ? Icon(Icons.visibility_off_outlined)
+                                : Icon(Icons.visibility_outlined),
+                            onPressed: () {
+                              setState(() {
+                                obscurePassword = !obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-
-              // Spacer(),
-              SizedBox(height: 30),
-            ],
+            
+                
+                SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
@@ -176,11 +239,19 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
           text: 'submit',
-          onTap: () {
+          onTap: () async{
+            if(_formkey.currentState!.validate()){
+            Map<String, dynamic> userDetails = {
+             "USER_NAME":nameCtlr.text.trim(),
+             "USER_EMAIL": emailCtrl.text.trim(),
+             "USER_PASSWORD": passwordCtrl.text.trim(),
+            };
+            await updatePerson(userDetails);
+            }
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BottomNavigationWidget(currentIndex: 3),
+                builder: (context) => BottomNavigationWidget(currentIndex: 3, loginUser: widget.loginUser),
               ),
             );
           },
@@ -188,14 +259,13 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-   void updatePerson(PersonModel editProfile) async {
-    final DocumentReference<Map<String, dynamic>> documentRef =
-        FirebaseFirestore.instance.collection("EDIT PROFILE").doc(editProfile.id);
-    await documentRef.update(editProfile.toJson()).then((value) {
-      log("Updated successfully");
-    }).onError((e, stack) {
-      log("Error is $e", name: "oxdo");
-    });
-    // getAllPersonList();
+  updatePerson(Map<String, dynamic> userDetails) async {
+    FirebaseFirestore.instance.collection("STAFF").doc(widget.loginUser.id)
+     .update(userDetails).then((value) {
+    log("Updated successfully");
+  }).onError((e, stackTrace) {
+    log("Error is $e", name: "oxdo");
+  });
   }
+   
 }
