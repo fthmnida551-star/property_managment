@@ -34,8 +34,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
           ],
         ),
       ),
-     
-      
-    );
+      );
   }
+
 }

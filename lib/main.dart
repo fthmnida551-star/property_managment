@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase_options.dart';
+import 'package:property_managment/presentation/auth/sign%20up.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/filter.dart';
 import 'package:property_managment/presentation/auth/login.dart';
@@ -21,15 +22,13 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
 
 void main() async {
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // FirebaseService().initialize();
-  await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    // set settings
-    FirebaseFirestore.instance.settings = const Settings(
-      persistenceEnabled: true,
-    );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // set settings
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }

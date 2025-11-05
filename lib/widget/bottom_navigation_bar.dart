@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
-import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/notification_screen/notificationscreen.dart';
 import 'package:property_managment/presentation/profile/profile.dart';
@@ -14,8 +14,8 @@ class BottomNavigationWidget extends StatefulWidget {
   List <String> propertytype;
   RangeValues? price;
   RangeValues? sqft;
-
-  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft});
+UserModel? loginUser;
+  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft ,this.loginUser});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
@@ -23,13 +23,18 @@ class BottomNavigationWidget extends StatefulWidget {
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   // final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
+ late List<Widget> _pages;
 
-  final List<Widget> _pages =  [
-    Center(child: DashboardScreen()),
-    Center(child: Searchingpage()),
-    Center(child: Notificationscreen()),
-    Center(child: Profilescreen()),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const Center(child: DashboardScreen()),
+      const Center(child: Searchingpage()),
+      const Center(child: Notificationscreen()),
+      Center(child: Profilescreen(loginUser: widget.loginUser!)),
+    ];
+  }
 
   @override
   void dispose() {
