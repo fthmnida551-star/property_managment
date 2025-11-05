@@ -176,7 +176,7 @@ getPropertyBooking(String bookingId) async{
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text('${widget.property.name}\n${widget.property.bathrooms}\n${widget.property.sqft}',
+                    Text('${widget.property.name.toUpperCase()}\n${widget.property.bathrooms}\n${widget.property.sqft}',
                       // 'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),

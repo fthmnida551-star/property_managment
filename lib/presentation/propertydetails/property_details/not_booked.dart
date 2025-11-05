@@ -157,7 +157,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Modern Amenities\n${widget.property.bathrooms}\n${widget.property.sqft}',              
+                      '${widget.property.name.toUpperCase()}\n${widget.property.bathrooms}\n${widget.property.sqft}',              
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
                     SizedBox(height: 15),

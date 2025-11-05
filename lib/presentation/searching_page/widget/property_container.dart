@@ -59,10 +59,16 @@ class _PropertyContainerState extends State<PropertyContainer> {
               ),
             ),
             SizedBox(height: 8.h),
-            Text(
-              // 'Apartment',
-              widget.property.propertyType,
-              style: TextStyle(fontSize: 21.sp, color: AppColors.black),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  // 'modern amenities',
+                  widget.property.name.toUpperCase(),
+                  style: TextStyle(fontSize: 21.sp, color: AppColors.black),
+                ),
+                Text(widget.property.propertyType, style: TextStyle(fontSize: 12,color: AppColors.black),)
+              ],
             ),
             Text(
               // '90,000',
