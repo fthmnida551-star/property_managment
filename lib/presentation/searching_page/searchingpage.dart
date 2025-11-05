@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +26,8 @@ class Searchingpage extends StatefulWidget {
 class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
+  TextEditingController srchbrcntlr=TextEditingController();
 
   @override
   void initState() {
@@ -66,6 +70,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: srchbrcntlr,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.search, color: AppColors.black),
@@ -194,26 +199,26 @@ class _SearchingpageState extends State<Searchingpage> {
                     itemBuilder: (context, index) {
                       var item = propertyDetailsList[index];
 
-                      // return item.isBooked
-                      //     ? PropertyContainer(
-                      //         text: 'Booked',
-                      //         textColor: AppColors.white,
-                      //         color: AppColors.booked,
-                      //         onTap: () {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //               builder: (context) =>
-                      //                   BookedPropertyScreen(property: item, ),
-                      //             ),
-                      //           );
-                      //         },
-                      //         property: item,
-                      //       )
-                      //     : PropertyContainer(
-                      //         text: "Booking Now",
-                      //         property: item,
-                      //       );
+                      return item.isBooked
+                          ? PropertyContainer(
+                              text: 'Booked',
+                              textColor: AppColors.white,
+                              color: AppColors.booked,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        BookedPropertyScreen(property: item, ),
+                                  ),
+                                );
+                              },
+                              property: item,
+                            )
+                          : PropertyContainer(
+                              text: "Booking Now",
+                              property: item,
+                            );
                     },
                   ),
           ],
@@ -233,6 +238,10 @@ class _SearchingpageState extends State<Searchingpage> {
       for (var element in querySnapshot.docs) {
         // final String id = element.id;
         final Map<String, dynamic> data = element.data();
+        data.keys.forEach((element) => log(element));
+        log("Document keys: ${data.keys}");
+        log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
+        log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
 
         // Make sure PropertyModel.fromJson can handle the ID
         propertyDetailsList.add(PropertyModel.fromMap(data));

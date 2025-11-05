@@ -8,7 +8,7 @@ class PropertyModel {
   final int bhk;
   final int bathrooms;
   final bool readyToMove;
-  final double carpetArea;
+  // final double carpetArea;
   final bool carParking;
   final double maintenance;
   final double sqft;
@@ -33,7 +33,7 @@ class PropertyModel {
     required this.bathrooms,
     required this.readyToMove,
     required this.carParking,
-    required this.carpetArea,
+    // required this.carpetArea,
     required this.aminities,
     required this.isOwner,
     required this.ownername,
@@ -55,7 +55,7 @@ class PropertyModel {
       'BHK': bhk,
       'BATHROOMS': bathrooms,
       'READY_TO_MOVE': readyToMove,
-      'CARPET AREA': carpetArea,
+      // 'CARPET AREA': carpetArea,
       'carParking': carParking,
       'MAINTENANCE': maintenance,
       'PROPERTY SQFT': sqft,
@@ -78,14 +78,14 @@ class PropertyModel {
       location: map['PROPERTY LOCATION'] ?? '',
       description: map['PROPERTY DESCRIPTION'] ?? '',
       price: (map['PROPERTY PRICE'] ?? 0).toDouble(),
-      bhk: (map['BHK'] ?? 0).toInt(),
-      bathrooms: (map['BATHROOMS'] ?? 0).toInt(),
+      bhk: map[' BHK']??0,
+      bathrooms: (map[' BATHROOMS'] ?? 0).toInt(),
       readyToMove: map['READY_TO_MOVE']=='YES'?true :  false,
-      carpetArea: (map['CARPET AREA'] ?? 0).toDouble(),
+      // carpetArea: (map[' CARPET AREA'] ?? 0).toDouble(),
       carParking: map['CARPARKING'] =='YES'?true: false,
-      maintenance: (map['MAINTENANCE'] ?? 0).toDouble(),
-      sqft: (map['PROPERTY SQFT'] ?? 0).toDouble(),
-      aminities: map['AMINITIES'] ?? '',
+      maintenance: (map[' MAINTENANCE'] ?? 0).toDouble(),
+      sqft: (map[' PROPERTY SQFT'] ?? 0).toDouble(),
+      aminities: map['  AMINITIES'] ?? '',
       isOwner: map['IS_OWN_PROPERTY'] =="YES"? true :false,
       ownername: map['OWNER_NAME'] ?? '',
       contact: map['OWNER_CONTACT'] ?? '',

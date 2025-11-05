@@ -189,6 +189,8 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
 
                 divider,
+
+                divider,
                 TextFieldContainer(
                   text: 'Price',
                   controllerName: priceCtlr,
@@ -266,7 +268,7 @@ class _AddPropertyState extends State<AddProperty> {
                         divider,
                         TextFieldContainer(
                           text: "Carpet Area(sqft)",
-                          controllerName: carpetAreactlr,
+                          controllerName: propertySqrftCtlr,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter sqft';
@@ -381,7 +383,7 @@ class _AddPropertyState extends State<AddProperty> {
                   " BHK": int.tryParse(bhkctlr.text.trim()),
                   " BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
                   " CARPET AREA": int.tryParse(
-                    carpetAreactlr.text.trim(),
+                    propertySqrftCtlr.text.trim(),
                   ),
                   'CARPARKING':carparking? "yes": "no",
                   " MAINTENANCE": int.tryParse(
@@ -734,7 +736,7 @@ class _AddPropertyState extends State<AddProperty> {
 //                 "READY_TO_MOVE": readytoMove ? "YES" : "NO",
 //                 "BHK": int.tryParse(bhkctlr.text.trim()),
 //                 "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-//                 "CARPET AREA": int.tryParse(carpetAreactlr.text.trim()),
+//                 "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
 //                 "CARPARKING": carparking ? "YES" : "NO",
 //                 "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
 //                 "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
@@ -799,7 +801,7 @@ class _AddPropertyState extends State<AddProperty> {
 //         divider,
 //         TextFieldContainer(
 //           text: "Carpet Area(sqft)",
-//           controllerName: carpetAreactlr,
+//           controllerName: propertySqrftCtlr,
 //           validator: (value) =>
 //               value == null || value.isEmpty ? 'Enter sqft' : null,
 //         ),

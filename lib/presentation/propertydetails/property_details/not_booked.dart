@@ -316,13 +316,14 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               Padding(
                                 padding: EdgeInsets.only(bottom: 8.0),
                                 child: Text(
-                                  'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
-                                  'Project : Impact Milestone-Premium residential Apartment\n'
-                                  'Flat Type: 2 BHK Spacious Living & Dining\n'
-                                  'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
-                                  'car parking: Yes\n'
-                                  'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
-                                  'Status : Ready To Move',
+                                  // 'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
+                                  // 'Project : Impact Milestone-Premium residential Apartment\n'
+                                  // 'Flat Type: 2 BHK Spacious Living & Dining\n'
+                                  // 'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
+                                  // 'car parking: Yes\n'
+                                  // 'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
+                                  // 'Status : Ready To Move',
+                                  widget.property.description,
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ),

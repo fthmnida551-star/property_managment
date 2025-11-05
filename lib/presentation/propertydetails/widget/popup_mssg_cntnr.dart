@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
 void showLandlordPopup(BuildContext context, PropertyModel property) {
@@ -8,7 +10,7 @@ void showLandlordPopup(BuildContext context, PropertyModel property) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child:!property.isOwner? Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,18 +49,6 @@ void showLandlordPopup(BuildContext context, PropertyModel property) {
             ),
             const SizedBox(height: 10),
 
-            // Property Type (Optional)
-            Row(
-              children: [
-                const Icon(Icons.home_outlined, color: Colors.teal),
-                const SizedBox(width: 8),
-                Text(
-                  property.propertyType,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
 
             // Mobile
             Row(
@@ -88,7 +78,33 @@ void showLandlordPopup(BuildContext context, PropertyModel property) {
 
            
           ],
-        ),
+        ):Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Landlord',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // Text("PloteX.",style: TextStyle(fontSize: 15),)
+            Image.asset(AssetResource.logo,)
+            // Center(child: SvgPicture.asset(AssetResource.appLogo))
+          ],
+        )
       ),
     ),
   );
