@@ -353,7 +353,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookingDetails()),
+                  MaterialPageRoute(builder: (context) => BookingDetails(propertyId: widget.property.id,)),
                 );
               },
               style: ElevatedButton.styleFrom(

@@ -176,7 +176,7 @@ class BookedDetails extends StatelessWidget {
                       final updatedBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails(
+                          builder: (context) => BookingDetails(propertyId: property.id,
                            // pass the existing details
                           ),
                         ),
@@ -195,6 +195,27 @@ class BookedDetails extends StatelessWidget {
       ),
     );
   }
+
+  Future<BookingModel?> getBooking(String bookingId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> doc =
+          await fdb.collection('BOOKING').doc(bookingId).get();
+
+      if (doc.exists && doc.data() != null) {
+        // Merge Firestore ID with document data
+        final data = doc.data()!;
+        data['id'] = doc.id;
+        return BookingModel.fromMap(data,doc.id);
+      } else {
+        print("No property found for ID: $bookingId");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching property: $e");
+      return null;
+    }
+  }
+
 
   void updateBookingProperty(BookingModel Updatedetails) async {
     final DocumentReference<Map<String, dynamic>> documentRef = fdb

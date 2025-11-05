@@ -13,7 +13,8 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
- const BookingDetails({super.key, });
+  final String propertyId;
+ const BookingDetails({super.key,required this.propertyId });
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
