@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/presentation/propertydetails/animated_tick.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/date_picker.dart';
@@ -12,7 +13,7 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
- const BookingDetails({super.key});
+ const BookingDetails({super.key, });
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
