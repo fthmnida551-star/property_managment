@@ -51,7 +51,7 @@ void dltAlert(BuildContext context) {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            BottomNavigationWidget(currentIndex: 1),
+                            BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
                       ),
                     );
                   },

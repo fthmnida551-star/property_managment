@@ -120,7 +120,7 @@ class BookedDetails extends StatelessWidget {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => BottomNavigationWidget(currentIndex: 1),
+        builder: (context) => BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
       ),
     );
   },

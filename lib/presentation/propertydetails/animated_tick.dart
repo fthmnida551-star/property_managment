@@ -26,7 +26,7 @@ class _GrowContainerState extends State<GrowContainer> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BottomNavigationWidget(currentIndex: 0),
+          builder: (context) => BottomNavigationWidget(currentIndex: 0, propertytype: [], price: null, sqft: null),
         ),
       );
     });

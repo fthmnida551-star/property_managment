@@ -11,8 +11,11 @@ import 'package:property_managment/presentation/searching_page/searchingpage.dar
 
 class BottomNavigationWidget extends StatefulWidget {
   int currentIndex;
-   UserModel? loginUser;
-  BottomNavigationWidget({super.key, required this.currentIndex, this.loginUser});
+  List <String> propertytype;
+  RangeValues? price;
+  RangeValues? sqft;
+UserModel? loginUser;
+  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft ,this.loginUser});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
