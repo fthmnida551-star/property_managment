@@ -52,6 +52,7 @@ class BookingModel {
   final String contact;
   final int date;
   final String id;
+  final String propertyId;
 
   BookingModel({
     required this.name,
@@ -59,6 +60,7 @@ class BookingModel {
     required this.contact,
     required this.date,
     required this.id,
+    required this.propertyId,
   });
 
   /// Factory constructor to create a BookingModel from Firestore map
@@ -67,6 +69,7 @@ class BookingModel {
       name: (map['NAME'] ?? map['name'] ?? '').toString(),
       email: (map['EMAIL'] ?? map['email'] ?? '').toString(),
       contact: (map['CONTACT'] ?? map['contact'] ?? '').toString(),
+      propertyId: (map['property id'] ?? map ['property id']??'').toString(),
       date: (map['DATE'] ?? map['date'] ?? 0) is int
           ? (map['DATE'] ?? map['date'] ?? 0)
           : int.tryParse(map['DATE']?.toString() ?? '0') ?? 0,
@@ -82,6 +85,7 @@ class BookingModel {
       'CONTACT': contact,
       'DATE': date,
       'id': id,
+      'propertyId':propertyId,
     };
   }
 }

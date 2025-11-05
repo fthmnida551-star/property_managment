@@ -32,17 +32,12 @@ class _PropertyContainerState extends State<PropertyContainer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap??  () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => PropertydetailsScreen(userName: '', property: ,)),//NotBookedPropertyScreen()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property, )),//NotBookedPropertyScreen()),
+        );
       }, 
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
-      //   );
-      // },
+      
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
