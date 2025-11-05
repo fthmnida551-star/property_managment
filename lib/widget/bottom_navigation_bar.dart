@@ -11,8 +11,11 @@ import 'package:property_managment/presentation/searching_page/searchingpage.dar
 
 class BottomNavigationWidget extends StatefulWidget {
   int currentIndex;
-   UserModel? loginUser;
-  BottomNavigationWidget({super.key, required this.currentIndex, this.loginUser});
+  List <String> propertytype;
+  RangeValues? price;
+  RangeValues? sqft;
+UserModel? loginUser;
+  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft ,this.loginUser});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
@@ -20,18 +23,13 @@ class BottomNavigationWidget extends StatefulWidget {
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   // final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
- late List<Widget> _pages;
 
-  @override
-  void initState() {
-    super.initState();
-    _pages = [
-      const Center(child: DashboardScreen()),
-      const Center(child: Searchingpage()),
-      const Center(child: Notificationscreen()),
-      Center(child: Profilescreen(loginUser: widget.loginUser!)),
-    ];
-  }
+  List<Widget> get _pages => [
+    Center(child: DashboardScreen()),
+    Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
+    Center(child: Notificationscreen()),
+    // Center(child: Profilescreen()),
+  ];
 
   @override
   void dispose() {

@@ -196,8 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (_formKey.currentState!.validate()) {
                         try{
                         await fdb
-                            .collection('STAFF')
-                            .where(
+                            .collection('STAFF').where(
                               "USER_EMAIL",
                               isEqualTo: emailcntrlr.text.trim(),
                             )
@@ -214,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        BottomNavigationWidget(currentIndex: 0, loginUser: user,),
+                                        BottomNavigationWidget(currentIndex: 0, propertytype:[] , price: null, sqft: null, loginUser: user,),
                                   ),
                                 );
                               } else {

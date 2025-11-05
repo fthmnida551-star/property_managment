@@ -436,7 +436,7 @@ getPropertyBooking(String bookingId) async{
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             BottomNavigationWidget(
-                                              currentIndex: 1,
+                                              currentIndex: 1, propertytype: [], price: null, sqft: null,
                                             ),
                                       ),
                                     );
