@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
 import 'package:property_managment/presentation/propertydetails/widget/dlt_alert.dart';
@@ -10,12 +13,18 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 
 
 class NotBookedPropertyScreen extends StatefulWidget {
-  const NotBookedPropertyScreen({super.key});
+   final String userName;
+  final PropertyModel property;
+  const NotBookedPropertyScreen({super.key, required this.userName, required this.property, });
+ 
+  // const NotBookedPropertyScreen({super.key});
   @override
   State<NotBookedPropertyScreen> createState() => _NotBookedPropertyScreenState();
 }
 
 class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
+   
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -96,7 +105,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context);
+                                  showLandlordPopup(context,widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -139,8 +148,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '₹ 79,00,000',
+                    Text('${widget.property.price}',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -149,7 +157,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
+                      'Modern Amenities\n${widget.property.bathrooms}\n${widget.property.sqft}',              
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
                     SizedBox(height: 15),
@@ -159,7 +167,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                         Icon(Icons.location_on, color: AppColors.black),
                         SizedBox(width: 5),
                         Text(
-                          'KARAVATTOM, MALAPPURAM',
+                         '${widget.property.location}',
                           style: TextStyle(
                             fontSize: 15,
                             color: AppColors.black,
@@ -210,7 +218,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Property Overview\nModern Apartment\nKARAVATTOM, MALAPPURAM',
+                                    'Property Overview\n${widget.property.name}\n${widget.property.location}',
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -225,19 +233,19 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     RowWidget(
-                                      text: 'Flats/Apartments',
+                                      text: '${widget.property.propertyType}',
                                       icons: Icons.apartment,
                                     ),
                                     Divider(thickness: 1),
                                     RowWidget(
-                                      text: 'Ready to move',
+                                      text: '${widget.property.readyToMove}',
                                       icons: Icons.check_circle_outline,
                                     ),
                                     Divider(thickness: 1),
-                                    RowWidget(
-                                      text: 'Owner',
-                                      icons: Icons.account_circle,
-                                    ),
+                                    // RowWidget(
+                                    //   text: 'Owner',
+                                    //   icons: Icons.account_circle,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -261,20 +269,20 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     DetailsTable(
-                                      text: 'BHK',
-                                      details: '2',
+                                      text: 'Bedrooms',
+                                      details: '${widget.property.bhk}',
                                       icons: Icons.bed,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Carpet Area',
-                                      details: '1380 Sqft',
+                                      details: '${widget.property.sqft}',
                                       icons: Icons.check_box_outline_blank,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Bathrooms',
-                                      details: '2',
+                                      details: '${widget.property.bathrooms}',
                                       icons: Icons.bathtub,
                                     ),
                                   ],
@@ -284,11 +292,11 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               Text("Amenities", style: TextStyle(fontSize: 16)),
                               SizedBox(height: 8),
                               RowWidget(
-                                text: 'Car Parking',
+                                text: '${widget.property.carParking}',
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: 'Maintenance (Monthly) 2000',
+                                text: 'Maintenance (Monthly) ${widget.property.price}',
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],
@@ -308,13 +316,14 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               Padding(
                                 padding: EdgeInsets.only(bottom: 8.0),
                                 child: Text(
-                                  'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
-                                  'Project : Impact Milestone-Premium residential Apartment\n'
-                                  'Flat Type: 2 BHK Spacious Living & Dining\n'
-                                  'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
-                                  'car parking: Yes\n'
-                                  'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
-                                  'Status : Ready To Move',
+                                  // 'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
+                                  // 'Project : Impact Milestone-Premium residential Apartment\n'
+                                  // 'Flat Type: 2 BHK Spacious Living & Dining\n'
+                                  // 'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
+                                  // 'car parking: Yes\n'
+                                  // 'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
+                                  // 'Status : Ready To Move',
+                                  widget.property.description,
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ),
@@ -368,4 +377,5 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
-}
+
+   }

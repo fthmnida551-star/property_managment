@@ -2,12 +2,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:property_managment/firebase_options.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 
 
 
 class FirebaseService {
   static late final FirebaseFirestore fdb;
+
+  List< PropertyModel> PropertyList=[];
 
   initialize() async {
     await Firebase.initializeApp(
@@ -41,6 +45,23 @@ class FirebaseService {
       log("adding users");
     });
   }
+
+
+final FirebaseService firebaseService = FirebaseService();
+
+void addNewProperty() async {
+  BookingModel newProperty =BookingModel(
+    name: "faiha",
+    email: "faiha@gmail.com",
+    contact: '9988776655',
+    date: 30-10-2025, 
+    id: '', propertyId: '',
+  );
+
+  await firebaseService. getBookedProperty(newProperty);
+}
+
+  Future<void> getBookedProperty(BookingModel newProperty) async {}
 
   
 }

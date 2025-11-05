@@ -1,8 +1,13 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/filter.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
@@ -11,23 +16,40 @@ import 'package:property_managment/presentation/searching_page/widget/property_c
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Searchingpage extends StatefulWidget {
-  const Searchingpage({super.key});
+    // final BookingModel bookedProperty;
+  const Searchingpage({super.key,});
 
   @override
   State<Searchingpage> createState() => _SearchingpageState();
 }
 
 class _SearchingpageState extends State<Searchingpage> {
+  List<PropertyModel> propertyDetailsList = [];
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
+
+  TextEditingController srchbrcntlr=TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getAllPropertyDetailsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.propertyContainer,
       appBar: AppbarWidget(
         child: Row(
           children: [
             SizedBox(width: 15),
             Text(
               'Properties',
-              style: TextStyle(color: AppColors.white, fontSize: 21.sp,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 21.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -48,6 +70,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: srchbrcntlr,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.search, color: AppColors.black),
@@ -140,18 +163,6 @@ class _SearchingpageState extends State<Searchingpage> {
                     },
                   ),
                   FilteringContainer(
-                    text: 'Price Per Sqf',
-                    width: 120,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  FilteringContainer(
                     text: 'Area sqf',
                     width: 96,
                     onTap: () {
@@ -168,39 +179,78 @@ class _SearchingpageState extends State<Searchingpage> {
             ),
             // Propert Containers
             SizedBox(height: 15.h),
-            PropertyContainer(text: 'Booking Now'),
-            PropertyContainer(
-              text: 'Booked',
-              textColor: AppColors.white,
-              color: AppColors.booked,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookedPropertyScreen(),
-                  ),
-                );
-              },
-            ),
-            PropertyContainer(text: 'Booking Now'),
-            PropertyContainer(
-              text: 'Booked',
-              textColor: AppColors.white,
-              color: AppColors.booked,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookedPropertyScreen(),
-                  ),
-                );
-              }, 
-            ),
+            propertyDetailsList.isEmpty
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Center(
+                      child: Text(
+                        "No properties",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: propertyDetailsList.length,
+                    itemBuilder: (context, index) {
+                      var item = propertyDetailsList[index];
 
-            PropertyContainer(text: 'Booking Now'),
+                      return item.isBooked
+                          ? PropertyContainer(
+                              text: 'Booked',
+                              textColor: AppColors.white,
+                              color: AppColors.booked,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        BookedPropertyScreen(property: item, ),
+                                  ),
+                                );
+                              },
+                              property: item,
+                            )
+                          : PropertyContainer(
+                              text: "Booking Now",
+                              property: item,
+                            );
+                    },
+                  ),
           ],
         ),
       ),
     );
+  }
+
+  void getAllPropertyDetailsList() async {
+    propertyDetailsList.clear();
+
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
+          .collection('PROPERTIES')
+          .get();
+
+      for (var element in querySnapshot.docs) {
+        // final String id = element.id;
+        final Map<String, dynamic> data = element.data();
+        data.keys.forEach((element) => log(element));
+        log("Document keys: ${data.keys}");
+        log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
+        log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
+
+        // Make sure PropertyModel.fromJson can handle the ID
+        propertyDetailsList.add(PropertyModel.fromMap(data));
+      }
+
+      setState(() {}); // Refresh the UI
+    } catch (e) {
+      debugPrint("Error fetching property details: $e");
+    }
+    // propertyDetailsList.notifyListeners();
   }
 }

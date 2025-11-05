@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/widget/icon_row.dart';
@@ -12,6 +13,7 @@ class PropertyContainer extends StatefulWidget {
   final Color? textColor;
   final bool isShow;
   final VoidCallback? onTap;
+  final PropertyModel property;
   const PropertyContainer({
     super.key,
     required this.text,
@@ -19,6 +21,7 @@ class PropertyContainer extends StatefulWidget {
     this.textColor,
     this.isShow = true,
     this.onTap,
+    required this.property,
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
@@ -28,18 +31,14 @@ class _PropertyContainerState extends State<PropertyContainer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+     
+
       onTap: widget.onTap??  () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen()),
+          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property ,)),//NotBookedPropertyScreen()),
         );
-      }, 
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => PropertydetailsScreen()),
-      //   );
-      // },
+      },
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
@@ -61,18 +60,21 @@ class _PropertyContainerState extends State<PropertyContainer> {
             ),
             SizedBox(height: 8.h),
             Text(
-              'Apartment',
+              // 'Apartment',
+              widget.property.propertyType,
               style: TextStyle(fontSize: 21.sp, color: AppColors.black),
             ),
             Text(
-              '90,000',
+              // '90,000',
+              "${widget.property.price}",
               style: TextStyle(fontSize: 44.sp, color: AppColors.black),
             ),
             Row(
               children: [
                 Icon(Icons.location_on_outlined, size: 20),
                 Text(
-                  'Azizi Aliyah,al jaddaf, Dubai',
+                  // 'Azizi Aliyah,al jaddaf, Dubai',
+                  widget.property.location,
                   style: TextStyle(fontSize: 19.sp, color: AppColors.black),
                 ),
               ],
@@ -80,10 +82,33 @@ class _PropertyContainerState extends State<PropertyContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconRow(icon: Icons.bed_outlined, value: '2'),
-                IconRow(icon: Icons.bathtub_outlined, value: '2'),
-                IconRow(icon: Icons.crop_square_outlined, value: '2'),
-                Text('866 ft', style: TextStyle(fontSize: 13.sp)),
+                if (widget.property.propertyType != "LAND")
+                  Row(
+                    children: [
+                      Icon(Icons.bed_outlined, size: 20.sp),
+                      Center(child: Text('${widget.property.bhk}')),
+                    ],
+                  ),
+                if (widget.property.propertyType != "LAND")
+                  Row(
+                    children: [
+                      Icon(Icons.bathtub_outlined, size: 18.sp),
+                      Center(child: Text('${widget.property.bathrooms}')),
+                    ],
+                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(' ${widget.property.sqft}'),
+                    Text(
+                      'sqf',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
 
                 widget.isShow
                     ? Align(

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
@@ -11,12 +14,36 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
-  const BookedPropertyScreen({super.key});
+  final PropertyModel property;
+  const BookedPropertyScreen({super.key, required this.property, });
+  // const BookedPropertyScreen({super.key});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
 }
 
 class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
+  List<PropertyModel> propertyDetails = [];
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
+ BookingModel? bookedData;
+getPropertyBooking(String bookingId) async{
+  await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value){
+    if(value.exists){
+      Map<String, dynamic> data =value.data()!;
+      bookedData = BookingModel.fromMap(data, value.id);
+    }
+  });
+}
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPropertyBooking(widget.property.bookingid);
+  }
+
+
+  @override
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,7 +83,6 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             Icons.more_vert,
                             color: AppColors.whitecolor,
                           ),
-
                           itemBuilder: (BuildContext context) => [
                             PopupMenuItem(
                               child: InkWell(
@@ -97,7 +123,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context);
+                                  showLandlordPopup(context,widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -135,13 +161,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                 ],
               ),
               // --- Property Content Section ---
+              if(widget.property.propertyType == 'apartment')
               Padding(
                 padding: EdgeInsets.all(26.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '₹ 79,00,000',
+                    Text('${widget.property.price}',
+                      // '₹ 79,00,000',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -149,8 +176,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text(
-                      'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
+                    Text('${widget.property.name}\n${widget.property.bathrooms}\n${widget.property.sqft}',
+                      // 'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
                     SizedBox(height: 15),
@@ -159,8 +186,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       children: [
                         Icon(Icons.location_on, color: AppColors.black),
                         SizedBox(width: 5),
-                        Text(
-                          'KARAVATTOM, MALAPPURAM',
+                        Text('${widget.property.location}',
+                          // 'KARAVATTOM, MALAPPURAM',
                           style: TextStyle(
                             fontSize: 15,
                             color: AppColors.black,
@@ -212,7 +239,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    'Property Overview\nModern Apartment\nKARAVATTOM, MALAPPURAM',
+                                    'Property Overview\n${widget.property.name},\n${widget.property.location}',
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -227,19 +254,19 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     RowWidget(
-                                      text: 'Flats/Apartments',
+                                      text: '${widget.property.propertyType}',
                                       icons: Icons.apartment,
                                     ),
                                     Divider(thickness: 1),
                                     RowWidget(
-                                      text: 'Ready to move',
+                                      text:'${widget.property.readyToMove}',
                                       icons: Icons.check_circle_outline,
                                     ),
-                                    Divider(thickness: 1),
-                                    RowWidget(
-                                      text: 'Owner',
-                                      icons: Icons.account_circle,
-                                    ),
+                                    // Divider(thickness: 1),
+                                    // RowWidget(
+                                    //   text: 'Owner',
+                                    //   icons: Icons.account_circle,
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -264,20 +291,20 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     DetailsTable(
-                                      text: 'BHK',
-                                      details: '2',
+                                      text: 'Bedrooms',
+                                      details:"${widget.property.bathrooms}",
                                       icons: Icons.bed,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Carpet Area',
-                                      details: '1380 Sqft',
+                                      details:"${widget.property.sqft}",
                                       icons: Icons.check_box_outline_blank,
                                     ),
                                     Divider(thickness: 1),
                                     DetailsTable(
                                       text: 'Bathrooms',
-                                      details: '2',
+                                      details: "${widget.property.bathrooms}",
                                       icons: Icons.bathtub,
                                     ),
                                   ],
@@ -287,11 +314,11 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               Text("Amenities", style: TextStyle(fontSize: 16)),
                               SizedBox(height: 8),
                               RowWidget(
-                                text: 'Car Parking',
+                                text: "${widget.property.carParking}",
                                 icons: Icons.directions_car,
                               ),
                               RowWidget(
-                                text: 'Maintenance (Monthly) 2000',
+                                text: "Maintenance (Monthly) ${widget.property.price}",
                                 icons: Icons.currency_bitcoin,
                               ),
                             ],
@@ -364,29 +391,34 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             children: [
                               Icon(Icons.person, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Name\n Hrishilal'),
+                              // Text('Name\n Hrishilal'),
+                              Text("${bookedData!.name}"),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.phone, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Mobile No'),
-                              Text('+91 960592260'),
+                               Text("${bookedData!.contact}"),
+                              // Text('Mobile No'),
+                              // Text('+91 960592260'),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.mail, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Email\n Hrishilal@gmail.com'),
+                               Text("${bookedData!.email}"),
+                              
+                              // Text('email'),
                             ],
                           ),
                           Row(
                             children: [
-                              Icon(Icons.calendar_month, color: Colors.green),
+                              Icon(Icons.mail, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Date\n 2-3-2025'),
+                               Text("${bookedData!.date}"),
+                              // Text('Date\n 2-3-2025'),
                             ],
                           ),
                           SingleChildScrollView(
@@ -435,11 +467,23 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                     ),
                   ],
                 ),
+
+                
               ),
+
             ],
           ),
         ),
       ),
     );
+  }
+void getPropertyDetails() async {
+    propertyDetails.clear();
+    fdb.doc(widget.property.bookingid).get();
+  }
+
+  void deleteUser(String id) async {
+    await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
+    // getAllPropertyDetails();
   }
 }

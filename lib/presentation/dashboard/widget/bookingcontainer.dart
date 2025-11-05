@@ -4,10 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/app_textstyl.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/booked_details.dart';
 
 class BookingConatainerWidget extends StatefulWidget {
-  final Widget child;
+  final BookingModel bookedProperty;
   final Color? color;
   final String? imagepath1;
   final String? imagepath2;
@@ -15,12 +16,12 @@ class BookingConatainerWidget extends StatefulWidget {
   final BorderRadius? borderRadius;
   const BookingConatainerWidget({
     super.key,
-    required this.child,
     this.color,
     this.imagepath1,
     this.imagepath2,
     this.padding,
     this.borderRadius,
+    required this.bookedProperty,
   });
 
   @override
@@ -32,12 +33,12 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BookedDetails()),
-        );
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => BookedDetails()),
+      //   );
+      // },
       child: Container(
         height: 75.h,
         padding: widget.padding ?? EdgeInsets.all(12),
@@ -49,9 +50,9 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
           boxShadow: [
             BoxShadow(
               color: AppColors.black,
-              spreadRadius: 0.5,
-              blurRadius: 0.5,
-              offset: Offset.infinite,
+              spreadRadius: 0.7,
+              blurRadius: 0.7,
+            offset:Offset.infinite,
             ),
           ],
         ),
@@ -70,7 +71,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
             Column(
               children: [
                 Text(
-                  'Sruthi Hassan',
+                  widget.bookedProperty.name,
                   style: AppTextstyle.propertyMediumTextstyle(
                     context,
                     fontColor: AppColors.black,
@@ -81,7 +82,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
                   children: [
                     SvgPicture.asset(AssetResource.contact),
                     SizedBox(width: 5),
-                    Text('+987654578'),
+                    Text(widget.bookedProperty.contact.toString()),
                   ],
                 ),
               ],

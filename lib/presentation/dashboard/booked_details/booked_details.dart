@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/searching_page/widget/property_container.dart';
@@ -8,8 +10,10 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedDetails extends StatelessWidget {
-  const BookedDetails({super.key});
-
+ final String userName;
+  final BookingModel bookedProperty;
+  final PropertyModel property;
+  const BookedDetails({super.key, required this.userName,  required this.bookedProperty, required this.property});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +40,7 @@ class BookedDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
-              PropertyContainer(text: 'abc', isShow: false),
+              PropertyContainer(text: 'abc', isShow: false, property:property,),
 
               SizedBox(height: 16),
 
@@ -45,8 +49,8 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.person_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-
-                  Text('Name\nHrishilal'),
+                  Text("${bookedProperty.name}"),
+                  // Text('Name\nHrishilal'),
                 ],
               ),
 
@@ -57,8 +61,8 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.phone_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-
-                  Text('Mobile No\n+91 960592260'),
+                   Text("${bookedProperty.contact}"),
+                  // Text('Mobile No\n+91 960592260'),
                 ],
               ),
 
@@ -69,8 +73,8 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.mail_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-
-                  Text('Email\nHrishilal@gmail.com'),
+                  Text("${bookedProperty.email}"),
+                  // Text('Email\nHrishilal@gmail.com'),
                 ],
               ),
 
@@ -81,8 +85,8 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.calendar_month_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-
-                  Text('Date\n2-3-2025'),
+                   Text("${bookedProperty.date}"),
+                  // Text('Date\n2-3-2025'),
                 ],
               ),
 
