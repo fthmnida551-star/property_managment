@@ -23,7 +23,7 @@ class BottomNavigationWidget extends StatefulWidget {
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   // final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
 
-  final List<Widget> _pages = const [
+  final List<Widget> _pages =  [
     Center(child: DashboardScreen()),
     Center(child: Searchingpage()),
     Center(child: Notificationscreen()),

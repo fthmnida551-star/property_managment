@@ -15,7 +15,7 @@ import 'package:property_managment/widget/text_field.dart';
 
 class AddUserScreen extends StatefulWidget {
   final UserModel? users;
-  const AddUserScreen({super.key,this.users});
+  const AddUserScreen({super.key, this.users});
 
   @override
   State<AddUserScreen> createState() => _AddUserScreenState();
@@ -26,7 +26,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   final formkey = GlobalKey<FormState>();
   final List<String> _roles = ['Manager', 'Agent', 'Staff'];
   String? _selectedRole;
-  final _saveButtonMode = SaveButtonMode.save;
+  SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   final TextEditingController namectrlr = TextEditingController();
   final TextEditingController emailctrlr = TextEditingController();
@@ -38,6 +38,19 @@ class _AddUserScreenState extends State<AddUserScreen> {
     namectrlr.clear();
     emailctrlr.clear();
     passWordctrlr.clear();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.users != null) {
+      namectrlr.text = widget.users!.name;
+      emailctrlr.text = widget.users!.email;
+      passWordctrlr.text = widget.users!.password;
+      _selectedRole = widget.users!.role;
+      _saveButtonMode = SaveButtonMode.edit;
+    }
   }
 
   @override
@@ -57,7 +70,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
               ),
             ),
             Text(
-              'Add User',
+              _saveButtonMode == SaveButtonMode.save
+                  ? 'Add User'
+                  : 'Edit User', // 🟩 CHANGED: dynamic title
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
@@ -127,7 +142,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                     child: DropdownButtonFormField<String>(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please select your role"; 
+                          return "Please select your role";
                         }
                         return null;
                       },
@@ -135,7 +150,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Role',
-                        
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: _roles
@@ -156,7 +171,6 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                
                 Padding(
                   padding: const EdgeInsets.only(left: 0.1, right: 0.1),
                   child: Padding(
@@ -224,29 +238,25 @@ class _AddUserScreenState extends State<AddUserScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
-          text: 'Submit',
+          text: _saveButtonMode == SaveButtonMode.save ? 'Submit' : 'Update',
           onTap: () async {
-           
             if (formkey.currentState!.validate()) {
-               if (_saveButtonMode == SaveButtonMode.save) {
               Map<String, dynamic> userDetails = {
                 "USER_NAME": namectrlr.text.trim(),
                 "USER_EMAIL": emailctrlr.text.trim(),
-                "USER_ROLE":_selectedRole,
+                "USER_ROLE": _selectedRole,
                 "USER_PASSWORD": passWordctrlr.text.trim(),
-
               };
-
-              await addUsers(userDetails);
-              
-              
+              if (_saveButtonMode == SaveButtonMode.save) {
+                await addUsers(userDetails);
+              } else {
+                await updateUser(widget.users!.id!, userDetails);
+              }
               _clearControllers();
-              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UsersScreen()),
-                  );
-            }
-               
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => UsersScreen()),
+              );
             }
           },
         ),
@@ -254,13 +264,21 @@ class _AddUserScreenState extends State<AddUserScreen> {
     );
   }
 
- addUsers(Map<String, dynamic> finaldetails) {
-    fdb.collection("STAFF").add(finaldetails).then((
+  addUsers(Map<String, dynamic> userDetails) {
+    fdb.collection("STAFF").add(userDetails).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
       final String id = docRef.id;
       log("adding users");
     });
   }
-   
+
+  updateUser(String id, Map<String, dynamic> updatedData) async {
+    try {
+      await fdb.collection("STAFF").doc(id).update(updatedData);
+      log("User updated successfully");
+    } catch (e) {
+      log("Error updating user: $e");
+    }
+  }
 }

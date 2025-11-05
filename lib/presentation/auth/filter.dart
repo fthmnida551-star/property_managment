@@ -360,6 +360,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'dart:developer';
 
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
@@ -603,21 +604,27 @@ async {
   {
     basequery = basequery.where("PROPERTY_TYPE",isEqualTo: propertyTypes);
 
-  }else if(priceRange != null){
-    basequery =basequery.where("PROPERTY_PRICE", isGreaterThanOrEqualTo: priceRange.start);
-       basequery =basequery.where ("PROPERTY_PRICE", isLessThanOrEqualTo: priceRange.end);
   }
+//   else if(priceRange != null){
+//     basequery =basequery.where("PROPERTY_PRICE", isGreaterThanOrEqualTo: priceRange.start);
+//        basequery =basequery.where ("PROPERTY_PRICE", isLessThanOrEqualTo: priceRange.end);
+//   }
+//   else if(){}
+//   else if (sqftRange != null){
+// basequery= basequery.where("PROPERTY SQFT", isGreaterThanOrEqualTo:sqftRange.start);
+// basequery=basequery.where("PROPERTY SQFT", isLessThan: sqftRange.end);
 
-  else if (sqftRange !=null){
-basequery= basequery.where("PROPERTY SQFT", isGreaterThan:sqftRange.start);
-basequery=basequery.where("PROPERTY SQFT", isLessThan: sqftRange.end);
-
-  }
+//   }
+  basequery =basequery.where("PROPERTY_PRICE", isGreaterThanOrEqualTo: priceRange.start)
+       .where ("PROPERTY_PRICE", isLessThanOrEqualTo: priceRange.end)
+       .where("PROPERTY SQFT", isGreaterThanOrEqualTo:sqftRange.start)
+       .where("PROPERTY SQFT", isLessThan: sqftRange.end);
 QuerySnapshot<Object?> qs = await basequery.get();
 if(qs.docs.isNotEmpty){
   for(var items in qs.docs){
-   Object? prop_map= items.data();
+   Map<String, dynamic> prop_map= items.data() as Map<String,dynamic>;
    String id=items.id;
+   propertydetailslist.add(PropertyModel.fromMap(prop_map));
    
   }
 } 

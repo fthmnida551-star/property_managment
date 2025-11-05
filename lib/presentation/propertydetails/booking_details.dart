@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +12,7 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
-  BookingDetails({super.key});
+ const BookingDetails({super.key});
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
@@ -26,6 +25,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   TextEditingController namectlr = TextEditingController();
   TextEditingController contactCtlr = TextEditingController();
   TextEditingController emailCtlr = TextEditingController();
+  TextEditingController datectlr = TextEditingController();
   final SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   _clearControllers() {
@@ -115,7 +115,17 @@ class _BookingDetailsState extends State<BookingDetails> {
                   },
                 ),
                 divider,
-                CalendarPickerContainer(hintText: 'Date'),
+                CalendarPickerContainer(
+                  hintText: 'Select date',
+
+                  validator: (date) {
+                    if (date == null) {
+                      return 'Please select a date';
+                    }
+                    return null;
+                  },
+                  controller: datectlr,
+                ),
               ],
             ),
           ),
@@ -127,15 +137,16 @@ class _BookingDetailsState extends State<BookingDetails> {
           text: 'Save',
           onTap: () {
             if (formKey.currentState!.validate()) {
-Map<String, dynamic> bookingDetails={};
+              Map<String, dynamic> bookingDetails = {};
               if (_saveButtonMode == SaveButtonMode.save) {
-                 bookingDetails= {
+                bookingDetails = {
                   "NAME": namectlr.text.trim(),
                   "CONTACT": int.tryParse(contactCtlr.text.trim()),
                   "EMAIL": emailCtlr.text.trim(),
+                  "DATE": datectlr.text.trim(),
                 };
               }
-               addbookingDetails(bookingDetails);
+              addbookingDetails(bookingDetails);
               _clearControllers();
               Navigator.push(
                 context,
@@ -148,13 +159,14 @@ Map<String, dynamic> bookingDetails={};
     );
   }
 
-  void addbookingDetails(Map<String, dynamic> propertyData) async {
-    await fdb.collection("BOOKING DETAILS").add(propertyData).then((
+  void addbookingDetails(Map<String, dynamic> bookingData) async {
+    await fdb.collection("BOOKING DETAILS").add(bookingData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
       final String id = docRef.id;
 
       log("Insert Data with $id");
+       docRef.update({'BOOKING_ID': id});
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/searching_page/widget/property_container.dart';
@@ -8,8 +9,9 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedDetails extends StatelessWidget {
-  const BookedDetails({super.key});
-
+ final String userName;
+  final PropertyModel property;
+  const BookedDetails({super.key, required this.userName, required this.property});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,7 @@ class BookedDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
-              PropertyContainer(text: 'abc', isShow: false),
+              PropertyContainer(text: 'abc', isShow: false, property:property,),
 
               SizedBox(height: 16),
 
@@ -98,7 +100,7 @@ class BookedDetails extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              BottomNavigationWidget(currentIndex: 1, propertytype: '', price: null, sqft: null,),
+                              BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
                         ),
                       );
                     },

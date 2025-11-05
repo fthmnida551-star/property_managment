@@ -6,7 +6,7 @@ import 'package:property_managment/presentation/propertydetails/propertydetails.
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
-void deleteAlert(BuildContext context) {
+void deleteAlert(BuildContext context,{required VoidCallback onConfirm}) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -47,7 +47,8 @@ void deleteAlert(BuildContext context) {
               children: [
                 InkWell(
                   onTap: () {
-                    
+                    Navigator.pop(context); 
+                    onConfirm(); 
                   },
                   child: Container(
                     height: 50.h,

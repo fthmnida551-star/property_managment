@@ -1,53 +1,97 @@
+class PropertyModel {
+  final String id;
+  final String name;
+  final String propertyType;
+  final String location;
+  final String description;
+  final double price;
+  final int bhk;
+  final int bathrooms;
+  final bool readyToMove;
+  final double carpetArea;
+  final bool carParking;
+  final double maintenance;
+  final double sqft;
+  final String aminities;
+  final bool isOwner;
+  final String ownername;
+  final String contact;
+  final String email;
+  final bool isBooked;
+  final String bookingid;
 
-// class PropertyModel {
-//   final String id;         
-//   final String name;       
-//   final String location;   
-//   final double amount;    
-//   final int bedrooms;
-//   final int bathrooms;
-//   final int ;
-//   final bool available;    
+  PropertyModel({
+    required this.id,
+    required this.name,
+    required this.propertyType,
+    required this.location,
+    required this.description,
+    required this.price,
+    required this.maintenance,
+    required this.sqft,
+    required this.bhk,
+    required this.bathrooms,
+    required this.readyToMove,
+    required this.carParking,
+    required this.carpetArea,
+    required this.aminities,
+    required this.isOwner,
+    required this.ownername,
+    required this.contact,
+    required this.email,
+    required this.isBooked,
+    required this.bookingid,
+  });
 
-//   PropertyModel({
-//     required this.id,
-//     required this.name,
-//     required this.location,
-//     required this.amount,
-//     required this.bedrooms,
-//     required this.bathrooms;
-//     required this.available,
-//   });
+  /// Convert model to Map (for Firestore or JSON)
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'BUILDING NAME': name,
+      'PROPERTY TYPE': propertyType,
+      'PROPERTY LOCATION': location,
+      'PROPERTY DESCRIPTION': description,
+      'PROPERTY PRICE': price,
+      'BHK': bhk,
+      'BATHROOMS': bathrooms,
+      'READY_TO_MOVE': readyToMove,
+      'CARPET AREA': carpetArea,
+      'carParking': carParking,
+      'MAINTENANCE': maintenance,
+      'PROPERTY SQFT': sqft,
+      'AMINITIES': aminities,
+      'IS_OWN_PROPERTY': isOwner,
+      'OWNER_NAME': ownername,
+      'OWNER_CONTACT': contact,
+      'OWNER_EMAIL': email,
+      'IS_BOOKED': isBooked,
+      'BOOKING_ID': bookingid,
+    };
+  }
 
-//   // ✅ Create a PropertyModel object from a Firestore document
-//   factory PropertyModel.fromMap(Map<String, dynamic> data, String documentId) {
-//     return PropertyModel(
-//       id: documentId,
-//       name: data['name'] ?? 'No name',
-//       location: data['location'] ?? 'No location',
-//       price: _toDouble(data['price']),
-//       bedrooms: data['bedrooms'] ?? 0,
-//        bathrooms: data['bathrooms'] ?? 0,
-//       available: data['available'] ?? false,
-//     );
-//   }
-
-//   // ✅ Convert a PropertyModel object to a Map (useful for add/update)
-//   Map<String, dynamic> toMap() {
-//     return {
-//       'name': name,
-//       'location': location,
-//       'price': price,
-//       'bedrooms': bedrooms,
-//       'available': available,
-//     };
-//   }
-
-//   // 🔹 Helper to safely convert Firestore numbers to double
-//   static double _toDouble(dynamic value) {
-//     if (value is int) return value.toDouble();
-//     if (value is double) return value;
-//     return 0.0;
-//   }
-// }
-
+  /// Create model from Map (for Firestore or JSON)
+  factory PropertyModel.fromMap(Map<String, dynamic> map) {
+    return PropertyModel(
+      id: map['id'] ?? '',
+      name: map['BUILDING NAME'] ?? '',
+      propertyType: map['PROPERTY TYPE'] ?? '',
+      location: map['PROPERTY LOCATION'] ?? '',
+      description: map['PROPERTY DESCRIPTION'] ?? '',
+      price: (map['PROPERTY PRICE'] ?? 0).toDouble(),
+      bhk: (map['BHK'] ?? 0).toInt(),
+      bathrooms: (map['BATHROOMS'] ?? 0).toInt(),
+      readyToMove: map['READY_TO_MOVE']=='YES'?true :  false,
+      carpetArea: (map['CARPET AREA'] ?? 0).toDouble(),
+      carParking: map['CARPARKING'] =='YES'?true: false,
+      maintenance: (map['MAINTENANCE'] ?? 0).toDouble(),
+      sqft: (map['PROPERTY SQFT'] ?? 0).toDouble(),
+      aminities: map['AMINITIES'] ?? '',
+      isOwner: map['IS_OWN_PROPERTY'] =="YES"? true :false,
+      ownername: map['OWNER_NAME'] ?? '',
+      contact: map['OWNER_CONTACT'] ?? '',
+      email: map['OWNER_EMAIL'] ?? '',
+      isBooked: map['IS_BOOKED'] =="YES"? true :false,
+      bookingid: map['BOOKING_ID'] ?? '',
+    );
+  }
+}
