@@ -13,8 +13,8 @@ class TextFieldContainer extends StatefulWidget {
     required this.text,
     this.suffixIcon,
     this.priffixIcon,
-    required this.controllerName,
-    required this.validator,
+    required this.controllerName, this.validator,
+   
   });
 
   @override

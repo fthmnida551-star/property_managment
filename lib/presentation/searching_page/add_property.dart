@@ -189,6 +189,8 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
 
                 divider,
+
+                divider,
                 TextFieldContainer(
                   text: 'Price',
                   controllerName: priceCtlr,

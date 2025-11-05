@@ -14,10 +14,10 @@ class _FilterSortPageState extends State<FilterSortPage> {
   RangeValues sqftRange = const RangeValues(500, 5000);
 
   Map<String, bool> propertyTypes = {
-    'Apartment': false,
-    'Villa': false,
-    'Plot': false,
-    'Commercial': false,
+    'APARTMENT': false,
+    'VILLA': false,
+    'LAND': false,
+    
   };
 
   @override

@@ -103,7 +103,11 @@ Future<void> getBookedProperty() async {
        
       totalproperty = count;
       bookedproperty = booked;
-      vacantproperty = totalproperty - bookedproperty;
+      if(totalproperty>bookedproperty)
+      {vacantproperty = totalproperty - bookedproperty;}
+      else{
+        vacantproperty=0;
+      }
     
 
     });
