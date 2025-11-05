@@ -13,11 +13,16 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedDetails extends StatelessWidget {
- final String userName;
+  final String userName;
   final BookingModel bookedProperty;
   final PropertyModel property;
-   BookedDetails({super.key, required this.userName,  required this.bookedProperty, required this.property});
-  FirebaseFirestore fdb =FirebaseFirestore.instance;
+  BookedDetails({
+    super.key,
+    required this.userName,
+    required this.bookedProperty,
+    required this.property,
+  });
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,22 +51,23 @@ class BookedDetails extends StatelessWidget {
             children: [
               // PropertyContainer(text: 'abc', isShow: false, property:property,),
               PropertyContainer(
-                              text: 'Booked',
-                              textColor: AppColors.white,
-                              color: AppColors.booked,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        BookedPropertyScreen(property:property, ),
-                                  ),
-                                );
-                              }, property: property,
+                text: 'Booked',
+                textColor: AppColors.white,
+                color: AppColors.booked,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BookedPropertyScreen(property: property),
+                    ),
+                  );
+                },
+                property: property,
               ),
-                            
 
-              SizedBox(height: 16),              Row(
+              SizedBox(height: 16),
+              Row(
                 children: [
                   Icon(Icons.person_rounded, color: Colors.green),
 
@@ -78,7 +84,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.phone_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                   Text("${bookedProperty.contact}"),
+                  Text("${bookedProperty.contact}"),
                   // Text('Mobile No\n+91 960592260'),
                 ],
               ),
@@ -102,7 +108,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.calendar_month_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                   Text("${bookedProperty.date}"),
+                  Text("${bookedProperty.date}"),
                   // Text('Date\n2-3-2025'),
                 ],
               ),
@@ -113,25 +119,32 @@ class BookedDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Button(
-  text: 'Delete',
-  onTap: () async {
-     deleteBookingProperty(property.id); // pass the booking document ID
+                    text: 'Delete',
+                    onTap: () async {
+                      deleteBookingProperty(
+                        property.id,
+                      ); // pass the booking document ID
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
-      ),
-    );
-  },
-  icon: Icons.delete_outline_outlined,
-),
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavigationWidget(
+                            currentIndex: 1,
+                            propertytype: [],
+                            price: null,
+                            sqft: null,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icons.delete_outline_outlined,
+                  ),
 
                   // Button(
                   //   text: 'Delete',
                   //   onTap: () {
                   //     deleteBookingProperty()
-                      
+
                   //     Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
@@ -162,8 +175,8 @@ class BookedDetails extends StatelessWidget {
       ),
     );
   }
-   void deleteBookingProperty(String id) async {
+
+  void deleteBookingProperty(String id) async {
     await fdb.collection("BOOKING DETAILS").doc(id).delete();
-    
   }
 }
