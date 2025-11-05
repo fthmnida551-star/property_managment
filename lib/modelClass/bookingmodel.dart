@@ -1,52 +1,91 @@
+
+// class BookingModel {
+//   final String name;
+//   final String email;
+//   final String contact;
+//   final int date;
+//   final String id;
+
+//   BookingModel({
+//     required this.name,
+//     required this.email,
+//     required this.contact,
+//     required this.date,
+//     required this.id,
+//   });
+
+
+//   // factory BookingModel.fromMap(Map<String, dynamic> map, String id) {
+//   //   return BookingModel(
+//   //     name: map['NAME'] ?? 'No name',
+//   //     email: map['EMAIL'] ?? 'No email',
+//   //     contact: map['CONTACT']?.toString() ?? 'No contact',
+//   //     date: map['DATE'] ?? 'No date',
+//   //     id: id,
+//   //   );
+//   // }
+//   factory BookingModel.fromMap(Map<String, dynamic> map, String id) {
+//   return BookingModel(
+//     name: map['NAME'] ?? map['name'] ?? 'No name',
+//     email: map['EMAIL'] ?? map['email'] ?? 'No email',
+//     contact: map['CONTACT']?.toString() ?? map['contact']?.toString() ?? 'No contact',
+//     date: map['DATE'] ?? map['date'] ?? 0,
+//     id: id,
+//   );
+// }
+
+
+  
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'NAME': name,
+//       'EMAIL': email,
+//       'CONTACT': contact,
+//       'DATE': date,
+//       'id': id,
+//     };
+//   }
+// }
 class BookingModel {
   final String name;
   final String email;
-  final int phone;
+  final String contact;
   final int date;
-  
+  final String id;
+  final String propertyId;
 
   BookingModel({
     required this.name,
     required this.email,
-    required this.phone,
+    required this.contact,
     required this.date,
+    required this.id,
+    required this.propertyId,
   });
-  factory BookingModel.fromMap(Map<String, dynamic> data, String documentId) {
+
+  /// Factory constructor to create a BookingModel from Firestore map
+  factory BookingModel.fromMap(Map<String, dynamic> map, String id) {
     return BookingModel(
-     name: data['name'] ?? 'No name',
-     email: data['email'] ?? 'No email',
-     phone: data['contact'] ?? 'No contact',
-     date: data['date'] ?? 0,
-      
-    );
-  }
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'email':email,
-      'contact':phone,
-      'date':date,
-      
-    };
-  }
- factory BookingModel.fromJson(Map<String, dynamic> json) {
-    return BookingModel(
-      name: json['name'] ?? 'No name',
-      email: json['email'] ?? 'No email',
-      phone: json['contact'] ?? 0,
-      date: json['date'] ?? 0,
+      name: (map['NAME'] ?? map['name'] ?? '').toString(),
+      email: (map['EMAIL'] ?? map['email'] ?? '').toString(),
+      contact: (map['CONTACT'] ?? map['contact'] ?? '').toString(),
+      propertyId: (map['property id'] ?? map ['property id']??'').toString(),
+      date: (map['DATE'] ?? map['date'] ?? 0) is int
+          ? (map['DATE'] ?? map['date'] ?? 0)
+          : int.tryParse(map['DATE']?.toString() ?? '0') ?? 0,
+      id: id,
     );
   }
 
-  /// Convert the object into JSON (for API or local storage)
+  /// Converts model to JSON for Firestore upload
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'email': email,
-      'contact': phone,
-      'date': date,
+      'NAME': name,
+      'EMAIL': email,
+      'CONTACT': contact,
+      'DATE': date,
+      'id': id,
+      'propertyId':propertyId,
     };
   }
 }
-
- 

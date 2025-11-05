@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/dashboard/booked_details/widget/button.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
@@ -12,15 +14,36 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
- 
   final PropertyModel property;
-  const BookedPropertyScreen({super.key, required this.property});
+  const BookedPropertyScreen({super.key, required this.property, });
   // const BookedPropertyScreen({super.key});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
 }
 
 class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
+  List<PropertyModel> propertyDetails = [];
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
+ BookingModel? bookedData;
+getPropertyBooking(String bookingId) async{
+  await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value){
+    if(value.exists){
+      Map<String, dynamic> data =value.data()!;
+      bookedData = BookingModel.fromMap(data, value.id);
+    }
+  });
+}
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPropertyBooking(widget.property.bookingid);
+  }
+
+
+  @override
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -60,7 +83,6 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             Icons.more_vert,
                             color: AppColors.whitecolor,
                           ),
-
                           itemBuilder: (BuildContext context) => [
                             PopupMenuItem(
                               child: InkWell(
@@ -101,7 +123,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context);
+                                  showLandlordPopup(context,widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -369,29 +391,34 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             children: [
                               Icon(Icons.person, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Name\n Hrishilal'),
+                              // Text('Name\n Hrishilal'),
+                              Text("${bookedData!.name}"),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.phone, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Mobile No'),
-                              Text('+91 960592260'),
+                               Text("${bookedData!.contact}"),
+                              // Text('Mobile No'),
+                              // Text('+91 960592260'),
                             ],
                           ),
                           Row(
                             children: [
                               Icon(Icons.mail, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Email\n Hrishilal@gmail.com'),
+                               Text("${bookedData!.email}"),
+                              
+                              // Text('email'),
                             ],
                           ),
                           Row(
                             children: [
-                              Icon(Icons.calendar_month, color: Colors.green),
+                              Icon(Icons.mail, color: Colors.green),
                               SizedBox(width: 8),
-                              Text('Date\n 2-3-2025'),
+                               Text("${bookedData!.date}"),
+                              // Text('Date\n 2-3-2025'),
                             ],
                           ),
                           SingleChildScrollView(
@@ -449,5 +476,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
         ),
       ),
     );
+  }
+void getPropertyDetails() async {
+    propertyDetails.clear();
+    fdb.doc(widget.property.bookingid).get();
+  }
+
+  void deleteUser(String id) async {
+    await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
+    // getAllPropertyDetails();
   }
 }

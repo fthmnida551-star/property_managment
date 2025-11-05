@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/filter.dart';
@@ -15,7 +16,8 @@ import 'package:property_managment/presentation/searching_page/widget/property_c
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Searchingpage extends StatefulWidget {
-  const Searchingpage({super.key});
+    // final BookingModel bookedProperty;
+  const Searchingpage({super.key,});
 
   @override
   State<Searchingpage> createState() => _SearchingpageState();
@@ -204,7 +206,7 @@ class _SearchingpageState extends State<Searchingpage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        BookedPropertyScreen(property: item),
+                                        BookedPropertyScreen(property: item, ),
                                   ),
                                 );
                               },
