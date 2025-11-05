@@ -27,6 +27,8 @@ class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
+  TextEditingController srchbrcntlr=TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +70,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: srchbrcntlr,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Icon(Icons.search, color: AppColors.black),
