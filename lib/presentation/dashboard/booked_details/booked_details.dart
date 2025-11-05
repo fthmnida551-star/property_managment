@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +15,11 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedDetails extends StatelessWidget {
-  final String userName;
+ final String userName;
   final BookingModel bookedProperty;
   final PropertyModel property;
-  BookedDetails({
-    super.key,
-    required this.userName,
-    required this.bookedProperty,
-    required this.property,
-  });
-  FirebaseFirestore fdb = FirebaseFirestore.instance;
+   BookedDetails({super.key, required this.userName,  required this.bookedProperty, required this.property});
+  FirebaseFirestore fdb =FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,25 +122,31 @@ class BookedDetails extends StatelessWidget {
                         property.id,
                       ); // pass the booking document ID
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigationWidget(
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => BottomNavigationWidget(
+                            
                             currentIndex: 1,
+                           
                             propertytype: [],
+                           
                             price: null,
+                           
                             sqft: null,
+                          
                           ),
-                        ),
-                      );
-                    },
-                    icon: Icons.delete_outline_outlined,
-                  ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icons.delete_outline_outlined,
+                                    ),
 
                   // Button(
                   //   text: 'Delete',
                   //   onTap: () {
                   //     deleteBookingProperty()
+
 
                   //     Navigator.push(
                   //       context,
@@ -155,15 +158,32 @@ class BookedDetails extends StatelessWidget {
                   //   },
                   //   icon: Icons.delete_outline_outlined,
                   // ),
+                  // Button(
+                  //   text: 'Edit',
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => BookingDetails(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: Icons.edit_outlined,
+                  // ),
                   Button(
                     text: 'Edit',
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final updatedBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails(),
+                          builder: (context) => BookingDetails(
+                           // pass the existing details
+                          ),
                         ),
                       );
+                      if (updatedBooking != null) {
+                        updateBookingProperty(updatedBooking);
+                      }
                     },
                     icon: Icons.edit_outlined,
                   ),
@@ -174,6 +194,20 @@ class BookedDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void updateBookingProperty(BookingModel Updatedetails) async {
+    final DocumentReference<Map<String, dynamic>> documentRef = fdb
+        .collection("BOOKING DETAILS")
+        .doc(Updatedetails.id);
+    await documentRef
+        .update(Updatedetails.toJson())
+        .then((value) {
+          log("Updated successfully");
+        })
+        .onError((e, stack) {
+          log("Error is $e");
+        });
   }
 
   void deleteBookingProperty(String id) async {

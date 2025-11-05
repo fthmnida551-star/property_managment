@@ -11,11 +11,10 @@ import 'package:property_managment/presentation/propertydetails/widget/row.dart'
 import 'package:property_managment/presentation/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 
-
 class NotBookedPropertyScreen extends StatefulWidget {
    final String userName;
   final PropertyModel property;
-  const NotBookedPropertyScreen({super.key, required this.userName, required this.property, });
+  const NotBookedPropertyScreen({super.key, required this.userName, required this.property,});
  
   // const NotBookedPropertyScreen({super.key});
   @override
@@ -157,7 +156,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Modern Amenities\n${widget.property.bathrooms}\n${widget.property.sqft}',              
+                      '${widget.property.name.toUpperCase()}\n BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',              
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
                     SizedBox(height: 15),

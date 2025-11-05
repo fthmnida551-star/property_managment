@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -176,7 +178,7 @@ getPropertyBooking(String bookingId) async{
                       ),
                     ),
                     SizedBox(height: 10),
-                    Text('${widget.property.name}\n${widget.property.bathrooms}\n${widget.property.sqft}',
+                    Text('${widget.property.name.toUpperCase()}\n BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',
                       // 'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
                       style: TextStyle(fontSize: 16, color: AppColors.black),
                     ),
@@ -452,7 +454,7 @@ getPropertyBooking(String bookingId) async{
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => BookingDetails(),
+                                        builder: (context) => AddProperty(),
                                       ),
                                     );
                                   },
@@ -477,9 +479,22 @@ getPropertyBooking(String bookingId) async{
       ),
     );
   }
-void getPropertyDetails() async {
-    propertyDetails.clear();
-    fdb.doc(widget.property.bookingid).get();
+// void getPropertyDetails() async {
+//    await fdb.collection('BOOKING').doc(widget.property.bookingid).get().then((value)(
+//     if(value.isempty){
+//     Map<String, dynamic> booking =value.data;
+//     }
+//    ));
+//   }
+ void updatePerson(BookingModel personToUpdate) async {
+    final DocumentReference<Map<String, dynamic>> documentRef =
+        fdb.collection("BOOKING MODEL").doc(personToUpdate.id);
+    await documentRef.update(personToUpdate.toJson()).then((value) {
+      log("Updated successfully");
+    }).onError((e, stack) {
+      log("Error is $e", name: "oxdo");
+    });
+  
   }
 
   void deleteUser(String id) async {
