@@ -21,7 +21,7 @@ class PropertyContainer extends StatefulWidget {
     this.textColor,
     this.isShow = true,
     this.onTap,
-    required this.property
+    required this.property,
   });
   @override
   State<PropertyContainer> createState() => _PropertyContainerState();
@@ -31,13 +31,14 @@ class _PropertyContainerState extends State<PropertyContainer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+     
+
       onTap: widget.onTap??  () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property, )),//NotBookedPropertyScreen()),
+          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property ,)),//NotBookedPropertyScreen()),
         );
-      }, 
-      
+      },
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
@@ -60,7 +61,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
             SizedBox(height: 8.h),
             Text(
               // 'Apartment',
-              '${widget.property.propertyType}',
+              widget.property.propertyType,
               style: TextStyle(fontSize: 21.sp, color: AppColors.black),
             ),
             Text(
@@ -73,7 +74,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
                 Icon(Icons.location_on_outlined, size: 20),
                 Text(
                   // 'Azizi Aliyah,al jaddaf, Dubai',
-                  '${widget.property.location}',
+                  widget.property.location,
                   style: TextStyle(fontSize: 19.sp, color: AppColors.black),
                 ),
               ],
@@ -81,27 +82,31 @@ class _PropertyContainerState extends State<PropertyContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if(widget.property.propertyType != "LAND")
-                // IconRow(icon: Icons.bed_outlined, value: '${widget.property.bhk}', property: widget.property,),
-                 Row(
-                  children: [
-                    Icon(Icons.bed_outlined,size: 20.sp,),
-                    Center(child: Text('${widget.property.bhk}')),
-                  ],
-                ),
-                if(widget.property.propertyType != "LAND")
-                Row(
-                  children: [
-                    Icon(Icons.bathtub_outlined,size: 18.sp,),
-                    Center(child: Text('${widget.property.bathrooms}')),
-                  ],
-                ),
+                if (widget.property.propertyType != "LAND")
+                  Row(
+                    children: [
+                      Icon(Icons.bed_outlined, size: 20.sp),
+                      Center(child: Text('${widget.property.bhk}')),
+                    ],
+                  ),
+                if (widget.property.propertyType != "LAND")
+                  Row(
+                    children: [
+                      Icon(Icons.bathtub_outlined, size: 18.sp),
+                      Center(child: Text('${widget.property.bathrooms}')),
+                    ],
+                  ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                   
                     Text(' ${widget.property.sqft}'),
-                    Text('sqf',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                    Text(
+                      'sqf',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
 
