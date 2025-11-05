@@ -16,8 +16,8 @@ import 'package:property_managment/presentation/searching_page/widget/property_c
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Searchingpage extends StatefulWidget {
-    // final BookingModel bookedProperty;
-  const Searchingpage({super.key,});
+  // final BookingModel bookedProperty;
+  const Searchingpage({super.key});
 
   @override
   State<Searchingpage> createState() => _SearchingpageState();
@@ -27,7 +27,7 @@ class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
-  TextEditingController srchbrcntlr=TextEditingController();
+  TextEditingController srchbrcntlr = TextEditingController();
 
   @override
   void initState() {
@@ -71,9 +71,18 @@ class _SearchingpageState extends State<Searchingpage> {
                     ),
                     child: TextField(
                       controller: srchbrcntlr,
+                      //                      onChanged: (value) {
+                      //   searchProperties(value);
+                      // },
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.search, color: AppColors.black),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.search, color: AppColors.black),
+                          onPressed: () {
+                            searchProperties(srchbrcntlr.text);
+                          },
+                        ),
+
                         hintText: 'Search',
                         hintStyle: TextStyle(fontSize: 14.sp),
                       ),
@@ -209,7 +218,7 @@ class _SearchingpageState extends State<Searchingpage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        BookedPropertyScreen(property: item, ),
+                                        BookedPropertyScreen(property: item),
                                   ),
                                 );
                               },
@@ -252,5 +261,27 @@ class _SearchingpageState extends State<Searchingpage> {
       debugPrint("Error fetching property details: $e");
     }
     // propertyDetailsList.notifyListeners();
+  }
+
+  void searchProperties(String query) async {
+    if (query.isEmpty) {
+      getAllPropertyDetailsList();
+      return;
+    }
+
+    final lowerQuery = query.toLowerCase();
+
+    final allDocs = await fdb.collection('PROPERTIES').get();
+    propertyDetailsList = allDocs.docs
+        .map((doc) {
+          return PropertyModel.fromMap(doc.data());
+        })
+        .where((property) {
+          return property.name.toLowerCase().contains(lowerQuery) ||
+              property.location.toLowerCase().contains(lowerQuery);
+        })
+        .toList();
+
+    setState(() {});
   }
 }
