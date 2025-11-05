@@ -50,9 +50,9 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
           boxShadow: [
             BoxShadow(
               color: AppColors.black,
-              spreadRadius: 0.5,
-              blurRadius: 0.5,
-            offset:Offset(0, 1)
+              spreadRadius: 0.7,
+              blurRadius: 0.7,
+            offset:Offset.infinite,
             ),
           ],
         ),
