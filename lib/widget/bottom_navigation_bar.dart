@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/presentation/dashboard/dashboard.dart';
 import 'package:property_managment/presentation/notification_screen/notificationscreen.dart';
 import 'package:property_managment/presentation/profile/profile.dart';

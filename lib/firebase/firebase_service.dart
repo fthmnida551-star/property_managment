@@ -45,7 +45,7 @@ void addNewProperty() async {
     email: "faiha@gmail.com",
     contact: '9988776655',
     date: 30-10-2025, 
-    id: '',
+    id: '', propertyId: '',
   );
 
   await firebaseService. getBookedProperty(newProperty);

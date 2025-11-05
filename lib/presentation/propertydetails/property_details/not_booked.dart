@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
+import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/booking_details.dart';
 import 'package:property_managment/presentation/propertydetails/widget/detailstable.dart';
@@ -13,14 +15,16 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 class NotBookedPropertyScreen extends StatefulWidget {
    final String userName;
   final PropertyModel property;
-  const NotBookedPropertyScreen({super.key, required this.userName, required this.property});
-
+  const NotBookedPropertyScreen({super.key, required this.userName, required this.property, });
+ 
   // const NotBookedPropertyScreen({super.key});
   @override
   State<NotBookedPropertyScreen> createState() => _NotBookedPropertyScreenState();
 }
 
 class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
+   
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -101,7 +105,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context);
+                                  showLandlordPopup(context,widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -372,4 +376,5 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
-}
+
+   }
