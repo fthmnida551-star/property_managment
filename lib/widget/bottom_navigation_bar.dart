@@ -23,7 +23,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   final List<Widget> _pages =  [
     Center(child: DashboardScreen()),
-    Center(child: Searchingpage()),
+   // Center(child: Searchingpage()),
     Center(child: Notificationscreen()),
     Center(child: Profilescreen()),
   ];
