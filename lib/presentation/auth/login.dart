@@ -251,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                                             propertytype: [],
                                             price: null,
                                             sqft: null,
-                                            loginUser: user,
+                                            // loginUser: user,
                                           ),
                                     ),
                                   );

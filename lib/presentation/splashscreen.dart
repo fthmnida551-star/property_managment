@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -28,7 +30,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
     // Add delay for splash animation
     await Future.delayed(const Duration(seconds: 3));
-
+log("eeeeeeeeeeeeeeeeeeeee $isLoggedIn   mounted $mounted");
     if (!mounted) return;
 
     if (isLoggedIn) {
@@ -41,7 +43,7 @@ class _SplashscreenState extends State<Splashscreen> {
             propertytype: [],
             price: null,
             sqft: null,
-            loginUser: null,
+            
           ),
         ),
       );
@@ -65,3 +67,5 @@ class _SplashscreenState extends State<Splashscreen> {
     );
   }
 }
+
+
