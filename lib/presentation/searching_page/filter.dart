@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/presentation/searching_page/searchingpage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 class FilterSortPage extends StatefulWidget {
-  const FilterSortPage({super.key});
+  const  FilterSortPage({super.key});
 
   @override
   State<FilterSortPage> createState() => _FilterSortPageState();
@@ -39,13 +43,12 @@ class _FilterSortPageState extends State<FilterSortPage> {
             // Left Side Menu
             Container(
               width: 130,
-              color:AppColors.greyColor,
+              color:AppColors.white,
               child: ListView(
                 children: [
                   buildMenuItem("Property Type", 0),
                   buildMenuItem("Price", 1),
-                  buildMenuItem("Price per Sqft", 2),
-                  buildMenuItem("Area Sqft", 3),
+                   buildMenuItem("Area Sqft", 3),
                 ],
               ),
             ),
@@ -93,9 +96,13 @@ class _FilterSortPageState extends State<FilterSortPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                           onPressed: () {
+                     Navigator.push(
+                     context,
+                   MaterialPageRoute(builder: (context) =>Searchingpage()),
+                        );
+                      },
+
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.greenColor,
                               shape: RoundedRectangleBorder(
@@ -126,7 +133,7 @@ class _FilterSortPageState extends State<FilterSortPage> {
     return InkWell(
       onTap: () => setState(() => selectedIndex = index),
       child: Container(
-        color: selected ? Colors.green.shade700 : Colors.transparent,
+        color: selected ? AppColors.greencolor : Colors.transparent,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         child: Text(
           title,

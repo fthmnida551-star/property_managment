@@ -251,7 +251,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BottomNavigationWidget(currentIndex: 3, loginUser: widget.loginUser),
+                builder: (context) => BottomNavigationWidget(currentIndex: 3, propertytype:[] , price: null, sqft: null, loginUser: widget.loginUser),
               ),
             );
           },

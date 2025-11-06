@@ -10,6 +10,7 @@ import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -194,50 +195,78 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        try{
-                        await fdb
-                            .collection('STAFF')
-                            .where(
-                              "USER_EMAIL",
-                              isEqualTo: emailcntrlr.text.trim(),
-                            )
-                            .where(
-                              "USER_PASSWORD",
-                              isEqualTo: passwordcntrlr.text.trim(),
-                            )
-                            .get()
-                            .then((value) {
-                              if (value.docs.isNotEmpty) {
-                                Map<String, dynamic> userMap = value.docs.first.data();
-                                UserModel user = UserModel.fromMap(userMap, value.docs.first.id);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        BottomNavigationWidget(currentIndex: 0, loginUser: user,),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "invalid email or password!",
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                );
-                              }
-                          
-                            });
-                        // FirebaseService().addUsers(finaldetails);
+                        try {
+                          await fdb
+                              .collection('STAFF')
+                              .where(
+                                "USER_EMAIL",
+                                isEqualTo: emailcntrlr.text.trim(),
+                              )
+                              .where(
+                                "USER_PASSWORD",
+                                isEqualTo: passwordcntrlr.text.trim(),
+                              )
+                              .get()
+                              .then((value) async {
+                                if (value.docs.isNotEmpty) {
+                                  Map<String, dynamic> userMap = value
+                                      .docs
+                                      .first
+                                      .data();
+                                  UserModel user = UserModel.fromMap(
+                                    userMap,
+                                    value.docs.first.id,
+                                  );
 
-                        _clearControllers();
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  await prefs.setBool('isLoggedIn', true);
+
+                                  // Use the Firestore keys exactly as stored in your collection
+                                  await prefs.setString(
+                                    'email',
+                                    userMap['USER_EMAIL'] ?? '',
+                                  );
+                                  await prefs.setString(
+                                    'password',
+                                    userMap['USER_PASSWORD'] ?? '',
+                                  );
+                                  await prefs.setString(
+                                    'userId',
+                                    value.docs.first.id,
+                                  );
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BottomNavigationWidget(
+                                            currentIndex: 0,
+                                            propertytype: [],
+                                            price: null,
+                                            sqft: null,
+                                            loginUser: user,
+                                          ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "invalid email or password!",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              });
+                          // FirebaseService().addUsers(finaldetails);
+
+                          _clearControllers();
+                        } catch (e) {
+                          log("error in login  $e");
+                        }
                       }
-                      catch(e){
-                        log("error in login  $e");
-                      }
-                      }
-                      
 
                       // Navigator.push(
                       //   context,
