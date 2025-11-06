@@ -11,8 +11,8 @@ import 'package:property_managment/widget/appbar_widget.dart';
 
 class Profilescreen extends StatefulWidget {
 
-  final UserModel loginUser;
-  const Profilescreen({super.key, required this.loginUser});
+ 
+  const Profilescreen({super.key});
 
   @override
   State<Profilescreen> createState() => _ProfilescreenState();
@@ -100,7 +100,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.loginUser.name,
+                          "",
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -109,7 +109,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          widget.loginUser.email,
+                          "widget.loginUser.email",
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 17.sp,
@@ -123,12 +123,12 @@ class _ProfilescreenState extends State<Profilescreen> {
                   // ✅ Edit Icon
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditProfileScreen(loginUser: widget.loginUser),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => EditProfileScreen(loginUser: ),
+                      //   ),
+                      // );
                     },
                     child: SizedBox(
                       height: 20,

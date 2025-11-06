@@ -14,8 +14,8 @@ class BottomNavigationWidget extends StatefulWidget {
   List <String> propertytype;
   RangeValues? price;
   RangeValues? sqft;
-UserModel? loginUser;
-  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft ,this.loginUser});
+
+  BottomNavigationWidget({super.key, required this.currentIndex,required this.propertytype,required this.price,required this.sqft ,});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
@@ -28,7 +28,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     Center(child: DashboardScreen()),
     Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
     Center(child: Notificationscreen()),
-    Center(child: Profilescreen(loginUser: widget.loginUser!,)),
+    Center(child: Profilescreen()),
   ];
 
   @override

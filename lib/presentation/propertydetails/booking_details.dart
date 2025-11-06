@@ -183,13 +183,13 @@ class _BookingDetailsState extends State<BookingDetails> {
     });
   }
 
-  Future<void> updateBooking(String id, Map<String, dynamic> updatedData) async {
-    try {
-      await fdb.collection("BOOKING").doc(id).update(updatedData);
-      log("Booking updated successfully");
-    } catch (e) {
-      log("Error updating booking: $e");
-    }
-  }
+  // Future<void> updateBooking(String id, Map<String, dynamic> updatedData) async {
+  //   try {
+  //     await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
+  //     log("Booking updated successfully");
+  //   } catch (e) {
+  //     log("Error updating booking: $e");
+  //   }
+  // }
 
 }

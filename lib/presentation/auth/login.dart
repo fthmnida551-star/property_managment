@@ -229,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                                   );
                                   await prefs.setString(
                                     'password',
-                                    userMap['USER_PASSWORD'] ?? '',
+                                    userMap['USER_PASSWORD']?? "",
                                   );
                                   await prefs.setString(
                                     'userId',
@@ -251,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                                             propertytype: [],
                                             price: null,
                                             sqft: null,
-                                            loginUser: user,
+                                            // loginUser: user,
                                           ),
                                     ),
                                   );

@@ -748,7 +748,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   
 
   deleteUser(String id) async {
-    await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
+    await fdb.collection("BOOKING DETAILS").doc(widget.property.bookingid).delete();
     // getAllPropertyDetails();
   }
 }
