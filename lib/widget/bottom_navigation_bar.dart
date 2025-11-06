@@ -23,18 +23,13 @@ UserModel? loginUser;
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   // final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
- late List<Widget> _pages;
 
-  @override
-  void initState() {
-    super.initState();
-    _pages = [
-      const Center(child: DashboardScreen()),
-      const Center(child: Searchingpage()),
-      const Center(child: Notificationscreen()),
-      Center(child: Profilescreen(loginUser: widget.loginUser!)),
-    ];
-  }
+  final List<Widget> _pages =  [
+    Center(child: DashboardScreen()),
+    Center(child: Searchingpage()),
+    Center(child: Notificationscreen()),
+    // Center(child: Profilescreen()),
+  ];
 
   @override
   void dispose() {
