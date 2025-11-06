@@ -92,7 +92,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     rootNavigator: true,
                                   ).push(
                                     MaterialPageRoute(
-                                      builder: (context) => AddProperty(),
+                                      builder: (context) => AddProperty(from: 'Edit', property: widget.property,),
                                     ),
                                   );
                                 },
@@ -107,6 +107,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
+                                  deleteProperty(widget.property.id);
                                   Navigator.pop(context);
                                   dltAlert(context);
                                 },
@@ -452,7 +453,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AddProperty(),
+                                          builder: (context) => BookingDetails(property: widget.property,),
                                         ),
                                       );
                                     },
@@ -749,6 +750,10 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
 
   deleteUser(String id) async {
     await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
+    // getAllPropertyDetails();
+  }
+   deleteProperty(String id) async {
+    await fdb.collection("PROPERTIES").doc(widget.property.bookingid).delete();
     // getAllPropertyDetails();
   }
 }

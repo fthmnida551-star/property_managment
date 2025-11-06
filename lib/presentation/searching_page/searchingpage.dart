@@ -122,7 +122,7 @@ class _SearchingpageState extends State<Searchingpage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddProperty()),
+                        MaterialPageRoute(builder: (context) => AddProperty(from: 'new', property: null,)),
                       );
                     },
                     child: Icon(

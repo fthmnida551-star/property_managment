@@ -79,7 +79,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                     rootNavigator: true,
                                   ).push(
                                     MaterialPageRoute(
-                                      builder: (context) => AddProperty(),
+                                      builder: (context) => AddProperty(from: 'Edit', property: widget.property,),
                                     ),
                                   );
                                 },

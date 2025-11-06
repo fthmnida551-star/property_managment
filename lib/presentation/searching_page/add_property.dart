@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/presentation/searching_page/widget/dropdown._form_field.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
@@ -16,7 +17,9 @@ import 'package:property_managment/widget/text_field.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProperty extends StatefulWidget {
-  const AddProperty({super.key});
+  final String from;
+  final PropertyModel? property;
+  const AddProperty({super.key, required this.from, required this.property});
 
   @override
   State<AddProperty> createState() => _AddPropertyState();
@@ -404,7 +407,7 @@ class _AddPropertyState extends State<AddProperty> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      AddLandlordDetails(propertyMap: propertyDetailsAll),
+                      AddLandlordDetails(propertyMap: propertyDetailsAll, from: '', property: null,),
                 ),
               );
             }
