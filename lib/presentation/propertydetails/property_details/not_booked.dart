@@ -562,4 +562,5 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
+  
 }

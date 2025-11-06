@@ -156,7 +156,7 @@ class _BookingDetailsState extends State<BookingDetails> {
               } else {
                 await updateBooking(widget.property.bookingid!,bookingDetails);
               }
-              addbookingDetails(bookingDetails);
+              // addbookingDetails(bookingDetails);
               _clearControllers();
               Navigator.push(
                 context,
@@ -185,7 +185,7 @@ class _BookingDetailsState extends State<BookingDetails> {
 
   Future<void> updateBooking(String id, Map<String, dynamic> updatedData) async {
     try {
-      await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
+      await fdb.collection("BOOKING").doc(id).update(updatedData);
       log("Booking updated successfully");
     } catch (e) {
       log("Error updating booking: $e");
