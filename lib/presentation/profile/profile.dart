@@ -8,6 +8,7 @@ import 'package:property_managment/presentation/profile/edit_profile.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/presentation/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
 
@@ -20,6 +21,31 @@ class Profilescreen extends StatefulWidget {
 
 class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
+  String? userName;
+  String? userEmail;
+  String? userId;
+
+  @override
+  void initState(){
+    super.initState();
+    getUserData();
+    getNotificationStatus();
+  }
+  Future<void> getUserData() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString("userName");
+      userEmail = prefs.getString("userEmail");
+      userId = prefs.getString("userId");
+    });
+  }
+  Future<void> getNotificationStatus() async{
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSwitched = prefs.getBool("notificationStatus") ?? false;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
