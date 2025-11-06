@@ -23,6 +23,7 @@ class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
   String? userName;
   String? userEmail;
+  String? userPassword;
   String? userId;
 
   @override
@@ -36,6 +37,7 @@ class _ProfilescreenState extends State<Profilescreen> {
     setState(() {
       userName = prefs.getString("userName");
       userEmail = prefs.getString("userEmail");
+      userPassword = prefs.getString("password");
       userId = prefs.getString("userId");
     });
   }
