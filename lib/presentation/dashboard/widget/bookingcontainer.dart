@@ -226,7 +226,7 @@ Future<PropertyModel?> getPropertyById(String propertyId) async {
       final data = doc.data()!;
       data['id'] = doc.id;
       print("Property fetched: ${data['name'] ?? data['NAME']}");
-      return PropertyModel.fromMap(data);
+      return PropertyModel.fromMap(data,doc.id);
     } else {
       print(" No property found for ID: $propertyId");
       return null;

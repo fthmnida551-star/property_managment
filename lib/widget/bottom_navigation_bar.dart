@@ -24,9 +24,9 @@ UserModel? loginUser;
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   // final ValueNotifier<int> _currentIndex = ValueNotifier<int>(0);
 
-  late final List<Widget> _pages =  [
+  List<Widget> get _pages => [
     Center(child: DashboardScreen()),
-    Center(child: Searchingpage()),
+    Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
     Center(child: Notificationscreen()),
     Center(child: Profilescreen(loginUser: widget.loginUser!)),
   ];

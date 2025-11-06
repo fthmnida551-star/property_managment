@@ -6,6 +6,7 @@ import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/animated_tick.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/date_picker.dart';
@@ -13,8 +14,9 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
-  final String propertyId;
- const BookingDetails({super.key,required this.propertyId });
+  // final String propertyId;
+  final PropertyModel property;
+  const BookingDetails({super.key, required this.property,});
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
@@ -137,7 +139,7 @@ class _BookingDetailsState extends State<BookingDetails> {
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
           text: 'Save',
-          onTap: () {
+          onTap: () async {
             if (formKey.currentState!.validate()) {
               Map<String, dynamic> bookingDetails = {};
               if (_saveButtonMode == SaveButtonMode.save) {
@@ -146,7 +148,13 @@ class _BookingDetailsState extends State<BookingDetails> {
                   "CONTACT": int.tryParse(contactCtlr.text.trim()),
                   "EMAIL": emailCtlr.text.trim(),
                   "DATE": datectlr.text.trim(),
+                  "PROPERTY_ID": widget.property.id,
                 };
+              }
+              if (_saveButtonMode == SaveButtonMode.save) {
+                await addbookingDetails(bookingDetails);
+              } else {
+                await updateBooking(widget.property.bookingid!,bookingDetails);
               }
               addbookingDetails(bookingDetails);
               _clearControllers();
@@ -161,14 +169,27 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-  void addbookingDetails(Map<String, dynamic> bookingData) async {
+   addbookingDetails(Map<String, dynamic> bookingData) async {
     await fdb.collection("BOOKING DETAILS").add(bookingData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
       final String id = docRef.id;
 
       log("Insert Data with $id");
-       docRef.update({'BOOKING_ID': id});
+      fdb.collection("PROPERTIES").doc(bookingData['PROPERTY_ID']).update({
+        'BOOKING_ID': id,
+        'IS_BOOKED': 'YES',
+      });
     });
   }
+
+  Future<void> updateBooking(String id, Map<String, dynamic> updatedData) async {
+    try {
+      await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
+      log("Booking updated successfully");
+    } catch (e) {
+      log("Error updating booking: $e");
+    }
+  }
+
 }

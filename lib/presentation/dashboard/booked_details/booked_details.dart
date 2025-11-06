@@ -69,7 +69,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.person_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text("${bookedProperty.name}"),
+                  Text(bookedProperty.name),
                   // Text('Name\nHrishilal'),
                 ],
               ),
@@ -81,7 +81,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.phone_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text("${bookedProperty.contact}"),
+                  Text(bookedProperty.contact),
                   // Text('Mobile No\n+91 960592260'),
                 ],
               ),
@@ -176,7 +176,7 @@ class BookedDetails extends StatelessWidget {
                       final updatedBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails(propertyId: property.id,
+                          builder: (context) => BookingDetails( property: property,
                            // pass the existing details
                           ),
                         ),
