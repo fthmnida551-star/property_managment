@@ -1,15 +1,12 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
-import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
@@ -150,7 +147,10 @@ class _AddUserScreenState extends State<AddUserScreen> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Role',
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: _roles
@@ -250,7 +250,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await addUsers(userDetails);
               } else {
-                await updateUser(widget.users!.id!, userDetails);
+                await updateUser(widget.users!.id, userDetails);
               }
               _clearControllers();
               Navigator.pushReplacement(

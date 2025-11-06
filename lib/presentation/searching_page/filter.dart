@@ -420,7 +420,7 @@ class _FilterSortPageState extends State<FilterSortPage> {
                   price: null,
                   propertytype: [],
                   sqft: null,
-                  loginUser: null,
+                  // loginUser: null,
                 ),
               ),
             );
