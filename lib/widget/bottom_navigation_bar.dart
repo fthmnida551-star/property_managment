@@ -28,7 +28,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     Center(child: DashboardScreen()),
     Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
     Center(child: Notificationscreen()),
-    // Center(child: Profilescreen()),
+    Center(child: Profilescreen(loginUser: widget.loginUser!,)),
   ];
 
   @override

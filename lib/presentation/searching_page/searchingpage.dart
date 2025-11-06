@@ -147,7 +147,7 @@ class _SearchingpageState extends State<Searchingpage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FilterSortPage(),
+                            builder: (context) => FilterSortPage(initialIndex: 0,),
                           ),
                         );
                       },
@@ -175,7 +175,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 0,),
                         ),
                       );
                     },
@@ -187,7 +187,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 1,),
                         ),
                       );
                     },
@@ -199,7 +199,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 2,),
                         ),
                       );
                     },
@@ -268,13 +268,13 @@ class _SearchingpageState extends State<Searchingpage> {
       for (var element in querySnapshot.docs) {
         // final String id = element.id;
         final Map<String, dynamic> data = element.data();
-        // data.keys.forEach((element) => log(element));
-        // log("Document keys: ${data.keys}");
-        // log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
-        // log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
+        data.keys.forEach((element) => log(element));
+        log("Document keys: ${data.keys}");
+        log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
+        log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
 
         // Make sure PropertyModel.fromJson can handle the ID
-        propertyDetailsList.add(PropertyModel.fromMap(data));
+        propertyDetailsList.add(PropertyModel.fromMap(data, element.id));
       }
 
       setState(() {}); // Refresh the UI
@@ -295,7 +295,7 @@ class _SearchingpageState extends State<Searchingpage> {
     final allDocs = await fdb.collection('PROPERTIES').get();
     filterPropertyDetailsList = allDocs.docs
         .map((doc) {
-          return PropertyModel.fromMap(doc.data());
+          return PropertyModel.fromMap(doc.data(), doc.id);
         })
         .where((property) {
           return property.name.toLowerCase().contains(lowerQuery) ||
@@ -343,7 +343,7 @@ class _SearchingpageState extends State<Searchingpage> {
 
         for (var doc in querySnapshot.docs) {
           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          PropertyModel property = PropertyModel.fromMap(data);
+          PropertyModel property = PropertyModel.fromMap(data, doc.id);
 
           // Filter 2: Apply SQFT range in memory (optional)
           if (sqft != null) {

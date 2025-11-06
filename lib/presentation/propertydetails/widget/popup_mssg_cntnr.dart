@@ -101,8 +101,8 @@ void showLandlordPopup(BuildContext context, PropertyModel property) {
             ),
             const SizedBox(height: 10),
             // Text("PloteX.",style: TextStyle(fontSize: 15),)
-            Image.asset(AssetResource.logo,)
-            // Center(child: SvgPicture.asset(AssetResource.appLogo))
+            // Image.asset(AssetResource.logo,)
+            Center(child: SvgPicture.asset(AssetResource.logoGreen,height: 35,width: 35,),)
           ],
         )
       ),

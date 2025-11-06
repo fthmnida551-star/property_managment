@@ -357,6 +357,7 @@
 // //     }
 // //   }
 // // }
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -366,7 +367,8 @@ import 'dart:developer';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class FilterSortPage extends StatefulWidget {
-  const FilterSortPage({super.key});
+  int initialIndex;
+  FilterSortPage({super.key, required this.initialIndex});
 
   @override
   State<FilterSortPage> createState() => _FilterSortPageState();
@@ -375,7 +377,7 @@ class FilterSortPage extends StatefulWidget {
 class _FilterSortPageState extends State<FilterSortPage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
-  int selectedIndex = 0;
+  // late int selectedIndex;
   RangeValues priceRange = const RangeValues(1000, 1000000);
   RangeValues sqftRange = const RangeValues(100, 50000);
 
@@ -388,6 +390,12 @@ class _FilterSortPageState extends State<FilterSortPage> {
 
   // 🔹 List to store selected property types
   List<String> selectedproperty = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // selectedIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -432,7 +440,7 @@ class _FilterSortPageState extends State<FilterSortPage> {
                   buildMenuItem("Property Type", 0),
                   buildMenuItem("Price", 1),
 
-                  buildMenuItem("Area Sqft", 3),
+                  buildMenuItem("Area Sqft", 2),
                 ],
               ),
             ),
@@ -595,22 +603,12 @@ class _FilterSortPageState extends State<FilterSortPage> {
       ),
     );
   }
-  // List<dynamic> elements = ["property type",RangeValues price, RangeValues sqft];
-  // {
-  //   Query basequery= firestore.collection("PROPERTIES");
-  //   if (propertyTypes.isNotEmpty);
-  //   {
-  //     basequery = basequery.where("PROPERTY_TYPE",isEqualTo: propertyTypes);
-
-  //   };
-
-  // }
 
   // 🔹 Left-side Menu Builder
   Widget buildMenuItem(String title, int index) {
-    bool selected = selectedIndex == index;
+    bool selected = widget.initialIndex == index;
     return InkWell(
-      onTap: () => setState(() => selectedIndex = index),
+      onTap: () => setState(() => widget.initialIndex = index),
       child: Container(
         color: selected ? AppColors.greenColor : Colors.transparent,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -627,7 +625,8 @@ class _FilterSortPageState extends State<FilterSortPage> {
 
   // 🔹 Filter Options
   Widget getFilterContent() {
-    switch (selectedIndex) {
+    log("getFilterContent  ${widget.initialIndex}");
+    switch (widget.initialIndex) {
       case 0:
         return ListView(
           children: propertyTypes.keys.map((type) {
@@ -675,15 +674,15 @@ class _FilterSortPageState extends State<FilterSortPage> {
           ],
         );
 
-      case 2:
-        return const Center(
-          child: Text(
-            "Price per Sqft filter coming soon...",
-            style: TextStyle(fontSize: 16),
-          ),
-        );
+      // case 2:
+      //   return const Center(
+      //     child: Text(
+      //       "Price per Sqft filter coming soon...",
+      //       style: TextStyle(fontSize: 16),
+      //     ),
+      //   );
 
-      case 3:
+      case 2:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

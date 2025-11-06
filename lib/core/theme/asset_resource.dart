@@ -12,6 +12,7 @@ class AssetResource {
   static const camera = 'assets/properties/camera_photo.svg';
   static const tick = 'assets/properties/tick_of_save.png';
   static const sqft = 'assets/properties/sqf.png';
+  static const logoGreen = 'assets/svg/logo_green.svg';
   // =======
   static const bookingbuilding1 = 'assets/dashboard/building1.png';
   // >>>>>>> jafna_dev
