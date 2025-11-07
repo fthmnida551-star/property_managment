@@ -209,7 +209,7 @@ class _BookedDetailsState extends State<BookedDetails> {
                         MaterialPageRoute(
                           builder: (context) => BookingDetails(
                             
-                            propertyId: widget.property.id, bookedData: bookedProperty,
+                            propertyId: widget.property.id, bookedData: widget.bookedProperty,
                             
                           ),
                         ),
@@ -256,7 +256,7 @@ class _BookedDetailsState extends State<BookedDetails> {
         .collection("BOOKING DETAILS")
         .doc(Updatedetails.id);
     await documentRef
-        .update(Updatedetails.toJson())
+        .update(Updatedetails.toMap())
         .then((value) {
           log("Updated successfully");
         })
