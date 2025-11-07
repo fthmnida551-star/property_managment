@@ -11,6 +11,7 @@ import 'package:property_managment/presentation/searching_page/searchingpage.dar
 
 class BottomNavigationWidget extends StatefulWidget {
   int currentIndex;
+
   List <String> propertytype;
   RangeValues? price;
   RangeValues? sqft;

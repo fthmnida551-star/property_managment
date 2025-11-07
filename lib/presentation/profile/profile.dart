@@ -4,14 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/modelClass/user_model.dart';
-import 'package:property_managment/presentation/profile/adding_users.dart';
 import 'package:property_managment/presentation/profile/edit_profile.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/presentation/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
+
   const Profilescreen({super.key});
 
   @override
@@ -34,41 +35,82 @@ class _ProfilescreenState extends State<Profilescreen> {
     setState(() {});
   }
 
+
+  // Variables to hold fetched user data
+  String userId="";
+  String userName ="";
+  String userEmail="";
+   String userRole="";
+  String userPassword="";
+ 
+  UserModel? loginUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+    getNotificationStatus();
+  }
+
+  // ✅ Get user data from SharedPreferences
+  Future<void> getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = prefs.getString('userId')??"";
+      userName = prefs.getString('userName')??"";
+      userEmail = prefs.getString('userEmail')??"";
+      userRole = prefs.getString('userRole')??"";
+      userPassword = prefs.getString('userPassword')??"";
+      
+
+      loginUser = UserModel(
+          userId,
+          userName,
+          userEmail,
+          userRole,
+          userPassword,
+          
+         );
+    });
+       //setState(() {
+        
+      // });
+
+      }
+
+  // ✅ Get notification switch status
+  Future<void> getNotificationStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSwitched = prefs.getBool('notificationStatus') ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ✅ Custom AppBar
       appBar: AppbarWidget(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                SizedBox(width: 15),
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                    color: AppColors.whiteColor,
-                    fontSize: 21,
-                    fontWeight: FontWeight.w600,
-                  ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                'Profile',
+                style: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
+              ),
             ),
-            // Image.asset(
-            //   AssetResource.moonpic,
-            //   height: 24,
-            //   width: 24,
-            //   color: Colors.white,
-            // ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: () {
                   logoutAlert(context);
-                  // Navigator.pop(context);
                 },
-                child: Icon(Icons.logout, color: AppColors.white),
+                child: const Icon(Icons.logout, color: AppColors.white),
               ),
             ),
           ],
@@ -113,7 +155,8 @@ class _ProfilescreenState extends State<Profilescreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "",
+                          userName,
+                          
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -122,7 +165,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          "widget.loginUser.email",
+                          userEmail,
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 17.sp,
@@ -136,6 +179,13 @@ class _ProfilescreenState extends State<Profilescreen> {
                   // ✅ Edit Icon
                   GestureDetector(
                     onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditProfileScreen(loginUser: loginUser!),
+                        ),
+                      );
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -177,7 +227,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                 ),
               ),
 
-            // ✅ Example ListTile
+            // ✅ Notification List Tile
             _buildListTile(
               image: AssetResource.notificationpic,
               title: "Notification",
@@ -200,23 +250,7 @@ class _ProfilescreenState extends State<Profilescreen> {
 
     return ListTile(
       onTap: () {
-        if (hasSwitch) {
-          setState(() {
-            this.isSwitched = !this.isSwitched;
-          });
-
-          // ✅ Show SnackBar
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                this.isSwitched
-                    ? 'Notifications turned ON'
-                    : 'Notifications turned OFF',
-              ),
-              duration: const Duration(seconds: 1),
-            ),
-          );
-        } else {
+        if (!hasSwitch) {
           onTap?.call();
         }
       },
@@ -231,21 +265,13 @@ class _ProfilescreenState extends State<Profilescreen> {
       trailing: hasSwitch
           ? Switch(
               value: this.isSwitched,
-              onChanged: (value) {
+              onChanged: (value) async{
                 setState(() {
                   this.isSwitched = value;
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      value
-                          ? 'Notifications turned ON'
-                          : 'Notifications turned OFF',
-                    ),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-              },
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool("notificationStatus", value);
+                },
               activeColor: AppColors.blackColor,
             )
           : const Icon(Icons.arrow_forward_ios, size: 16),
