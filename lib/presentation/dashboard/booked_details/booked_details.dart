@@ -82,12 +82,13 @@ class _BookedDetailsState extends State<BookedDetails> {
                 text: 'Booked',
                 textColor: AppColors.white,
                 color: AppColors.booked,
-                onTap: () {
+                onTap: () async{
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          BookedPropertyScreen(property: widget.property),
+                          BookedPropertyScreen(property: widget.property, bookedData: widget.bookedProperty,),
                     ),
                   );
                 },
@@ -150,6 +151,7 @@ class _BookedDetailsState extends State<BookedDetails> {
                     text: 'Delete',
                     onTap: () async {
                       deleteBookingProperty(
+                        widget.property.bookingid,
                         widget.property.id,
                       ); // pass the booking document ID
 
@@ -158,12 +160,13 @@ class _BookedDetailsState extends State<BookedDetails> {
                         MaterialPageRoute(
                           builder: (context) => BottomNavigationWidget(
                             currentIndex: 1,
-
+                           
                             propertytype: [],
-
+                           
                             price: null,
-
+                           
                             sqft: null,
+                          
                           ),
                         ),
                       );
@@ -205,13 +208,14 @@ class _BookedDetailsState extends State<BookedDetails> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => BookingDetails(
-                            property: widget.property,
-                            // pass the existing details
+                            
+                            propertyId: widget.property.id, bookedData: bookedProperty,
+                            
                           ),
                         ),
                       );
                       if (updatedBooking != null) {
-                        updateBookingProperty(updatedBooking);
+                        // updateBookingProperty(updatedBooking);
                       }
                     },
                     icon: Icons.edit_outlined,
@@ -261,7 +265,13 @@ class _BookedDetailsState extends State<BookedDetails> {
         });
   }
 
-  void deleteBookingProperty(String id) async {
-    await fdb.collection("BOOKING DETAILS").doc(id).delete();
+  void deleteBookingProperty(String bookingId, String propertyId) async {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();
+    await fdb.collection('PROPERTIES').doc(propertyId).update({
+      'IS_BOOKED': 'NO',
+    });
+    await fdb.collection('PROPERTIES').doc(propertyId).set({
+      "BOOKING_ID": FieldValue.delete(),
+    }, SetOptions(merge: true));
   }
 }
