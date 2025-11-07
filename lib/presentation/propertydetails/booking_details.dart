@@ -156,7 +156,6 @@ class _BookingDetailsState extends State<BookingDetails> {
               } else {
                 await updateBooking(widget.property.bookingid!,bookingDetails);
               }
-              addbookingDetails(bookingDetails);
               _clearControllers();
               Navigator.push(
                 context,

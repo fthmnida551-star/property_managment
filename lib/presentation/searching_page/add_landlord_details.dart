@@ -31,11 +31,21 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
   TextEditingController nameCtlr = TextEditingController();
   TextEditingController emailCtlr = TextEditingController();
   TextEditingController contactCtlr = TextEditingController();
-  final SaveButtonMode _saveButtonMode = SaveButtonMode.save;
+  SaveButtonMode _saveButtonMode = SaveButtonMode.save;
   _clearControllers() {
     nameCtlr.clear();
     emailCtlr.clear();
     contactCtlr.clear();
+  }
+  void initstate() {
+    super.initState();
+    if (widget.from =="EDIT" && widget.property==null){
+      nameCtlr.text =widget.property!.ownername;
+       emailCtlr.text =widget.property!.email;
+        contactCtlr.text =widget.property!.contact;
+         isOwnProperty =widget.property!.isOwner;
+       _saveButtonMode = SaveButtonMode.edit;
+    }
   }
 
   @override
@@ -140,7 +150,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
           text: 'Submit',
-          onTap: () {
+          onTap: () async {
             if (frmKey.currentState!.validate()) {
               if (_saveButtonMode == SaveButtonMode.save) {
                 Map<String, dynamic> ownerDetails = {
@@ -155,6 +165,11 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                   ...ownerDetails,
                 };
                 log("asdfghjkl $finaldetails");
+                 if (_saveButtonMode == SaveButtonMode.save) {
+                await addProperties(finaldetails);
+              } else {
+                await updateproperty(widget.property!.id,finaldetails);
+              }
                addProperties(finaldetails);
                 _clearControllers();
               }
@@ -171,7 +186,7 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
     );
   }
 
-  void addProperties(Map<String, dynamic> propertyData) async {
+   addProperties(Map<String, dynamic> propertyData) async {
     await fdb.collection("PROPERTIES").add(propertyData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
@@ -181,7 +196,14 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       
 
     });
-   
-    
   }
+ Future<void> updateproperty(String id, Map<String, dynamic> updatedData) async {
+    try {
+      await fdb.collection("PROPERTIES").doc(id).update(updatedData);
+      log("Properties updated successfully");
+    } catch (e) {
+      log("Error updating properties: $e");
+    }
+  }
+
 }
