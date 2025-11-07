@@ -16,7 +16,11 @@ import 'package:property_managment/widget/text_field.dart';
 class BookingDetails extends StatefulWidget {
   final String propertyId;
   final BookingModel? bookedData;
-  const BookingDetails({super.key,required this.propertyId,required this.bookedData,});
+  const BookingDetails({
+    super.key,
+    required this.propertyId,
+    required this.bookedData,
+  });
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
@@ -30,7 +34,7 @@ class _BookingDetailsState extends State<BookingDetails> {
   TextEditingController contactCtlr = TextEditingController();
   TextEditingController emailCtlr = TextEditingController();
   TextEditingController datectlr = TextEditingController();
-  final SaveButtonMode _saveButtonMode = SaveButtonMode.save;
+  SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   _clearControllers() {
     namectlr.clear();
@@ -38,18 +42,22 @@ class _BookingDetailsState extends State<BookingDetails> {
     emailCtlr.clear();
   }
 
-  @override
-void initState() {
-  super.initState();
-
-  if (widget.bookedData != null) {
-    namectlr.text = widget.bookedData!.name;
-    contactCtlr.text = widget.bookedData!.contact;
-    emailCtlr.text = widget.bookedData!.email;
-    datectlr.text = widget.bookedData!.date;
+  editBooking() {
+    if (widget.bookedData != null) {
+      namectlr.text = widget.bookedData!.name;
+      contactCtlr.text = widget.bookedData!.contact;
+      emailCtlr.text = widget.bookedData!.email;
+      datectlr.text = widget.bookedData!.date;
+      _saveButtonMode = SaveButtonMode.edit;
+    }
+    setState(() {});
   }
-}
 
+  @override
+  void initState() {
+    super.initState();
+    editBooking();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +78,16 @@ void initState() {
                   size: 30,
                 ),
               ),
-               Text(
-              _saveButtonMode == SaveButtonMode.save
-                  ? 'Add Booking Details'
-                  : 'Edit Booking Details', // 🟩 CHANGED: dynamic title
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: AppColors.white,
-                fontSize: 21,
+              Text(
+                _saveButtonMode == SaveButtonMode.save
+                    ? 'Add Booking Details'
+                    : 'Edit Booking Details', // 🟩 CHANGED: dynamic title
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
+                  fontSize: 21,
+                ),
               ),
-            ),
             ],
           ),
         ),
@@ -162,15 +170,15 @@ void initState() {
           onTap: () async {
             if (formKey.currentState!.validate()) {
               Map<String, dynamic> bookingDetails = {};
-              if (_saveButtonMode == SaveButtonMode.save) {
-                bookingDetails = {
-                  "NAME": namectlr.text.trim(),
-                  "CONTACT": int.tryParse(contactCtlr.text.trim()),
-                  "EMAIL": emailCtlr.text.trim(),
-                  "DATE": datectlr.text.trim(),
-                  "PROPERTY_ID": widget.propertyId,
-                };
-              }
+              bookingDetails = {
+                "NAME": namectlr.text.trim(),
+                "CONTACT": int.tryParse(contactCtlr.text.trim()),
+                "EMAIL": emailCtlr.text.trim(),
+                "DATE": datectlr.text.trim(),
+                "PROPERTY_ID": widget.propertyId,
+                "ADDED_DATE": DateTime.now(),
+              };
+
               if (_saveButtonMode == SaveButtonMode.save) {
                 await addbookingDetails(bookingDetails);
               } else {
@@ -198,6 +206,7 @@ void initState() {
       fdb.collection("PROPERTIES").doc(bookingData['PROPERTY_ID']).update({
         'BOOKING_ID': id,
         'IS_BOOKED': 'YES',
+        'ADDED_DATE': DateTime.now(),
       });
     });
   }

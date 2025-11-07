@@ -187,7 +187,7 @@ class BookedDetails extends StatelessWidget {
         // Merge Firestore ID with document data
         final data = doc.data()!;
         data['id'] = doc.id;
-        return BookingModel.fromMap(data, doc.id);
+        return BookingModel.fromMap(bookingId,data);
       } else {
         print("No property found for ID: $bookingId");
         return null;
@@ -198,19 +198,6 @@ class BookedDetails extends StatelessWidget {
     }
   }
 
-  // void updateBookingProperty(BookingModel Updatedetails) async {
-  //   final DocumentReference<Map<String, dynamic>> documentRef = fdb
-  //       .collection("BOOKING DETAILS")
-  //       .doc(Updatedetails.id);
-  //   await documentRef
-  //       .update(Updatedetails.toJson())
-  //       .then((value) {
-  //         log("Updated successfully");
-  //       })
-  //       .onError((e, stack) {
-  //         log("Error is $e");
-  //       });
-  // }
 
   void deleteBookingProperty(String bookingId, String propertyId) async {
     await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();

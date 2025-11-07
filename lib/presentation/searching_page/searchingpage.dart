@@ -39,10 +39,10 @@ class _SearchingpageState extends State<Searchingpage> {
   TextEditingController srchbrcntlr = TextEditingController();
   BookingModel? bookingData;
   getPropertyBookingData(String bookingId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId) .get().then((value) {
       if (value.exists) {
         Map<String, dynamic> data = value.data()!;
-        bookingData = BookingModel.fromMap(data, value.id);
+        bookingData = BookingModel.fromMap(value.id, data);
       }
     });
     setState(() {});
@@ -88,6 +88,7 @@ class _SearchingpageState extends State<Searchingpage> {
                     decoration: BoxDecoration(
                       color: AppColors.propertyContainer,
                       borderRadius: BorderRadius.circular(8),
+                      border: Border.all(width: 1,color: AppColors.opacityGrey)
                     ),
                     child: TextField(
                       controller: srchbrcntlr,
@@ -114,13 +115,13 @@ class _SearchingpageState extends State<Searchingpage> {
                           },
                         ),
 
-                        hintText: 'Search',
+                        hintText: '    Search',
                         hintStyle: TextStyle(fontSize: 14.sp),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 1.w),
                 Container(
                   height: 46.h,
                   width: 46.w,
@@ -141,12 +142,13 @@ class _SearchingpageState extends State<Searchingpage> {
                     child: Icon(
                       Icons.add_box_sharp,
                       color: AppColors.greenColor,
-                      size: 35.sp,
+                      size: 50.sp,
                     ),
                   ),
                 ),
               ],
             ),
+            SizedBox(height: 10,),
             //↬ Filtering section
             SizedBox(
               height: 40.h,
@@ -277,7 +279,7 @@ class _SearchingpageState extends State<Searchingpage> {
 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
-          .collection('PROPERTIES')
+          .collection('PROPERTIES').orderBy('ADDED_DATE',descending: true)
           .get();
 
       for (var element in querySnapshot.docs) {
@@ -349,7 +351,7 @@ class _SearchingpageState extends State<Searchingpage> {
             .where("PROPERTY PRICE", isLessThanOrEqualTo: price.end);
       }
 
-      QuerySnapshot querySnapshot = await baseQuery.get();
+      QuerySnapshot querySnapshot = await baseQuery.orderBy("ADDED_DATE",descending: true).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         log("data is not empty");
