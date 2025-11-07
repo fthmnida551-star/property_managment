@@ -21,12 +21,12 @@ class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
 
   // Variables to hold fetched user data
+  String userId="";
   String userName ="";
   String userEmail="";
-  String userId="";
+   String userRole="";
   String userPassword="";
-  String userRole="";
-
+ 
   UserModel? loginUser;
 
   @override
@@ -40,18 +40,20 @@ class _ProfilescreenState extends State<Profilescreen> {
   Future<void> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
+      userId = prefs.getString('userId')??"";
       userName = prefs.getString('userName')??"";
       userEmail = prefs.getString('userEmail')??"";
-      userId = prefs.getString('userId')??"";
-      userPassword = prefs.getString('userPassword')??"";
       userRole = prefs.getString('userRole')??"";
+      userPassword = prefs.getString('userPassword')??"";
+      
 
       loginUser = UserModel(
+          userId,
           userName,
           userEmail,
-          userId,
-          userPassword,
           userRole,
+          userPassword,
+          
          );
     });
        //setState(() {
@@ -245,11 +247,13 @@ class _ProfilescreenState extends State<Profilescreen> {
       trailing: hasSwitch
           ? Switch(
               value: this.isSwitched,
-              onChanged: (value) {
+              onChanged: (value) async{
                 setState(() {
                   this.isSwitched = value;
                 });
-              },
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setBool("notificationStatus", value);
+                },
               activeColor: AppColors.blackColor,
             )
           : const Icon(Icons.arrow_forward_ios, size: 16),
