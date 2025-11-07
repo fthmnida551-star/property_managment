@@ -15,11 +15,18 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedDetails extends StatelessWidget {
- final String userName;
+  final String userName;
   final BookingModel bookedProperty;
   final PropertyModel property;
-   BookedDetails({super.key, required this.userName,  required this.bookedProperty, required this.property});
-  FirebaseFirestore fdb =FirebaseFirestore.instance;
+  BookedDetails({
+    super.key,
+    required this.userName,
+    required this.bookedProperty,
+    required this.property,
+  });
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,12 +58,13 @@ class BookedDetails extends StatelessWidget {
                 text: 'Booked',
                 textColor: AppColors.white,
                 color: AppColors.booked,
-                onTap: () {
+                onTap: () async{
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          BookedPropertyScreen(property: property),
+                          BookedPropertyScreen(property: property, bookedData: bookedProperty,),
                     ),
                   );
                 },
@@ -119,70 +127,42 @@ class BookedDetails extends StatelessWidget {
                     text: 'Delete',
                     onTap: () async {
                       deleteBookingProperty(
+                        property.bookingid,
                         property.id,
                       ); // pass the booking document ID
 
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BottomNavigationWidget(
-                            
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavigationWidget(
                             currentIndex: 1,
-                           
+
                             propertytype: [],
-                           
+
                             price: null,
-                           
+
                             sqft: null,
-                          
                           ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete_outline_outlined,
-                                    ),
+                        ),
+                      );
+                    },
+                    icon: Icons.delete_outline_outlined,
+                  ),
 
-                  // Button(
-                  //   text: 'Delete',
-                  //   onTap: () {
-                  //     deleteBookingProperty()
-
-
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             BottomNavigationWidget(currentIndex: 1),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icons.delete_outline_outlined,
-                  // ),
-                  // Button(
-                  //   text: 'Edit',
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => BookingDetails(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icons.edit_outlined,
-                  // ),
                   Button(
                     text: 'Edit',
                     onTap: () async {
                       final updatedBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails( property: property,
-                           // pass the existing details
+                          builder: (context) => BookingDetails(
+                             propertyId: property.id, bookedData: bookedProperty,
+                           
                           ),
                         ),
                       );
                       if (updatedBooking != null) {
-                        updateBookingProperty(updatedBooking);
+                        // updateBookingProperty(updatedBooking);
                       }
                     },
                     icon: Icons.edit_outlined,
@@ -198,14 +178,16 @@ class BookedDetails extends StatelessWidget {
 
   Future<BookingModel?> getBooking(String bookingId) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> doc =
-          await fdb.collection('BOOKING').doc(bookingId).get();
+      DocumentSnapshot<Map<String, dynamic>> doc = await fdb
+          .collection('BOOKING')
+          .doc(bookingId)
+          .get();
 
       if (doc.exists && doc.data() != null) {
         // Merge Firestore ID with document data
         final data = doc.data()!;
         data['id'] = doc.id;
-        return BookingModel.fromMap(data,doc.id);
+        return BookingModel.fromMap(data, doc.id);
       } else {
         print("No property found for ID: $bookingId");
         return null;
@@ -216,22 +198,27 @@ class BookedDetails extends StatelessWidget {
     }
   }
 
+  // void updateBookingProperty(BookingModel Updatedetails) async {
+  //   final DocumentReference<Map<String, dynamic>> documentRef = fdb
+  //       .collection("BOOKING DETAILS")
+  //       .doc(Updatedetails.id);
+  //   await documentRef
+  //       .update(Updatedetails.toJson())
+  //       .then((value) {
+  //         log("Updated successfully");
+  //       })
+  //       .onError((e, stack) {
+  //         log("Error is $e");
+  //       });
+  // }
 
-  void updateBookingProperty(BookingModel Updatedetails) async {
-    final DocumentReference<Map<String, dynamic>> documentRef = fdb
-        .collection("BOOKING DETAILS")
-        .doc(Updatedetails.id);
-    await documentRef
-        .update(Updatedetails.toJson())
-        .then((value) {
-          log("Updated successfully");
-        })
-        .onError((e, stack) {
-          log("Error is $e");
-        });
-  }
-
-  void deleteBookingProperty(String id) async {
-    await fdb.collection("BOOKING DETAILS").doc(id).delete();
+  void deleteBookingProperty(String bookingId, String propertyId) async {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();
+    await fdb.collection('PROPERTIES').doc(propertyId).update({
+      'IS_BOOKED': 'NO',
+    });
+    await fdb.collection('PROPERTIES').doc(propertyId).set({
+      "BOOKING_ID": FieldValue.delete(),
+    }, SetOptions(merge: true));
   }
 }

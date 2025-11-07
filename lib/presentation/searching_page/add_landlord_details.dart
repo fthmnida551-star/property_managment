@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:property_managment/widget/checkbox.dart';
@@ -13,8 +14,10 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class AddLandlordDetails extends StatefulWidget {
+  final String from;
+  final PropertyModel? property;
   final Map<String, dynamic> propertyMap;
-  const AddLandlordDetails({super.key, required this.propertyMap});
+  const AddLandlordDetails({super.key, required this.propertyMap, required this.from, required this.property});
 
   @override
   State<AddLandlordDetails> createState() => _AddLandlordDetailsState();
@@ -178,7 +181,6 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       
 
     });
-   
-    
   }
+  
 }

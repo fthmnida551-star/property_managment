@@ -37,6 +37,16 @@ class _SearchingpageState extends State<Searchingpage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   TextEditingController srchbrcntlr = TextEditingController();
+  BookingModel? bookingData;
+  getPropertyBookingData(String bookingId) async {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
+      if (value.exists) {
+        Map<String, dynamic> data = value.data()!;
+        bookingData = BookingModel.fromMap(data, value.id);
+      }
+    });
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -122,7 +132,10 @@ class _SearchingpageState extends State<Searchingpage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddProperty()),
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddProperty(from: 'new', property: null),
+                        ),
                       );
                     },
                     child: Icon(
@@ -147,7 +160,8 @@ class _SearchingpageState extends State<Searchingpage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FilterSortPage(initialIndex: 0,),
+                            builder: (context) =>
+                                FilterSortPage(initialIndex: 0),
                           ),
                         );
                       },
@@ -175,7 +189,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 0,),
+                          builder: (context) => FilterSortPage(initialIndex: 0),
                         ),
                       );
                     },
@@ -187,7 +201,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 1,),
+                          builder: (context) => FilterSortPage(initialIndex: 1),
                         ),
                       );
                     },
@@ -199,7 +213,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 2,),
+                          builder: (context) => FilterSortPage(initialIndex: 2),
                         ),
                       );
                     },
@@ -234,12 +248,13 @@ class _SearchingpageState extends State<Searchingpage> {
                               text: 'Booked',
                               textColor: AppColors.white,
                               color: AppColors.booked,
-                              onTap: () {
+                              onTap: () async{
+                                await getPropertyBookingData(item.bookingid);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        BookedPropertyScreen(property: item),
+                                        BookedPropertyScreen(property: item,bookedData: bookingData,),
                                   ),
                                 );
                               },
@@ -313,8 +328,6 @@ class _SearchingpageState extends State<Searchingpage> {
   ) async {
     filterPropertyDetailsList.clear();
     log("entered filter function  propertytype $propertytype");
-    
-    
 
     try {
       Query baseQuery = fdb.collection("PROPERTIES");
@@ -347,7 +360,9 @@ class _SearchingpageState extends State<Searchingpage> {
 
           // Filter 2: Apply SQFT range in memory (optional)
           if (sqft != null) {
-            log("sqft ${sqft.start}  end ${sqft.end} sqft  ${data['PROPERTY SQFT']}");
+            log(
+              "sqft ${sqft.start}  end ${sqft.end} sqft  ${data['PROPERTY SQFT']}",
+            );
             double propertySqft =
                 double.tryParse(data[" PROPERTY SQFT"].toString()) ?? 0;
             if (propertySqft < sqft.start || propertySqft > sqft.end) {
