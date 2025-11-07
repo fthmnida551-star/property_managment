@@ -330,12 +330,12 @@ class _AddPropertyState extends State<AddProperty> {
                         TextFieldContainer(
                           text: "Aminities",
                           controllerName: aminitiesctlr,
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter Aminities ';
-                            }
-                            return null;
-                          },
+                          // validator: (String? value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return 'Please enter Aminities ';
+                          //   }
+                          //   return null;
+                          // },
                         ),
                       ],
                     ),
@@ -380,22 +380,20 @@ class _AddPropertyState extends State<AddProperty> {
                   "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
                   "BUILDING NAME": buildingNamectlr.text.trim(),
                    "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-                  " BHK": int.tryParse(bhkctlr.text.trim()),
-                  " BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-                  " CARPET AREA": int.tryParse(
+                  "BHK": int.tryParse(bhkctlr.text.trim()),
+                  "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+                  "CARPET AREA": int.tryParse(
                     propertySqrftCtlr.text.trim(),
                   ),
                   'CARPARKING':carparking? "yes": "no",
-                  " MAINTENANCE": int.tryParse(
+                  "MAINTENANCE": int.tryParse(
                     maintenancectlr.text.trim(),
                   ),
                  
-                  " PROPERTY SQFT": int.tryParse(
+                  "PROPERTY SQFT": int.tryParse(
                     propertySqrftCtlr.text.trim(),
                   ),
-                  "  AMINITIES": int.tryParse(
-                    aminitiesctlr.text.trim(),
-                  ),
+                  "AMINITIES": aminitiesctlr.text.trim(),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
                   "PROPERTY LOCATION": locationCtlr.text.trim(),
                 };
@@ -436,6 +434,36 @@ class _AddPropertyState extends State<AddProperty> {
 // import 'package:property_managment/widget/checkbox.dart';
 // import 'package:property_managment/widget/green_button.dart';
 // import 'package:property_managment/widget/text_field.dart';
+
+
+// import 'dart:convert';
+// // import 'dart:io';
+// import 'package:http/http.dart' as http;
+
+// class CloudinaryService {
+//   static const String cloudName = 'YOUR_CLOUD_NAME'; // from Cloudinary dashboard
+//   static const String uploadPreset = 'YOUR_UPLOAD_PRESET'; // from Cloudinary settings
+
+//   static Future<String?> uploadImage(File imageFile) async {
+//     final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+
+//     final request = http.MultipartRequest('POST', url)
+//       ..fields['upload_preset'] = uploadPreset
+//       ..files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+//     final response = await request.send();
+//     final res = await http.Response.fromStream(response);
+
+//     if (res.statusCode == 200) {
+//       final data = json.decode(res.body);
+//       return data['secure_url']; // ✅ Cloudinary image URL
+//     } else {
+//       print('❌ Upload failed: ${res.body}');
+//       return null;
+//     }
+//   }
+// }
+
 
 // // ✅ Location Picker Page
 // class MapLocationPicker extends StatefulWidget {
@@ -723,41 +751,61 @@ class _AddPropertyState extends State<AddProperty> {
 //           ),
 //         ),
 //       ),
-//       bottomNavigationBar: Padding(
-//         padding: const EdgeInsets.all(20.0),
-//         child: GreenButton(
-//           text: 'Next',
-//           onTap: () {
-//             if (formKey.currentState!.validate()) {
-//               Map<String, dynamic> propertyDetailsAll = {
-//                 "PROPERTY TYPE": _selectedValue,
-//                 "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-//                 "BUILDING NAME": buildingNamectlr.text.trim(),
-//                 "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-//                 "BHK": int.tryParse(bhkctlr.text.trim()),
-//                 "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-//                 "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
-//                 "CARPARKING": carparking ? "YES" : "NO",
-//                 "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
-//                 "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
-//                 "AMINITIES": aminitiesctlr.text.trim(),
-//                 "DESCRIPTION": descriptionCtlr.text.trim(),
-//                 "LOCATION": locationCtlr.text.trim(),
-//               };
+//      bottomNavigationBar: Padding(
+//   padding: const EdgeInsets.all(20.0),
+//   child: GreenButton(
+//     text: 'Next',
+//     onTap: () async {
+//       if (formKey.currentState!.validate()) {
+//         // ✅ 1. Upload image to Cloudinary if selected
+//         String? imageUrl;
+//         if (_selectedImage != null) {
+//           ScaffoldMessenger.of(context).showSnackBar(
+//             const SnackBar(content: Text("Uploading image...")),
+//           );
 
-//               clearController();
+//           imageUrl = await CloudinaryService.uploadImage(_selectedImage!);
 
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) =>
-//                       AddLandlordDetails(propertyMap: propertyDetailsAll),
-//                 ),
-//               );
-//             }
-//           },
-//         ),
-//       ),
+//           if (imageUrl == null) {
+//             ScaffoldMessenger.of(context).showSnackBar(
+//               const SnackBar(content: Text("Image upload failed")),
+//             );
+//             return; // Stop if upload failed
+//           }
+//         }
+
+//         // ✅ 2. Collect form data
+//         Map<String, dynamic> propertyDetailsAll = {
+//           "PROPERTY TYPE": _selectedValue,
+//           "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
+//           "BUILDING NAME": buildingNamectlr.text.trim(),
+//           "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+//           "BHK": int.tryParse(bhkctlr.text.trim()),
+//           "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+//           "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
+//           "CARPARKING": carparking ? "YES" : "NO",
+//           "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
+//           "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
+//           "AMINITIES": aminitiesctlr.text.trim(),
+//           "DESCRIPTION": descriptionCtlr.text.trim(),
+//           "LOCATION": locationCtlr.text.trim(),
+//           "imageUrl": imageUrl ?? "", // ✅ Store Cloudinary URL here
+//         };
+
+//         clearController();
+
+//         // ✅ 3. Navigate to next page with image URL included
+//         Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (context) => AddLandlordDetails(propertyMap: propertyDetailsAll),
+//           ),
+//         );
+//       }
+//     },
+//   ),
+// ),
+
 //     );
 //   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -31,14 +33,20 @@ class _PropertyContainerState extends State<PropertyContainer> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-     
-
-      onTap: widget.onTap??  () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => NotBookedPropertyScreen(userName: '', property:widget.property ,)),//NotBookedPropertyScreen()),
-        );
-      },
+      onTap:
+          widget.onTap ??
+          () {
+            log("PropertyContainer ${widget.property.id}");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotBookedPropertyScreen(
+                  userName: '',
+                  property: widget.property,
+                ),
+              ), //NotBookedPropertyScreen()),
+            );
+          },
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
@@ -59,10 +67,19 @@ class _PropertyContainerState extends State<PropertyContainer> {
               ),
             ),
             SizedBox(height: 8.h),
-            Text(
-              // 'Apartment',
-              widget.property.propertyType,
-              style: TextStyle(fontSize: 21.sp, color: AppColors.black),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  // 'modern amenities',
+                  widget.property.name.toUpperCase(),
+                  style: TextStyle(fontSize: 21.sp, color: AppColors.black),
+                ),
+                Text(
+                  widget.property.propertyType,
+                  style: TextStyle(fontSize: 12, color: AppColors.black),
+                ),
+              ],
             ),
             Text(
               // '90,000',

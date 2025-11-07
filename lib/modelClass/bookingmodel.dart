@@ -127,8 +127,8 @@ class BookingModel {
       'EMAIL': email,
       'CONTACT': contact,
       'DATE': date,
-      'id': id,
-      'propertyId': propertyId,
+      'BOOKING_ID': id,
+      'PROPERTY_ID': propertyId,
     };
   }
 }

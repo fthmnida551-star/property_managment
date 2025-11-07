@@ -8,7 +8,7 @@ import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
-import 'package:property_managment/presentation/auth/filter.dart';
+import 'package:property_managment/presentation/searching_page/filter.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/presentation/searching_page/widget/filtering.dart';
@@ -16,8 +16,16 @@ import 'package:property_managment/presentation/searching_page/widget/property_c
 import 'package:property_managment/widget/appbar_widget.dart';
 
 class Searchingpage extends StatefulWidget {
-    // final BookingModel bookedProperty;
-  const Searchingpage({super.key,});
+  final List<String> propertytype;
+  final RangeValues? price;
+  final RangeValues? sqft;
+
+  const Searchingpage({
+    super.key,
+    required this.propertytype,
+    required this.price,
+    required this.sqft,
+  });
 
   @override
   State<Searchingpage> createState() => _SearchingpageState();
@@ -25,14 +33,16 @@ class Searchingpage extends StatefulWidget {
 
 class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
+  List<PropertyModel> filterPropertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
-  TextEditingController srchbrcntlr=TextEditingController();
+  TextEditingController srchbrcntlr = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     getAllPropertyDetailsList();
+    getFilteredPropertyList(widget.propertytype, widget.price, widget.sqft);
   }
 
   @override
@@ -71,9 +81,29 @@ class _SearchingpageState extends State<Searchingpage> {
                     ),
                     child: TextField(
                       controller: srchbrcntlr,
+                      onChanged: (value) {
+                        if (srchbrcntlr.text.isEmpty) {
+                          setState(() {
+                            log(
+                              "propertyDetailsList length ${propertyDetailsList.length}",
+                            );
+                            log(
+                              "filterPropertyDetailsList length ${filterPropertyDetailsList.length}",
+                            );
+                            filterPropertyDetailsList = propertyDetailsList;
+                          });
+                        }
+                        // searchProperties(value);
+                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        prefixIcon: Icon(Icons.search, color: AppColors.black),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.search, color: AppColors.black),
+                          onPressed: () {
+                            searchProperties(srchbrcntlr.text);
+                          },
+                        ),
+
                         hintText: 'Search',
                         hintStyle: TextStyle(fontSize: 14.sp),
                       ),
@@ -117,7 +147,7 @@ class _SearchingpageState extends State<Searchingpage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FilterSortPage(),
+                            builder: (context) => FilterSortPage(initialIndex: 0,),
                           ),
                         );
                       },
@@ -145,7 +175,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 0,),
                         ),
                       );
                     },
@@ -157,7 +187,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 1,),
                         ),
                       );
                     },
@@ -169,7 +199,7 @@ class _SearchingpageState extends State<Searchingpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterSortPage(),
+                          builder: (context) => FilterSortPage(initialIndex: 2,),
                         ),
                       );
                     },
@@ -179,7 +209,7 @@ class _SearchingpageState extends State<Searchingpage> {
             ),
             // Propert Containers
             SizedBox(height: 15.h),
-            propertyDetailsList.isEmpty
+            filterPropertyDetailsList.isEmpty
                 ? SizedBox(
                     height: MediaQuery.of(context).size.height / 2,
                     child: Center(
@@ -195,9 +225,9 @@ class _SearchingpageState extends State<Searchingpage> {
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: propertyDetailsList.length,
+                    itemCount: filterPropertyDetailsList.length,
                     itemBuilder: (context, index) {
-                      var item = propertyDetailsList[index];
+                      var item = filterPropertyDetailsList[index];
 
                       return item.isBooked
                           ? PropertyContainer(
@@ -209,7 +239,7 @@ class _SearchingpageState extends State<Searchingpage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        BookedPropertyScreen(property: item, ),
+                                        BookedPropertyScreen(property: item),
                                   ),
                                 );
                               },
@@ -244,7 +274,7 @@ class _SearchingpageState extends State<Searchingpage> {
         log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
 
         // Make sure PropertyModel.fromJson can handle the ID
-        propertyDetailsList.add(PropertyModel.fromMap(data));
+        propertyDetailsList.add(PropertyModel.fromMap(data, element.id));
       }
 
       setState(() {}); // Refresh the UI
@@ -252,5 +282,88 @@ class _SearchingpageState extends State<Searchingpage> {
       debugPrint("Error fetching property details: $e");
     }
     // propertyDetailsList.notifyListeners();
+  }
+
+  void searchProperties(String query) async {
+    if (query.isEmpty) {
+      getAllPropertyDetailsList();
+      return;
+    }
+
+    final lowerQuery = query.toLowerCase();
+
+    final allDocs = await fdb.collection('PROPERTIES').get();
+    filterPropertyDetailsList = allDocs.docs
+        .map((doc) {
+          return PropertyModel.fromMap(doc.data(), doc.id);
+        })
+        .where((property) {
+          return property.name.toLowerCase().contains(lowerQuery) ||
+              property.location.toLowerCase().contains(lowerQuery);
+        })
+        .toList();
+
+    setState(() {});
+  }
+
+  Future<void> getFilteredPropertyList(
+    List<String> propertytype,
+    RangeValues? price,
+    RangeValues? sqft,
+  ) async {
+    filterPropertyDetailsList.clear();
+    log("entered filter function  propertytype $propertytype");
+    
+    
+
+    try {
+      Query baseQuery = fdb.collection("PROPERTIES");
+
+      // Filter 1: Property Type
+      if (propertytype.isNotEmpty) {
+        baseQuery = baseQuery.where("PROPERTY TYPE", whereIn: propertytype);
+      }
+
+      log("reached here....");
+
+      // Firestore limitation: only one field can have range filters
+      // So we’ll apply PRICE range in query and handle SQFT in memory after
+
+      if (price != null) {
+        log("price ${price.start}  end ${price.end}");
+        baseQuery = baseQuery
+            .where("PROPERTY PRICE", isGreaterThanOrEqualTo: price.start)
+            .where("PROPERTY PRICE", isLessThanOrEqualTo: price.end);
+      }
+
+      QuerySnapshot querySnapshot = await baseQuery.get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        log("data is not empty");
+
+        for (var doc in querySnapshot.docs) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          PropertyModel property = PropertyModel.fromMap(data, doc.id);
+
+          // Filter 2: Apply SQFT range in memory (optional)
+          if (sqft != null) {
+            log("sqft ${sqft.start}  end ${sqft.end} sqft  ${data['PROPERTY SQFT']}");
+            double propertySqft =
+                double.tryParse(data[" PROPERTY SQFT"].toString()) ?? 0;
+            if (propertySqft < sqft.start || propertySqft > sqft.end) {
+              continue; // skip if not within range
+            }
+          }
+
+          filterPropertyDetailsList.add(property);
+        }
+      }
+
+      log("Filtered count: ${filterPropertyDetailsList.length}");
+      setState(() {});
+    } catch (e, st) {
+      log("error in filtering... $e");
+      log("stacktrace: $st");
+    }
   }
 }

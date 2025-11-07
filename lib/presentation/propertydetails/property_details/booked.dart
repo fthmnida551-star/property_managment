@@ -17,8 +17,7 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class BookedPropertyScreen extends StatefulWidget {
   final PropertyModel property;
-  const BookedPropertyScreen({super.key, required this.property, });
-  // const BookedPropertyScreen({super.key});
+  const BookedPropertyScreen({super.key, required this.property});
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
 }
@@ -26,26 +25,24 @@ class BookedPropertyScreen extends StatefulWidget {
 class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   List<PropertyModel> propertyDetails = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
- BookingModel? bookedData;
-getPropertyBooking(String bookingId) async{
-  await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value){
-    if(value.exists){
-      Map<String, dynamic> data =value.data()!;
-      bookedData = BookingModel.fromMap(data, value.id);
-    }
-  });
-}
+  BookingModel? bookedData;
+  getPropertyBooking(String bookingId) async {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
+      if (value.exists) {
+        Map<String, dynamic> data = value.data()!;
+        bookedData = BookingModel.fromMap(data, value.id);
+      }
+    });
+    setState(() {});
+  }
 
-@override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPropertyBooking(widget.property.bookingid);
   }
 
-
   @override
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,16 +53,16 @@ getPropertyBooking(String bookingId) async{
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                 SizedBox(
-                  width: double.infinity,
-                  height: 250,
-                  child: PageView(
-                    children: [
-                      Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                      Image.asset(AssetResource.property, fit: BoxFit.cover),             
-                    ],
+                  SizedBox(
+                    width: double.infinity,
+                    height: 250,
+                    child: PageView(
+                      children: [
+                        Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                        Image.asset(AssetResource.property, fit: BoxFit.cover),
+                      ],
+                    ),
                   ),
-                ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
@@ -125,7 +122,7 @@ getPropertyBooking(String bookingId) async{
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context,widget.property);
+                                  showLandlordPopup(context, widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -162,343 +159,597 @@ getPropertyBooking(String bookingId) async{
                   ),
                 ],
               ),
+
               // --- Property Content Section ---
-              if(widget.property.propertyType == 'apartment')
-              Padding(
-                padding: EdgeInsets.all(26.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${widget.property.price}',
-                      // '₹ 79,00,000',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.black,
+              if (widget.property.propertyType == 'APARTMENT' ||
+                  widget.property.propertyType == "VILLA")
+                Padding(
+                  padding: EdgeInsets.all(26.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${widget.property.price}',
+                        style: TextStyle(
+                          fontSize: 29,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Text('${widget.property.name.toUpperCase()}\n BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',
-                      // 'Modern Amenities\n2 BHK - 2 Bathroom - 1380 Sqft',
-                      style: TextStyle(fontSize: 16, color: AppColors.black),
-                    ),
-                    SizedBox(height: 15),
-                    // --- Location ---
-                    Row(
-                      children: [
-                        Icon(Icons.location_on, color: AppColors.black),
-                        SizedBox(width: 5),
-                        Text('${widget.property.location}',
-                          // 'KARAVATTOM, MALAPPURAM',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: AppColors.black,
-                          ),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.property.name.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-
-                    SizedBox(height: 16),
-                    // --- Styled ExpansionTiles Section ---
-                    ExpansionTileTheme(
-                      data: ExpansionTileThemeData(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: Colors.black12, width: 1),
-                        ),
-                        collapsedShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: Colors.black12, width: 1),
-                        ),
-                        backgroundColor: Colors.white,
-                        collapsedBackgroundColor: Colors.white,
-                        tilePadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        childrenPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        iconColor: Colors.black,
-                        collapsedIconColor: Colors.black,
                       ),
-                      child: Column(
+                      Text(
+                        'BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',
+                        style: TextStyle(fontSize: 14, color: AppColors.black),
+                      ),
+                      SizedBox(height: 15),
+                      // --- Location ---
+                      Row(
                         children: [
-                          // --- Details Dropdown ---
-                          ExpansionTile(
-                            title: Text(
-                              'Details',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
+                          Icon(Icons.location_on, color: AppColors.black),
+                          SizedBox(width: 5),
+                          Text(
+                            widget.property.location,
+                            // 'KARAVATTOM, MALAPPURAM',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: AppColors.black,
                             ),
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 8.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Property Overview\n${widget.property.name},\n${widget.property.location}',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                              ),
-                              // Property Type Box
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.black),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    RowWidget(
-                                      text: '${widget.property.propertyType}',
-                                      icons: Icons.apartment,
-                                    ),
-                                    Divider(thickness: 1),
-                                    RowWidget(
-                                      text:'${widget.property.readyToMove}',
-                                      icons: Icons.check_circle_outline,
-                                    ),
-                                    // Divider(thickness: 1),
-                                    // RowWidget(
-                                    //   text: 'Owner',
-                                    //   icons: Icons.account_circle,
-                                    // ),
-                                  ],
-                                ),
-                              ),
-
-                              SizedBox(height: 8),
-                              Text(
-                                'Property Details',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              // Property Details Box
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColors.black),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    DetailsTable(
-                                      text: 'Bedrooms',
-                                      details:"${widget.property.bathrooms}",
-                                      icons: Icons.bed,
-                                    ),
-                                    Divider(thickness: 1),
-                                    DetailsTable(
-                                      text: 'Carpet Area',
-                                      details:"${widget.property.sqft}",
-                                      icons: Icons.check_box_outline_blank,
-                                    ),
-                                    Divider(thickness: 1),
-                                    DetailsTable(
-                                      text: 'Bathrooms',
-                                      details: "${widget.property.bathrooms}",
-                                      icons: Icons.bathtub,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text("Amenities", style: TextStyle(fontSize: 16)),
-                              SizedBox(height: 8),
-                              RowWidget(
-                                text: "${widget.property.carParking}",
-                                icons: Icons.directions_car,
-                              ),
-                              RowWidget(
-                                text: "Maintenance (Monthly) ${widget.property.price}",
-                                icons: Icons.currency_bitcoin,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12),
-                          // --- Description Dropdown ---
-                          ExpansionTile(
-                            title: Text(
-                              'Description',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
-                                  'Project : Impact Milestone-Premium residential Apartment\n'
-                                  'Flat Type: 2 BHK Spacious Living & Dining\n'
-                                  'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
-                                  'car parking: Yes\n'
-                                  'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
-                                  'Status : Ready To Move',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
-                      child: Image.asset(
-                        AssetResource.location,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        border: Border.all(color: AppColors.black, width: 1),
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 30,
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(width: 1, color: Colors.black),
-                            // ),
-                            child: Center(
-                              child: Text(
-                                'Booked Details',
+
+                      SizedBox(height: 16),
+                      // --- Styled ExpansionTiles Section ---
+                      ExpansionTileTheme(
+                        data: ExpansionTileThemeData(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.black12, width: 1),
+                          ),
+                          collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.black12, width: 1),
+                          ),
+                          backgroundColor: Colors.white,
+                          collapsedBackgroundColor: Colors.white,
+                          tilePadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
+                          childrenPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          iconColor: Colors.black,
+                          collapsedIconColor: Colors.black,
+                        ),
+                        child: Column(
+                          children: [
+                            // --- Details Dropdown ---
+                            ExpansionTile(
+                              title: Text(
+                                'Details',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black,
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Icon(Icons.person, color: Colors.green),
-                              SizedBox(width: 8),
-                              // Text('Name\n Hrishilal'),
-                              Text("${bookedData!.name}"),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.phone, color: Colors.green),
-                              SizedBox(width: 8),
-                               Text("${bookedData!.contact}"),
-                              // Text('Mobile No'),
-                              // Text('+91 960592260'),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.mail, color: Colors.green),
-                              SizedBox(width: 8),
-                               Text("${bookedData!.email}"),
-                              
-                              // Text('email'),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(Icons.mail, color: Colors.green),
-                              SizedBox(width: 8),
-                               Text("${bookedData!.date}"),
-                              // Text('Date\n 2-3-2025'),
-                            ],
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Button(
-                                  width: 150,
-                                  height: 40,
-                                  text: 'Delete',
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            BottomNavigationWidget(
-                                              currentIndex: 1, propertytype: [], price: null, sqft: null,
-                                            ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icons.delete_outline_outlined,
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Property Overview\n${widget.property.name},\n${widget.property.location}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(width: 10),
-                                Button(
-                                  width: 150,
-                                  height: 40,
-                                  text: 'Edit',
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AddProperty(),
+                                // Property Type Box
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.black),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RowWidget(
+                                        text: widget.property.propertyType,
+                                        icons: Icons.apartment,
                                       ),
-                                    );
-                                  },
-                                  icon: Icons.edit_outlined,
+                                      Divider(thickness: 1),
+                                      RowWidget(
+                                        text: '${widget.property.readyToMove}',
+                                        icons: Icons.check_circle_outline,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                SizedBox(height: 8),
+                                Text(
+                                  'Property Details',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+
+                                // Property Details Box
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.black),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      DetailsTable(
+                                        text: 'Bedrooms',
+                                        details: "${widget.property.bathrooms}",
+                                        icons: Icons.bed,
+                                      ),
+                                      Divider(thickness: 1),
+                                      DetailsTable(
+                                        text: 'Carpet Area',
+                                        details: "${widget.property.sqft}",
+                                        icons: Icons.check_box_outline_blank,
+                                      ),
+                                      Divider(thickness: 1),
+                                      DetailsTable(
+                                        text: 'Bathrooms',
+                                        details: "${widget.property.bathrooms}",
+                                        icons: Icons.bathtub,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  "Amenities",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                RowWidget(
+                                  text: "${widget.property.carParking}",
+                                  icons: Icons.directions_car,
+                                ),
+                                RowWidget(
+                                  text:
+                                      "Maintenance (Monthly) ${widget.property.price}",
+                                  icons: Icons.currency_bitcoin,
                                 ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 10,),
-                        ],
+                            SizedBox(height: 12),
+                            // --- Description Dropdown ---
+                            ExpansionTile(
+                              title: Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    widget.property.description,
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Image.asset(
+                          AssetResource.location,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          border: Border.all(color: AppColors.black, width: 1),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              child: Center(
+                                child: Text(
+                                  'Booked Details',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Icon(Icons.person, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text(bookedData!.name),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.phone, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text(bookedData!.contact),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.mail, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text(bookedData!.email),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.mail, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text("${bookedData!.date}"),
+                              ],
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Button(
+                                    width: 150,
+                                    height: 40,
+                                    text: 'Delete',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BottomNavigationWidget(
+                                                currentIndex: 1,
+                                                propertytype: [],
+                                                price: null,
+                                                sqft: null,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.delete_outline_outlined,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Button(
+                                    width: 150,
+                                    height: 40,
+                                    text: 'Edit',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AddProperty(),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.edit_outlined,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
-                
-              ),
+              if (widget.property.propertyType == 'LAND')
+                Padding(
+                  padding: EdgeInsets.all(26.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${widget.property.price}',
+                        style: TextStyle(
+                          fontSize: 29,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
 
+                      // --- Location ---
+                      Row(
+                        children: [
+                          Icon(Icons.location_on, color: AppColors.black),
+                          SizedBox(width: 5),
+                          Text(
+                            widget.property.location,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 16),
+                      // --- Styled ExpansionTiles Section ---
+                      ExpansionTileTheme(
+                        data: ExpansionTileThemeData(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.black12, width: 1),
+                          ),
+                          collapsedShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: Colors.black12, width: 1),
+                          ),
+                          backgroundColor: Colors.white,
+                          collapsedBackgroundColor: Colors.white,
+                          tilePadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
+                          childrenPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          iconColor: Colors.black,
+                          collapsedIconColor: Colors.black,
+                        ),
+                        child: Column(
+                          children: [
+                            // --- Details Dropdown ---
+                            ExpansionTile(
+                              title: Text(
+                                'Details',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Property Overview',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 8),
+
+                                // Property Details Box
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.black),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      DetailsTable(
+                                        text: 'Location',
+                                        details: widget.property.location,
+                                        icons: Icons.location_on,
+                                      ),
+                                      Divider(thickness: 1),
+                                      DetailsTable(
+                                        text: 'Property Type',
+                                        details: widget.property.propertyType,
+                                        icons: Icons.landslide_outlined,
+                                      ),
+                                      Divider(thickness: 1),
+
+                                      DetailsTable(
+                                        text: 'Sqft',
+                                        details: "${widget.property.sqft}",
+                                        icons: Icons.check_box_outline_blank,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  "Amenities",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                RowWidget(
+                                  text: widget.property.aminities,
+                                  icons: Icons.business_outlined,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 12),
+                            // --- Description Dropdown ---
+                            ExpansionTile(
+                              title: Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    widget.property.description,
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.0),
+                        child: Image.asset(
+                          AssetResource.location,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          border: Border.all(color: AppColors.black, width: 1),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(width: 1, color: Colors.black),
+                              // ),
+                              child: Center(
+                                child: Text(
+                                  'Booked Details',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Icon(Icons.person, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text("${bookedData!.name}"),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.phone, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text("${bookedData!.contact}"),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.mail, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text(bookedData!.email),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.mail, color: Colors.green),
+                                SizedBox(width: 8),
+                                Text("${bookedData!.date}"),
+                              ],
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Button(
+                                    width: 150,
+                                    height: 40,
+                                    text: 'Delete',
+                                    onTap: () async {
+                                      await deleteUser(
+                                        widget.property.bookingid,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BottomNavigationWidget(
+                                                currentIndex: 1,
+                                                propertytype: [],
+                                                price: null,
+                                                sqft: null,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.delete_outline_outlined,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Button(
+                                    width: 150,
+                                    height: 40,
+                                    text: 'Edit',
+                                    onTap: () {
+                                     
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>BookingDetails (property: widget.property,),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.edit_outlined,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
   }
-// void getPropertyDetails() async {
-//    await fdb.collection('BOOKING').doc(widget.property.bookingid).get().then((value)(
-//     if(value.isempty){
-//     Map<String, dynamic> booking =value.data;
-//     }
-//    ));
-//   }
- void updatePerson(BookingModel personToUpdate) async {
-    final DocumentReference<Map<String, dynamic>> documentRef =
-        fdb.collection("BOOKING MODEL").doc(personToUpdate.id);
-    await documentRef.update(personToUpdate.toJson()).then((value) {
-      log("Updated successfully");
-    }).onError((e, stack) {
-      log("Error is $e", name: "oxdo");
-    });
-  
-  }
 
-  void deleteUser(String id) async {
+  
+
+  deleteUser(String id) async {
     await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
     // getAllPropertyDetails();
   }
 }
+ 

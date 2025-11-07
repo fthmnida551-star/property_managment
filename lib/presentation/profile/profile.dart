@@ -10,8 +10,8 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
-  final UserModel loginUser;
-  const Profilescreen({super.key, required this.loginUser});
+
+  const Profilescreen({super.key});
 
   @override
   State<Profilescreen> createState() => _ProfilescreenState();
@@ -21,9 +21,13 @@ class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
 
   // Variables to hold fetched user data
-  String? userName;
-  String? userEmail;
-  String? userId;
+  String userName ="";
+  String userEmail="";
+  String userId="";
+  String userPassword="";
+  String userRole="";
+
+  UserModel? loginUser;
 
   @override
   void initState() {
@@ -36,11 +40,25 @@ class _ProfilescreenState extends State<Profilescreen> {
   Future<void> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      userName = prefs.getString('userName');
-      userEmail = prefs.getString('userEmail');
-      userId = prefs.getString('userId');
+      userName = prefs.getString('userName')??"";
+      userEmail = prefs.getString('userEmail')??"";
+      userId = prefs.getString('userId')??"";
+      userPassword = prefs.getString('userPassword')??"";
+      userRole = prefs.getString('userRole')??"";
+
+      loginUser = UserModel(
+          userName,
+          userEmail,
+          userId,
+          userPassword,
+          userRole,
+         );
     });
-  }
+       //setState(() {
+        
+      // });
+
+      }
 
   // ✅ Get notification switch status
   Future<void> getNotificationStatus() async {
@@ -119,7 +137,8 @@ class _ProfilescreenState extends State<Profilescreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          userName ?? widget.loginUser.name,
+                          userName,
+                          
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -128,7 +147,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          userEmail ?? widget.loginUser.email,
+                          userEmail,
                           style: TextStyle(
                             color: AppColors.black,
                             fontSize: 17.sp,
@@ -146,9 +165,15 @@ class _ProfilescreenState extends State<Profilescreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              EditProfileScreen(loginUser: widget.loginUser),
+                              EditProfileScreen(loginUser: loginUser!),
                         ),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => EditProfileScreen(loginUser: ),
+                      //   ),
+                      // );
                     },
                     child: SizedBox(
                       height: 20,
