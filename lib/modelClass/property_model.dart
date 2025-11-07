@@ -94,6 +94,8 @@ class PropertyModel {
       bookingid: map['BOOKING_ID'] ?? '',
     );
   }
+
+ 
 }
 
 

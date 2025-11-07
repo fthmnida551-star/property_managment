@@ -14,9 +14,9 @@ import 'package:property_managment/widget/green_button.dart';
 import 'package:property_managment/widget/text_field.dart';
 
 class BookingDetails extends StatefulWidget {
-  // final String propertyId;
-  final PropertyModel property;
-  const BookingDetails({super.key, required this.property,});
+  final String propertyId;
+  final BookingModel? bookedData;
+  const BookingDetails({super.key,required this.propertyId,required this.bookedData,});
 
   @override
   State<BookingDetails> createState() => _BookingDetailsState();
@@ -39,7 +39,21 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
   @override
+void initState() {
+  super.initState();
+
+  if (widget.bookedData != null) {
+    namectlr.text = widget.bookedData!.name;
+    contactCtlr.text = widget.bookedData!.contact;
+    emailCtlr.text = widget.bookedData!.email;
+    datectlr.text = widget.bookedData!.date;
+  }
+}
+
+
+  @override
   Widget build(BuildContext context) {
+    log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -56,10 +70,16 @@ class _BookingDetailsState extends State<BookingDetails> {
                   size: 30,
                 ),
               ),
-              Text(
-                'Add Booking Dtails',
-                style: TextStyle(color: AppColors.white, fontSize: 19.sp),
+               Text(
+              _saveButtonMode == SaveButtonMode.save
+                  ? 'Add Booking Details'
+                  : 'Edit Booking Details', // 🟩 CHANGED: dynamic title
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.white,
+                fontSize: 21,
               ),
+            ),
             ],
           ),
         ),
@@ -148,15 +168,14 @@ class _BookingDetailsState extends State<BookingDetails> {
                   "CONTACT": int.tryParse(contactCtlr.text.trim()),
                   "EMAIL": emailCtlr.text.trim(),
                   "DATE": datectlr.text.trim(),
-                  "PROPERTY_ID": widget.property.id,
+                  "PROPERTY_ID": widget.propertyId,
                 };
               }
               if (_saveButtonMode == SaveButtonMode.save) {
                 await addbookingDetails(bookingDetails);
               } else {
-                await updateBooking(widget.property.bookingid!,bookingDetails);
+                await updateBooking(widget.bookedData!.id, bookingDetails);
               }
-              addbookingDetails(bookingDetails);
               _clearControllers();
               Navigator.push(
                 context,
@@ -169,7 +188,7 @@ class _BookingDetailsState extends State<BookingDetails> {
     );
   }
 
-   addbookingDetails(Map<String, dynamic> bookingData) async {
+  addbookingDetails(Map<String, dynamic> bookingData) async {
     await fdb.collection("BOOKING DETAILS").add(bookingData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
@@ -183,7 +202,10 @@ class _BookingDetailsState extends State<BookingDetails> {
     });
   }
 
-  Future<void> updateBooking(String id, Map<String, dynamic> updatedData) async {
+  Future<void> updateBooking(
+    String id,
+    Map<String, dynamic> updatedData,
+  ) async {
     try {
       await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
       log("Booking updated successfully");
@@ -191,5 +213,4 @@ class _BookingDetailsState extends State<BookingDetails> {
       log("Error updating booking: $e");
     }
   }
-
 }
