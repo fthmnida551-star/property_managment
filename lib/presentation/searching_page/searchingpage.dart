@@ -14,6 +14,7 @@ import 'package:property_managment/presentation/searching_page/add_property.dart
 import 'package:property_managment/presentation/searching_page/widget/filtering.dart';
 import 'package:property_managment/presentation/searching_page/widget/property_container.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Searchingpage extends StatefulWidget {
   final List<String> propertytype;
@@ -35,12 +36,25 @@ class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
   List<PropertyModel> filterPropertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+   String userRole = "";
+  getUserRole()async{
+    final prefs =  await SharedPreferences.getInstance();
+    // final Set<String> keyss = prefs.getKeys();
+     userRole = prefs.getString('role')??"";
+    log("vvvvvvvvv $userRole");
+    setState(() {
+      
+    });
+  }
+  
+
 
   TextEditingController srchbrcntlr = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    getUserRole();
     getAllPropertyDetailsList();
     getFilteredPropertyList(widget.propertytype, widget.price, widget.sqft);
   }
@@ -111,6 +125,7 @@ class _SearchingpageState extends State<Searchingpage> {
                   ),
                 ),
                 SizedBox(width: 12.w),
+                if(userRole != "Agent")
                 Container(
                   height: 46.h,
                   width: 46.w,

@@ -13,13 +13,44 @@ import 'package:property_managment/presentation/propertydetails/property_details
 import 'package:property_managment/presentation/searching_page/widget/property_container.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class BookedDetails extends StatelessWidget {
- final String userName;
+class BookedDetails extends StatefulWidget {
+  final String userName;
   final BookingModel bookedProperty;
   final PropertyModel property;
-   BookedDetails({super.key, required this.userName,  required this.bookedProperty, required this.property});
-  FirebaseFirestore fdb =FirebaseFirestore.instance;
+
+  BookedDetails({
+    super.key,
+    required this.userName,
+    required this.bookedProperty,
+    required this.property,
+  });
+
+  @override
+  State<BookedDetails> createState() => _BookedDetailsState();
+}
+
+class _BookedDetailsState extends State<BookedDetails> {
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
+
+  String userRole = "";
+
+  Future<void>getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    userRole = prefs.getString("role") ?? "";
+    log("saveuserrole$userRole");
+    setState(() {
+      
+    });
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserRole();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,11 +87,11 @@ class BookedDetails extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          BookedPropertyScreen(property: property),
+                          BookedPropertyScreen(property: widget.property),
                     ),
                   );
                 },
-                property: property,
+                property: widget.property,
               ),
 
               SizedBox(height: 16),
@@ -69,7 +100,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.person_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text(bookedProperty.name),
+                  Text(widget.bookedProperty.name),
                   // Text('Name\nHrishilal'),
                 ],
               ),
@@ -81,7 +112,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.phone_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text(bookedProperty.contact),
+                  Text(widget.bookedProperty.contact),
                   // Text('Mobile No\n+91 960592260'),
                 ],
               ),
@@ -93,7 +124,7 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.mail_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text("${bookedProperty.email}"),
+                  Text("${widget.bookedProperty.email}"),
                   // Text('Email\nHrishilal@gmail.com'),
                 ],
               ),
@@ -105,13 +136,13 @@ class BookedDetails extends StatelessWidget {
                   Icon(Icons.calendar_month_rounded, color: Colors.green),
 
                   SizedBox(width: 8),
-                  Text("${bookedProperty.date}"),
+                  Text("${widget.bookedProperty.date}"),
                   // Text('Date\n2-3-2025'),
                 ],
               ),
 
               SizedBox(height: 50),
-
+              if (userRole =="Manager")
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -119,34 +150,31 @@ class BookedDetails extends StatelessWidget {
                     text: 'Delete',
                     onTap: () async {
                       deleteBookingProperty(
-                        property.id,
+                        widget.property.id,
                       ); // pass the booking document ID
 
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => BottomNavigationWidget(
-                            
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavigationWidget(
                             currentIndex: 1,
-                           
+
                             propertytype: [],
-                           
+
                             price: null,
-                           
+
                             sqft: null,
-                          
                           ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete_outline_outlined,
-                                    ),
+                        ),
+                      );
+                    },
+                    icon: Icons.delete_outline_outlined,
+                  ),
 
                   // Button(
                   //   text: 'Delete',
                   //   onTap: () {
                   //     deleteBookingProperty()
-
 
                   //     Navigator.push(
                   //       context,
@@ -176,8 +204,9 @@ class BookedDetails extends StatelessWidget {
                       final updatedBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingDetails( property: property,
-                           // pass the existing details
+                          builder: (context) => BookingDetails(
+                            property: widget.property,
+                            // pass the existing details
                           ),
                         ),
                       );
@@ -198,14 +227,16 @@ class BookedDetails extends StatelessWidget {
 
   Future<BookingModel?> getBooking(String bookingId) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> doc =
-          await fdb.collection('BOOKING').doc(bookingId).get();
+      DocumentSnapshot<Map<String, dynamic>> doc = await fdb
+          .collection('BOOKING')
+          .doc(bookingId)
+          .get();
 
       if (doc.exists && doc.data() != null) {
         // Merge Firestore ID with document data
         final data = doc.data()!;
         data['id'] = doc.id;
-        return BookingModel.fromMap(data,doc.id);
+        return BookingModel.fromMap(data, doc.id);
       } else {
         print("No property found for ID: $bookingId");
         return null;
@@ -215,7 +246,6 @@ class BookedDetails extends StatelessWidget {
       return null;
     }
   }
-
 
   void updateBookingProperty(BookingModel Updatedetails) async {
     final DocumentReference<Map<String, dynamic>> documentRef = fdb

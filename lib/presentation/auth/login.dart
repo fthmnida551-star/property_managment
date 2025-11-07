@@ -235,10 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                                     'userId',
                                     value.docs.first.id,
                                   );
-                                  await prefs.setString(
-                                    "role",
-                                    userMap["USER_ROLE"]?? '',
-                                  );
+                                  await prefs.setString("role",userMap["USER_ROLE"]?? '',);
                                   await prefs.setString("name", userMap["USER_NAME"]??'',
                                   );
 

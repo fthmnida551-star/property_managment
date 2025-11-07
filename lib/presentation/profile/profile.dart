@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -8,10 +9,9 @@ import 'package:property_managment/presentation/profile/edit_profile.dart';
 import 'package:property_managment/presentation/profile/users_screen.dart';
 import 'package:property_managment/presentation/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/widget/appbar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
-
- 
   const Profilescreen({super.key});
 
   @override
@@ -20,6 +20,20 @@ class Profilescreen extends StatefulWidget {
 
 class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
+  String userRole = '';
+   @override
+  void initState() {
+    super.initState();
+    getUserRole(); 
+  }
+  
+  getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    userRole = prefs.getString('role') ?? "";
+    log("vvvvvvvvv $userRole");
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +68,8 @@ class _ProfilescreenState extends State<Profilescreen> {
                   logoutAlert(context);
                   // Navigator.pop(context);
                 },
-                child: Icon(Icons.logout,color: AppColors.white,),
-              )
-              
+                child: Icon(Icons.logout, color: AppColors.white),
+              ),
             ),
           ],
         ),
@@ -147,21 +160,22 @@ class _ProfilescreenState extends State<Profilescreen> {
             const SizedBox(height: 20),
 
             // ✅ Custom Text Widget
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-
-              child: _buildListTile(
-                title: 'Users',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UsersScreen()),
-                  );
-                },
-                image: '',
-                isSwitched: isSwitched,
+            
+            if (userRole =="Manager")
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: _buildListTile(
+                  title: 'Users',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UsersScreen()),
+                    );
+                  },
+                  image: '',
+                  isSwitched: isSwitched,
+                ),
               ),
-            ),
 
             // ✅ Example ListTile
             _buildListTile(
@@ -247,5 +261,4 @@ class _ProfilescreenState extends State<Profilescreen> {
       ),
     );
   }
-  
 }

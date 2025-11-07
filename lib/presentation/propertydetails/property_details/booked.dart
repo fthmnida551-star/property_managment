@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -15,6 +14,7 @@ import 'package:property_managment/presentation/propertydetails/widget/popup_mss
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
+
 class BookedPropertyScreen extends StatefulWidget {
   final PropertyModel property;
   const BookedPropertyScreen({super.key, required this.property});
@@ -26,6 +26,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   List<PropertyModel> propertyDetails = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   BookingModel? bookedData;
+
   getPropertyBooking(String bookingId) async {
     await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
       if (value.exists) {
@@ -63,6 +64,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
@@ -77,6 +79,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             color: AppColors.whitecolor,
                           ),
                         ),
+
                         PopupMenuButton(
                           icon: Icon(
                             Icons.more_vert,
@@ -96,6 +99,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     ),
                                   );
                                 },
+
                                 child: Row(
                                   children: [
                                     Icon(Icons.edit, color: AppColors.black),
@@ -104,6 +108,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                               ),
                             ),
+
                             PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
@@ -718,11 +723,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
-                                     
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>BookingDetails (property: widget.property,),
+                                          builder: (context) => BookingDetails(
+                                            property: widget.property,
+                                          ),
                                         ),
                                       );
                                     },
@@ -745,11 +751,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
     );
   }
 
-  
-
   deleteUser(String id) async {
     await fdb.collection("BOOKING").doc(widget.property.bookingid).delete();
     // getAllPropertyDetails();
   }
 }
- 
