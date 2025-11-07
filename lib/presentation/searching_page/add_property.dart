@@ -31,7 +31,7 @@ class _AddPropertyState extends State<AddProperty> {
   final formKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   bool readytoMove = false;
-  bool carparking=false;
+  bool carparking = false;
   TextEditingController propertyTypeCtlr = TextEditingController();
   TextEditingController priceCtlr = TextEditingController();
   TextEditingController buildingNamectlr = TextEditingController();
@@ -59,7 +59,7 @@ class _AddPropertyState extends State<AddProperty> {
     }
   }
 
-  final SaveButtonMode _saveButtonMode = SaveButtonMode.save;
+  SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   clearController() {
     propertyTypeCtlr.clear();
@@ -67,7 +67,7 @@ class _AddPropertyState extends State<AddProperty> {
     buildingNamectlr.clear();
     bhkctlr.clear();
     bathroomctlr.clear();
-    carpetAreactlr.clear();
+    // carpetAreactlr.clear();
     maintenancectlr.clear();
     aminitiesctlr.clear();
     propertySqrftCtlr.clear();
@@ -75,7 +75,24 @@ class _AddPropertyState extends State<AddProperty> {
     locationCtlr.clear();
   }
 
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.from == "EDIT" && widget.property == null) {
+      propertyTypeCtlr.text = widget.property!.propertyType;
+      priceCtlr.text = widget.property!.price.toString();
+      buildingNamectlr.text = widget.property!.name;
+      bhkctlr.text = widget.property!.bhk.toString();
+      bathroomctlr.text = widget.property!.bathrooms.toString();
+      maintenancectlr.text = widget.property!.maintenance.toString();
+      aminitiesctlr.text = widget.property!.aminities.toString();
+      propertySqrftCtlr.text = widget.property!.sqft.toString();
+      descriptionCtlr.text = widget.property!.description;
+      locationCtlr.text = widget.property!.location;
+      _saveButtonMode = SaveButtonMode.edit;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -229,16 +246,17 @@ class _AddPropertyState extends State<AddProperty> {
                             return null;
                           },
                         ),
-                       
+
                         divider,
-                       
-                        CheckboxWithListenable(text: 'Ready to move',
-                        value: readytoMove,
-                  onChanged: (newValue) {
-                    setState(() {
-                      readytoMove = newValue ?? false;
-                    });
-                  },
+
+                        CheckboxWithListenable(
+                          text: 'Ready to move',
+                          value: readytoMove,
+                          onChanged: (newValue) {
+                            setState(() {
+                              readytoMove = newValue ?? false;
+                            });
+                          },
                         ),
                         divider,
                         TextFieldContainer(
@@ -284,12 +302,15 @@ class _AddPropertyState extends State<AddProperty> {
                         ),
 
                         divider,
-                        CheckboxWithListenable(text: 'Car parking', value: carparking,
-                  onChanged: (newValue) {
-                    setState(() {
-                      carparking = newValue ?? false;
-                    });
-                  },),
+                        CheckboxWithListenable(
+                          text: 'Car parking',
+                          value: carparking,
+                          onChanged: (newValue) {
+                            setState(() {
+                              carparking = newValue ?? false;
+                            });
+                          },
+                        ),
                         TextFieldContainer(
                           text: "maintenance(Monthly)",
                           controllerName: maintenancectlr,
@@ -382,20 +403,14 @@ class _AddPropertyState extends State<AddProperty> {
                   "PROPERTY TYPE": _selectedValue,
                   "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
                   "BUILDING NAME": buildingNamectlr.text.trim(),
-                   "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+                  "READY_TO_MOVE": readytoMove ? "YES" : "NO",
                   "BHK": int.tryParse(bhkctlr.text.trim()),
                   "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-                  "CARPET AREA": int.tryParse(
-                    propertySqrftCtlr.text.trim(),
-                  ),
-                  'CARPARKING':carparking? "yes": "no",
-                  "MAINTENANCE": int.tryParse(
-                    maintenancectlr.text.trim(),
-                  ),
-                 
-                  "PROPERTY SQFT": int.tryParse(
-                    propertySqrftCtlr.text.trim(),
-                  ),
+                  "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
+                  'CARPARKING': carparking ? "yes" : "no",
+                  "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
+
+                  "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
                   "AMINITIES": aminitiesctlr.text.trim(),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
                   "PROPERTY LOCATION": locationCtlr.text.trim(),
@@ -406,8 +421,11 @@ class _AddPropertyState extends State<AddProperty> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      AddLandlordDetails(propertyMap: propertyDetailsAll, from: '', property: null,),
+                  builder: (context) => AddLandlordDetails(
+                    propertyMap: propertyDetailsAll,
+                    from: '',
+                    property: null,
+                  ),
                 ),
               );
             }

@@ -538,7 +538,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        BookingDetails(property: widget.property,),
+                        BookingDetails(propertyId: widget.property.id, bookedData: null,),
                   ),
                 );
               },
@@ -562,4 +562,5 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
+  
 }
