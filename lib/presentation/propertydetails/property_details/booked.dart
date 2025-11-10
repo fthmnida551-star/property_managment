@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -14,6 +13,8 @@ import 'package:property_managment/presentation/propertydetails/widget/row.dart'
 import 'package:property_managment/presentation/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class BookedPropertyScreen extends StatefulWidget {
    PropertyModel property;
@@ -26,7 +27,14 @@ class BookedPropertyScreen extends StatefulWidget {
 class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   List<PropertyModel> propertyDetails = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
-  
+  String userRole ="";
+  void getUserRole()async{
+    final prefs =await SharedPreferences.getInstance();
+    userRole =prefs.getString("role")??'';
+    setState(() {
+      
+    });
+  } 
   // getPropertyBooking(String bookingId) async {
   //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
   //     if (value.exists) {
@@ -40,6 +48,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   @override
   void initState() {
     super.initState();
+    getUserRole();
     // getPropertyBooking(widget.property.bookingid);
   }
 
@@ -64,6 +73,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
@@ -84,6 +94,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             color: AppColors.whitecolor,
                           ),
                           itemBuilder: (BuildContext context) => [
+                            if (userRole!="Agent")
                             PopupMenuItem(
                               child: InkWell(
                                 onTap: () {
@@ -97,6 +108,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     ),
                                   );
                                 },
+
                                 child: Row(
                                   children: [
                                     Icon(Icons.edit, color: AppColors.black),
@@ -105,7 +117,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                               ),
                             ),
-                            PopupMenuItem(
+                           PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
                                   deleteProperty(widget.property.id);
@@ -120,6 +132,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                               ),
                             ),
+                            
                             PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
@@ -148,9 +161,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 10,
-                      ),
-
-                      decoration: BoxDecoration(
+                      ), 
+                       decoration: BoxDecoration(
                         color: AppColors.whitecolor,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -419,12 +431,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 Text("${widget.bookedData!.date}"),
                               ],
                             ),
+                            if (userRole!="Agent")
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  
                                   Button(
                                     width: 150,
                                     height: 40,
@@ -691,12 +705,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                   // Text('Date\n2-3-2025'),
                 ],
               ),
+              
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  if(userRole!="Agent")
                                   Button(
                                     width: 150,
                                     height: 40,
@@ -726,7 +742,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
-                                    
+                                     
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -753,8 +769,6 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
     );
   }
 
-  
-
   deleteUser(String id) async {
     await fdb.collection("BOOKING DETAILS").doc(widget.property.bookingid).delete();
     // getAllPropertyDetails();
@@ -764,4 +778,3 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
     // getAllPropertyDetails();
   }
 }
- 
