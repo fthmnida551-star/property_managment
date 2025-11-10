@@ -212,11 +212,14 @@ class _ProfilescreenState extends State<Profilescreen> {
                 ],
               ),
             ),
+            
 
             const SizedBox(height: 20),
+          if(userRole =="Manager")
 
             // ✅ Users List Tile
             Padding(
+             
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: _buildListTile(
                 title: 'Users',
