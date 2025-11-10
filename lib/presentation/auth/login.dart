@@ -218,23 +218,15 @@ class _LoginPageState extends State<LoginPage> {
                                     value.docs.first.id,
                                   );
 
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
+                                  final prefs = await SharedPreferences.getInstance();
                                   await prefs.setBool('isLoggedIn', true);
 
                                   // Use the Firestore keys exactly as stored in your collection
                                   await prefs.setString('email',userMap['USER_EMAIL'] ?? '',);
-                                  await prefs.setString(
-                                    'password',
-                                    userMap['USER_PASSWORD']?? "",
-                                  );
-                                  await prefs.setString(
-                                    'userId',
-                                    value.docs.first.id,
-                                  );
+                                  await prefs.setString('password',userMap['USER_PASSWORD']?? "",);
+                                  await prefs.setString('userId',value.docs.first.id,);
                                   await prefs.setString("role",userMap["USER_ROLE"]?? '',);
-                                  await prefs.setString("name", userMap["USER_NAME"]??'',
-                                  );
+                                  await prefs.setString("name", userMap["USER_NAME"]??'',);
 
                                   Navigator.pushReplacement(
                                     context,
