@@ -222,29 +222,11 @@ class _LoginPageState extends State<LoginPage> {
                                   await prefs.setBool('isLoggedIn', true);
 
                                   // Use the Firestore keys exactly as stored in your collection
-<<<<<<< HEAD
                                   await prefs.setString('email',userMap['USER_EMAIL'] ?? '',);
                                   await prefs.setString('password',userMap['USER_PASSWORD']?? "",);
                                   await prefs.setString('userId',value.docs.first.id,);
                                   await prefs.setString("role",userMap["USER_ROLE"]?? '',);
                                   await prefs.setString("name", userMap["USER_NAME"]??'',);
-=======
-                                  await prefs.setString(
-                                    'email',
-                                    userMap['USER_EMAIL'] ?? '',
-                                  );
-                                  await prefs.setString(
-                                    'password',
-                                    userMap['USER_PASSWORD']?? "",
-                                  );
-                                  await prefs.setString(
-                                    'userId',
-                                    value.docs.first.id,
-                                  );
-                                  await prefs.setString("role",userMap["USER_ROLE"]?? '',);
-                                  await prefs.setString("name", userMap["USER_NAME"]??'',
-                                  );
->>>>>>> 1e53d56b3547ce5c2ba81b071a67fb7bdba871bc
 
                                   Navigator.pushReplacement(
                                     context,
