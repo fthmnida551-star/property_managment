@@ -22,11 +22,8 @@ class Profilescreen extends StatefulWidget {
 class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
   String userRole = '';
-   @override
-  void initState() {
-    super.initState();
-    getUserRole(); 
-  }
+  
+  
   
   getUserRole() async {
     final prefs = await SharedPreferences.getInstance();
@@ -40,7 +37,7 @@ class _ProfilescreenState extends State<Profilescreen> {
   String userId="";
   String userName ="";
   String userEmail="";
-   String userRole="";
+  //  String userRole="";
   String userPassword="";
  
   UserModel? loginUser;
@@ -50,6 +47,7 @@ class _ProfilescreenState extends State<Profilescreen> {
     super.initState();
     getUserData();
     getNotificationStatus();
+     getUserRole(); 
   }
 
   // ✅ Get user data from SharedPreferences
