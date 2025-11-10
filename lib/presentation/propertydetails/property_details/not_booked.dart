@@ -13,24 +13,48 @@ import 'package:property_managment/presentation/propertydetails/widget/dlt_alert
 import 'package:property_managment/presentation/propertydetails/widget/row.dart';
 import 'package:property_managment/presentation/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class NotBookedPropertyScreen extends StatefulWidget {
   final String userName;
+ 
+  
+  
   final PropertyModel property;
-  const NotBookedPropertyScreen({
+  NotBookedPropertyScreen({
     super.key,
     required this.userName,
     required this.property,
+    
   });
+   
+
+  
 
   // const NotBookedPropertyScreen({super.key});
   @override
   State<NotBookedPropertyScreen> createState() =>
       _NotBookedPropertyScreenState();
+      
 }
 
 class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
+   String userRole ="";
+  void getUserRole()async{
+    final prefs=await SharedPreferences.getInstance();
+    userRole =prefs.getString("role")??"";
+  setState(() {
+    
+  });
+  log("yuio$userRole");
+   }
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserRole();
+  }
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
@@ -73,6 +97,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           ),
 
                           itemBuilder: (BuildContext context) => [
+                            if(userRole!="Agent")
                             PopupMenuItem(
                               onTap: () {
                                  Navigator.of(
@@ -517,17 +542,24 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
+                      
                       SizedBox(height: 8),
+                     
                     ],
+                    
                   ),
+                  
                 ),
             ],
           ),
         ),
-        bottomNavigationBar: Padding(
+     
+        bottomNavigationBar: userRole == "Agent" ? null
+         : Padding(
           padding: EdgeInsets.all(16.0),
           child: SizedBox(
             height: 50,
+            
             child: ElevatedButton(
               onPressed: () {
                 log("property id is  ${widget.property.id}");
@@ -545,6 +577,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
               ),
+             
               child: Text(
                 'Booking Now',
                 style: TextStyle(
