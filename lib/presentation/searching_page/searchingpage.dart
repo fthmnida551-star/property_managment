@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:property_managment/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
@@ -36,23 +37,19 @@ class _SearchingpageState extends State<Searchingpage> {
   List<PropertyModel> propertyDetailsList = [];
   List<PropertyModel> filterPropertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
-   String userRole = "";
-  getUserRole()async{
-    final prefs =  await SharedPreferences.getInstance();
+  String userRole = "";
+  getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
     // final Set<String> keyss = prefs.getKeys();
-     userRole = prefs.getString('role')??"";
+    userRole = prefs.getString('role') ?? "";
     log("vvvvvvvvv $userRole");
-    setState(() {
-      
-    });
+    setState(() {});
   }
-  
-
 
   TextEditingController srchbrcntlr = TextEditingController();
   BookingModel? bookingData;
   getPropertyBookingData(String bookingId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId) .get().then((value) {
+    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
       if (value.exists) {
         Map<String, dynamic> data = value.data()!;
         bookingData = BookingModel.fromMap(value.id, data);
@@ -102,7 +99,10 @@ class _SearchingpageState extends State<Searchingpage> {
                     decoration: BoxDecoration(
                       color: AppColors.propertyContainer,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(width: 1,color: AppColors.opacityGrey)
+                      border: Border.all(
+                        width: 1,
+                        color: AppColors.opacityGrey,
+                      ),
                     ),
                     child: TextField(
                       controller: srchbrcntlr,
@@ -136,34 +136,36 @@ class _SearchingpageState extends State<Searchingpage> {
                   ),
                 ),
                 SizedBox(width: 1.w),
-                if(userRole != "Agent")
-                Container(
-                  height: 46.h,
-                  width: 46.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.propertyContainer,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddProperty(from: 'new', property: null),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add_box_sharp,
-                      color: AppColors.greenColor,
-                      size: 50.sp,
+                if (userRole != "Agent")
+                  Container(
+                    height: 46.h,
+                    width: 46.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.propertyContainer,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        // pickAndUpload();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AddProperty(from: 'new', property: null),
+
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.add_box_sharp,
+                        color: AppColors.greenColor,
+                        size: 50.sp,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             //↬ Filtering section
             SizedBox(
               height: 40.h,
@@ -265,13 +267,15 @@ class _SearchingpageState extends State<Searchingpage> {
                               text: 'Booked',
                               textColor: AppColors.white,
                               color: AppColors.booked,
-                              onTap: () async{
+                              onTap: () async {
                                 await getPropertyBookingData(item.bookingid);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        BookedPropertyScreen(property: item,bookedData: bookingData,),
+                                    builder: (context) => BookedPropertyScreen(
+                                      property: item,
+                                      bookedData: bookingData,
+                                    ),
                                   ),
                                 );
                               },
@@ -294,7 +298,8 @@ class _SearchingpageState extends State<Searchingpage> {
 
     try {
       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
-          .collection('PROPERTIES').orderBy('ADDED_DATE',descending: true)
+          .collection('PROPERTIES')
+          .orderBy('ADDED_DATE', descending: true)
           .get();
 
       for (var element in querySnapshot.docs) {
@@ -366,7 +371,9 @@ class _SearchingpageState extends State<Searchingpage> {
             .where("PROPERTY PRICE", isLessThanOrEqualTo: price.end);
       }
 
-      QuerySnapshot querySnapshot = await baseQuery.orderBy("ADDED_DATE",descending: true).get();
+      QuerySnapshot querySnapshot = await baseQuery
+          .orderBy("ADDED_DATE", descending: true)
+          .get();
 
       if (querySnapshot.docs.isNotEmpty) {
         log("data is not empty");

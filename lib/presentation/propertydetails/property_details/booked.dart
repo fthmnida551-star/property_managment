@@ -39,21 +39,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
       
     });
   } 
-  // getPropertyBooking(String bookingId) async {
-  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
-  //     if (value.exists) {
-  //       Map<String, dynamic> data = value.data()!;
-  //       bookedData = BookingModel.fromMap(data, value.id);
-  //     }
-  //   });
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
     super.initState();
     getUserRole();
-    // getPropertyBooking(widget.property.bookingid);
+   
   }
 
   @override
@@ -72,8 +63,42 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                     height: 250,
                     child: PageView(
                       children: [
-                        Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        Image.asset(AssetResource.property, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
+                          InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Image.network(
+                                                  widget.property.image[0],
+                                                  fit: BoxFit.cover,
+                                                  height: 209,
+                                                  width: 356,
+                                                ),
+                          ),
+                    InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: Image.network(
+                        widget.property.image[1],
+                        fit: BoxFit.cover,
+                        height: 209,
+                        width: 356,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: Image.network(
+                        widget.property.image[2],
+                        fit: BoxFit.cover,
+                        height: 209,
+                        width: 356,
+                      ),
+                    ),
+
                       ],
                     ),
                   ),

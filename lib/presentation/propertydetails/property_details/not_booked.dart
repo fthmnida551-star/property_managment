@@ -18,9 +18,6 @@ import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class NotBookedPropertyScreen extends StatefulWidget {
   final String userName;
- 
-  
-  
   final PropertyModel property;
   NotBookedPropertyScreen({
     super.key,
@@ -71,8 +68,27 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                     height: 250,
                     child: PageView(
                       children: [
-                        Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        Image.asset(AssetResource.property, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
+                         Image.network(
+                      widget.property.image[0],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+                    Image.network(
+                      widget.property.image[1],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+                    Image.network(
+                      widget.property.image[2],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+
                       ],
                     ),
                   ),

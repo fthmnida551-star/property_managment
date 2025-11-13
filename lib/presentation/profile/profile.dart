@@ -20,12 +20,23 @@ class Profilescreen extends StatefulWidget {
 
 class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
+  String userRole = '';
+  
+  
+  
+  getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    userRole = prefs.getString('role') ?? "";
+    log("vvvvvvvvv $userRole");
+    setState(() {});
+  }
+
 
   // Variables to hold fetched user data
   String userId="";
   String userName ="";
   String userEmail="";
-   String userRole="";
+  //  String userRole="";
   String userPassword="";
  
   UserModel? loginUser;
@@ -36,6 +47,7 @@ class _ProfilescreenState extends State<Profilescreen> {
     log("reached here");
     getUserData();
     getNotificationStatus();
+     getUserRole(); 
   }
 
   // ✅ Get user data from SharedPreferences
@@ -199,11 +211,14 @@ class _ProfilescreenState extends State<Profilescreen> {
                 ],
               ),
             ),
+            
 
             const SizedBox(height: 20),
+          if(userRole =="Manager")
 
             // ✅ Users List Tile
             Padding(
+             
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: _buildListTile(
                 title: 'Users',

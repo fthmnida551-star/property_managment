@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:property_managment/cloudinary_img/dio.dart';
+import 'package:property_managment/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/firebase/save_button.dart';
@@ -46,20 +48,23 @@ class _AddPropertyState extends State<AddProperty> {
   TextEditingController aminitiesctlr = TextEditingController();
   TextEditingController descriptionCtlr = TextEditingController();
   TextEditingController locationCtlr = TextEditingController();
-  File? _selectedImage;
-  final ImagePicker _picker = ImagePicker();
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      // imageQuality: 80,
-    );
+  File? file1;
+  File? file2;
+  File? file3;
+  List<String> imageFile = [];
+  // final ImagePicker _picker = ImagePicker();
+  // Future<void> _pickImage() async {
+  //   final pickedFile = await _picker.pickImage(
+  //     source: ImageSource.gallery,
+  //     // imageQuality: 80,
+  //   );
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _selectedImage = File(pickedFile.path);
+  //     });
+  //   }
+  // }
 
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
@@ -93,8 +98,39 @@ class _AddPropertyState extends State<AddProperty> {
       propertySqrftCtlr.text = widget.property!.sqft.toString();
       descriptionCtlr.text = widget.property!.description;
       locationCtlr.text = widget.property!.location;
+      imageFile = widget.property!.image;
       _saveButtonMode = SaveButtonMode.edit;
     }
+    setState(() {});
+  }
+
+  List<File> files = [];
+
+  pickImg() async {
+    // Pick one image from the gallery
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+    );
+
+    // If user cancels, just return
+    if (picked == null) return;
+
+    // Convert XFile → File and add to list
+    files.add(File(picked.path));
+
+    // If still empty (just in case), stop
+    if (files.isEmpty) return;
+
+    // Assign each element in list to file1, file2, file3
+    if (files.isNotEmpty) file1 = files[0];
+    if (files.length > 1) file2 = files[1];
+    if (files.length > 2) file3 = files[2];
+
+    print("File1: ${file1?.path}");
+    print("File2: ${file2?.path}");
+    print("File3: ${file3?.path}");
+
     setState(() {});
   }
 
@@ -138,67 +174,214 @@ class _AddPropertyState extends State<AddProperty> {
             key: formKey,
             child: Column(
               children: [
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: GestureDetector(
+                // onTap: pickImg,
+                //     child: Container(
+                //       width: 368,
+                //       height: 200,
+                //       decoration: BoxDecoration(
+                //         color: AppColors.searchbar,
+                //         borderRadius: BorderRadius.circular(8),
+                //         border: BoxBorder.all(
+                //           width: 1,
+                //           color: AppColors.opacitygreyColor,
+                //         ),
+                //         image: _selectedImage != null
+                //             ? DecorationImage(
+                //                 image: FileImage(_selectedImage!),
+                //                 fit: BoxFit.cover,
+                //               )
+                //             : null,
+                //       ),
+                //       child: _selectedImage == null
+                //           ? Center(
+                //               child: Container(
+                //                 height: 50,
+                //                 width: 50,
+                //                 decoration: BoxDecoration(
+                //                   color: AppColors.greenColor,
+                //                   borderRadius: BorderRadius.circular(40),
+                //                 ),
+                //                 child: Center(
+                //                   child: SvgPicture.asset(AssetResource.camera),
+                //                 ),
+                //               ),
+                //             )
+                //           : Align(
+                //               alignment: Alignment.topRight,
+                //               child: Padding(
+                //                 padding: const EdgeInsets.all(8.0),
+                //                 child: GestureDetector(
+                //                   onTap: () {
+                //                     setState(() {
+                //                       _selectedImage = null; // remove image
+                //                     });
+                //                   },
+                //                   child: const CircleAvatar(
+                //                     radius: 16,
+                //                     backgroundColor: Colors.black54,
+                //                     child: Icon(
+                //                       Icons.close,
+                //                       color: Colors.white,
+                //                       size: 18,
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //     ),
+                //   ),
+                // ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      width: 368,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: AppColors.searchbar,
-                        borderRadius: BorderRadius.circular(8),
-                        border: BoxBorder.all(
-                          width: 1,
-                          color: AppColors.opacitygreyColor,
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 150,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: AppColors.searchbar,
+                          image: file1 != null
+                              ? DecorationImage(
+                                  image: FileImage(file1!),
+                                  fit: BoxFit.cover,
+                                )
+                              : imageFile.length>1?  DecorationImage(
+                                  image: NetworkImage(imageFile[0]),
+                                  fit: BoxFit.cover,
+                                ): null,
+                          borderRadius: BorderRadius.circular(8),
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: AppColors.opacitygreyColor,
+                          ),
                         ),
-                        image: _selectedImage != null
-                            ? DecorationImage(
-                                image: FileImage(_selectedImage!),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: _selectedImage == null
-                          ? Center(
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: AppColors.greenColor,
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                child: Center(
-                                  child: SvgPicture.asset(AssetResource.camera),
-                                ),
-                              ),
-                            )
-                          : Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedImage = null; // remove image
-                                    });
-                                  },
-                                  child: const CircleAvatar(
-                                    radius: 16,
-                                    backgroundColor: Colors.black54,
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 18,
+                        child: file1 == null && imageFile.isEmpty
+                            ? 
+                             Center(
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.greenColor,
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      AssetResource.camera,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              )
+                           :SizedBox() 
+                      ),
+                      Container(
+                        height: 150,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: AppColors.searchbar,
+                           image: file2 != null
+                              ? DecorationImage(
+                                  image: FileImage(file2!),
+                                  fit: BoxFit.cover,
+                                )
+                              : imageFile.length>1?  DecorationImage(
+                                  image: NetworkImage(imageFile[1]),
+                                  fit: BoxFit.cover,
+                                ): null,
+                          borderRadius: BorderRadius.circular(8),
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: AppColors.opacitygreyColor,
+                          ),
+                        ),
+                        child: file2 == null && imageFile.length==1
+                            ? Center(
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.greenColor,
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      AssetResource.camera,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                      ),
+                      Container(
+                        height: 150,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: AppColors.searchbar,
+                           image: file3 != null
+                              ? DecorationImage(
+                                  image: FileImage(file3!),
+                                  fit: BoxFit.cover,
+                                )
+                              : imageFile.length>2?  DecorationImage(
+                                  image: NetworkImage(imageFile[2]),
+                                  fit: BoxFit.cover,
+                                ): null,
+                          borderRadius: BorderRadius.circular(8),
+                          border: BoxBorder.all(
+                            width: 1,
+                            color: AppColors.opacitygreyColor,
+                          ),
+                        ),
+                        child: file3 == null && imageFile.length<2
+                            ? Center(
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.greenColor,
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      AssetResource.camera,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 3),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      pickImg();
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: AppColors.greenColor,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Upload Images',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20),
 
                 DropdownFormField(
@@ -406,40 +589,49 @@ class _AddPropertyState extends State<AddProperty> {
         padding: const EdgeInsets.all(20.0),
         child: GreenButton(
           text: 'Next',
-          onTap: () {
+          onTap: () async {
             if (formKey.currentState!.validate()) {
               Map<String, dynamic> propertyDetailsAll = {};
+              if (files.isNotEmpty) {
+                final imageUrls = await uploadMultipleUnsigned(
+                  files,
+                  cloudName: 'dcijrvaw3',
+                  uploadPreset: 'property_images',
+                );
+                propertyDetailsAll = {
+                  "PROPERTY TYPE": _selectedValue,
+                  "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
+                  "BUILDING NAME": buildingNamectlr.text.trim(),
+                  "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+                  "BHK": int.tryParse(bhkctlr.text.trim()),
+                  "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+                  "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
+                  'CARPARKING': carparking ? "yes" : "no",
+                  "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
 
-              propertyDetailsAll = {
-                "PROPERTY TYPE": _selectedValue,
-                "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-                "BUILDING NAME": buildingNamectlr.text.trim(),
-                "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-                "BHK": int.tryParse(bhkctlr.text.trim()),
-                "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-                "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
-                'CARPARKING': carparking ? "yes" : "no",
-                "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
+                  "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
+                  "AMINITIES": aminitiesctlr.text.trim(),
+                  "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
+                  "PROPERTY LOCATION": locationCtlr.text.trim(),
+                  "ADDED_DATE": DateTime.now(),
+                  "IMAGE": imageUrls,
+                };
 
-                "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
-                "AMINITIES": aminitiesctlr.text.trim(),
-                "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
-                "PROPERTY LOCATION": locationCtlr.text.trim(),
-                "ADDED_DATE": DateTime.now()
-              };
+                // clearController();
 
-              // clearController();
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddLandlordDetails(
-                    propertyMap: propertyDetailsAll,
-                    from: widget.from,
-                    property: widget.property,
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddLandlordDetails(
+                      propertyMap: propertyDetailsAll,
+                      from: widget.from,
+                      property: widget.property,
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                alertForImgAdd(context);
+              }
             }
           },
         ),
@@ -448,3 +640,40 @@ class _AddPropertyState extends State<AddProperty> {
   }
 }
 
+void alertForImgAdd(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'Please add atleast one image',
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
