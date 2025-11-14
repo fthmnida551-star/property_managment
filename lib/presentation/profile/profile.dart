@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -34,21 +32,19 @@ class _ProfilescreenState extends State<Profilescreen> {
   @override
   void initState() {
     super.initState();
-    log("reached here");
     getUserData();
     getNotificationStatus();
   }
 
   // ✅ Get user data from SharedPreferences
   Future<void> getUserData() async {
-
     final prefs = await SharedPreferences.getInstance();
-    
-      userId =  prefs.getString('userId')??"";
-      userName =  prefs.getString('name')??"";
-      userEmail = prefs.getString('email')??"";
-      userRole = prefs.getString('role')??"";
-      userPassword = prefs.getString('password')??"";
+    setState(() {
+      userId = prefs.getString('userId')??"";
+      userName = prefs.getString('userName')??"";
+      userEmail = prefs.getString('userEmail')??"";
+      userRole = prefs.getString('userRole')??"";
+      userPassword = prefs.getString('userPassword')??"";
       
 
       loginUser = UserModel(
@@ -59,10 +55,10 @@ class _ProfilescreenState extends State<Profilescreen> {
           userPassword,
           
          );
-    
-       setState(() {
+    });
+       //setState(() {
         
-      });
+      // });
 
       }
 
@@ -76,12 +72,6 @@ class _ProfilescreenState extends State<Profilescreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("username = $userName    ghghgh ${loginUser?.name}");
-    if(loginUser == null){
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -171,7 +161,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                   ),
 
                   // ✅ Edit Icon
-                  GestureDetector(
+                      GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
