@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 Future<void> getBookedProperty() async {
   try {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('BOOKING DETAILS')
+        .collection('BOOKING DETAILS').orderBy("ADDED_DATE",descending: true)
         .get();
 
     print('Docs count: ${snapshot.docs.length}');
@@ -69,7 +69,7 @@ Future<void> getBookedProperty() async {
     for (var element in snapshot.docs) {
       final String id = element.id;
       final Map<String, dynamic> data = element.data() as Map<String, dynamic>;
-      tempList.add(BookingModel.fromMap(data, id));
+      tempList.add(BookingModel.fromMap(id, data));
     }
 
     // ✅ Update state once with all fetched data

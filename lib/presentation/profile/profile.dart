@@ -12,7 +12,6 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
-
   const Profilescreen({super.key});
 
   @override
@@ -162,7 +161,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                       children: [
                         Text(
                           userName,
-                          
+
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -272,13 +271,13 @@ class _ProfilescreenState extends State<Profilescreen> {
       trailing: hasSwitch
           ? Switch(
               value: this.isSwitched,
-              onChanged: (value) async{
+              onChanged: (value) async {
                 setState(() {
                   this.isSwitched = value;
                 });
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool("notificationStatus", value);
-                },
+              },
               activeColor: AppColors.blackColor,
             )
           : const Icon(Icons.arrow_forward_ios, size: 16),

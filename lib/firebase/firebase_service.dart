@@ -49,17 +49,17 @@ class FirebaseService {
 
 final FirebaseService firebaseService = FirebaseService();
 
-void addNewProperty() async {
-  BookingModel newProperty =BookingModel(
-    name: "faiha",
-    email: "faiha@gmail.com",
-    contact: '9988776655',
-    date: '30-10-2025', 
-    id: '', propertyId: '',
-  );
+// void addNewProperty() async {
+//   BookingModel newProperty =BookingModel(
+//     name: "faiha",
+//     email: "faiha@gmail.com",
+//     contact: '9988776655',
+//     date: '30-10-2025', 
+//     id: '', propertyId: '', addedDate: ,
+//   );
 
-  await firebaseService. getBookedProperty(newProperty);
-}
+//   await firebaseService. getBookedProperty(newProperty);
+// }
 
   Future<void> getBookedProperty(BookingModel newProperty) async {}
 

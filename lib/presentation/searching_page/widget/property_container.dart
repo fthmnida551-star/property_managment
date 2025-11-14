@@ -54,18 +54,44 @@ class _PropertyContainerState extends State<PropertyContainer> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              child: Image.asset(
-                AssetResource.building,
-                fit: BoxFit.cover,
-                height: 209,
-                width: 356,
-              ),
-            ),
+            widget.property.image.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    // child: Image.asset(
+                    //   // AssetResource.building,
+                    //   ('${widget.property.image}'),
+                    //   fit: BoxFit.cover,
+                    //   height: 209,
+                    //   width: 356,
+                    // ),
+                    child: Image.network(
+                      widget.property.image[0],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+                  )
+                : Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade400),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    height: 209,
+                    width: 356,
+                    child: Center(
+                      child: Icon(
+                        Icons.image,
+                        color: Colors.grey.shade400,
+                        size: 45,
+                      ),
+                    ),
+                  ),
             SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

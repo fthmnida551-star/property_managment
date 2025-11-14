@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
+import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
 import 'package:property_managment/presentation/searching_page/searchingpage.dart';
 import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
-void dltAlert(BuildContext context) {
+void dltAlert(BuildContext context, PropertyModel property) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -47,11 +50,16 @@ void dltAlert(BuildContext context) {
               children: [
                 InkWell(
                   onTap: () {
+                    deleteProperty(property);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
+                        builder: (context) => BottomNavigationWidget(
+                          currentIndex: 1,
+                          propertytype: [],
+                          price: null,
+                          sqft: null,
+                        ),
                       ),
                     );
                   },
@@ -105,4 +113,18 @@ void dltAlert(BuildContext context) {
       ),
     ),
   );
+}
+
+deleteProperty(PropertyModel property) async {
+  await FirebaseFirestore.instance
+      .collection("PROPERTIES")
+      .doc(property.id)
+      .delete();
+  if (property.isBooked == true) {
+    await FirebaseFirestore.instance
+        .collection("BOOKING DETAILS")
+        .doc(property.bookingid)
+        .delete();
+  }
+  // getAllPropertyDetails();
 }

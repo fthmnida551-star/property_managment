@@ -17,9 +17,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class BookedPropertyScreen extends StatefulWidget {
-   PropertyModel property;
+  PropertyModel property;
   BookingModel? bookedData;
-   BookedPropertyScreen({super.key, required this.property, required this.bookedData});
+  BookedPropertyScreen({
+    super.key,
+    required this.property,
+    required this.bookedData,
+  });
   @override
   State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
 }
@@ -35,21 +39,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
       
     });
   } 
-  // getPropertyBooking(String bookingId) async {
-  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
-  //     if (value.exists) {
-  //       Map<String, dynamic> data = value.data()!;
-  //       bookedData = BookingModel.fromMap(data, value.id);
-  //     }
-  //   });
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
     super.initState();
     getUserRole();
-    // getPropertyBooking(widget.property.bookingid);
+   
   }
 
   @override
@@ -68,8 +63,42 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                     height: 250,
                     child: PageView(
                       children: [
-                        Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        Image.asset(AssetResource.property, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
+                          InkWell(
+                            onTap: () {
+                              
+                            },
+                            child: Image.network(
+                                                  widget.property.image[0],
+                                                  fit: BoxFit.cover,
+                                                  height: 209,
+                                                  width: 356,
+                                                ),
+                          ),
+                    InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: Image.network(
+                        widget.property.image[1],
+                        fit: BoxFit.cover,
+                        height: 209,
+                        width: 356,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        
+                      },
+                      child: Image.network(
+                        widget.property.image[2],
+                        fit: BoxFit.cover,
+                        height: 209,
+                        width: 356,
+                      ),
+                    ),
+
                       ],
                     ),
                   ),
@@ -104,7 +133,10 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     rootNavigator: true,
                                   ).push(
                                     MaterialPageRoute(
-                                      builder: (context) => AddProperty(from: 'Edit', property: widget.property,),
+                                      builder: (context) => AddProperty(
+                                        from: 'Edit',
+                                        property: widget.property,
+                                      ),
                                     ),
                                   );
                                 },
@@ -120,9 +152,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                            PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
-                                  deleteProperty(widget.property.id);
+                                  dltAlert(context,widget.property);
                                   Navigator.pop(context);
-                                  dltAlert(context);
                                 },
                                 child: Row(
                                   children: [
@@ -444,8 +475,9 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     height: 40,
                                     text: 'Delete',
                                     onTap: () async {
-                                       await deleteUser(
+                                      await deleteUser(
                                         widget.property.bookingid,
+                                        widget.property.id,
                                       );
                                       Navigator.push(
                                         context,
@@ -468,11 +500,13 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
-
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => BookingDetails(propertyId:widget.property.id, bookedData: widget.bookedData,),
+                                          builder: (context) => BookingDetails(
+                                            propertyId: widget.property.id,
+                                            bookedData: widget.bookedData,
+                                          ),
                                         ),
                                       );
                                     },
@@ -697,15 +731,17 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               ],
                             ),
                             Row(
-                children: [
-                  Icon(Icons.calendar_month_rounded, color: Colors.green),
+                              children: [
+                                Icon(
+                                  Icons.calendar_month_rounded,
+                                  color: Colors.green,
+                                ),
 
-                  SizedBox(width: 8),
-                  Text("${widget.bookedData!.date}"),
-                  // Text('Date\n2-3-2025'),
-                ],
-              ),
-              
+                                SizedBox(width: 8),
+                                Text("${widget.bookedData!.date}"),
+                                // Text('Date\n2-3-2025'),
+                              ],
+                            ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -720,6 +756,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     onTap: () async {
                                       await deleteUser(
                                         widget.property.bookingid,
+                                        widget.property.id
                                       );
                                       Navigator.push(
                                         context,
@@ -746,7 +783,10 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>BookingDetails ( propertyId: widget.property.id, bookedData: widget.bookedData,),
+                                          builder: (context) => BookingDetails(
+                                            propertyId: widget.property.id,
+                                            bookedData: widget.bookedData,
+                                          ),
                                         ),
                                       );
                                     },
@@ -769,12 +809,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
     );
   }
 
-  deleteUser(String id) async {
-    await fdb.collection("BOOKING DETAILS").doc(widget.property.bookingid).delete();
-    // getAllPropertyDetails();
-  }
-   deleteProperty(String id) async {
-    await fdb.collection("PROPERTIES").doc(widget.property.bookingid).delete();
+  deleteUser(String id, String propertyId) async {
+    await fdb
+        .collection("BOOKING DETAILS")
+        .doc(widget.property.bookingid)
+        .delete();
+         await fdb.collection('PROPERTIES').doc(propertyId).update({
+      'IS_BOOKED': 'NO',
+    });
     // getAllPropertyDetails();
   }
 }
