@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
@@ -10,7 +12,6 @@ import 'package:property_managment/widget/appbar_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends StatefulWidget {
-
   const Profilescreen({super.key});
 
   @override
@@ -19,12 +20,23 @@ class Profilescreen extends StatefulWidget {
 
 class _ProfilescreenState extends State<Profilescreen> {
   bool isSwitched = false;
+  String userRole = '';
+  
+  
+  
+  getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    userRole = prefs.getString('role') ?? "";
+    log("vvvvvvvvv $userRole" as num);
+    setState(() {});
+  }
+
 
   // Variables to hold fetched user data
   String userId="";
   String userName ="";
   String userEmail="";
-   String userRole="";
+  //  String userRole="";
   String userPassword="";
  
   UserModel? loginUser;
@@ -34,6 +46,7 @@ class _ProfilescreenState extends State<Profilescreen> {
     super.initState();
     getUserData();
     getNotificationStatus();
+     getUserRole(); 
   }
 
   // ✅ Get user data from SharedPreferences
@@ -140,7 +153,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                       children: [
                         Text(
                           userName,
-                          
+
                           style: TextStyle(
                             fontSize: 23.sp,
                             color: AppColors.blackColor,
@@ -190,11 +203,14 @@ class _ProfilescreenState extends State<Profilescreen> {
                 ],
               ),
             ),
+            
 
             const SizedBox(height: 20),
+          if(userRole =="Manager")
 
             // ✅ Users List Tile
             Padding(
+             
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: _buildListTile(
                 title: 'Users',
@@ -247,13 +263,13 @@ class _ProfilescreenState extends State<Profilescreen> {
       trailing: hasSwitch
           ? Switch(
               value: this.isSwitched,
-              onChanged: (value) async{
+              onChanged: (value) async {
                 setState(() {
                   this.isSwitched = value;
                 });
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setBool("notificationStatus", value);
-                },
+              },
               activeColor: AppColors.blackColor,
             )
           : const Icon(Icons.arrow_forward_ios, size: 16),

@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class BookingModel {
   final String name;
   final String email;
   final String contact;
   final String date;
+  final DateTime addedDate; // <-- date & time booking was added
   final String id;
   final String propertyId;
 
@@ -11,29 +14,35 @@ class BookingModel {
     required this.email,
     required this.contact,
     required this.date,
+    required this.addedDate,
     required this.id,
     required this.propertyId,
   });
 
-  /// ✅ Create BookingModel from Firestore document
-  factory BookingModel.fromMap(Map<String, dynamic> map, String documentId) {
+  // Convert Firestore document → BookingModel
+  factory BookingModel.fromMap(String id,Map<String, dynamic> map) {
     return BookingModel(
-      name: map['NAME']?.toString() ?? '',
-      email: map['EMAIL']?.toString() ?? '',
-      contact: map['CONTACT']?.toString() ?? '', // 🔹 converts int → String
-      date: map['DATE']?.toString() ?? '',
-      id: documentId,
-      propertyId: map['PROPERTY_ID']?.toString() ?? '',
+      name: map['NAME'] ?? '',
+      email: map['EMAIL'] ?? '',
+      contact: map['CONTACT'].toString(),
+      date: map['DATE'] ?? '',
+      addedDate: map['ADDED_DATE'] is Timestamp
+          ? (map['ADDED_DATE'] as Timestamp).toDate()
+          : DateTime.tryParse(map['ADDED_DATE'] ?? '') ?? DateTime.now(),
+      id: id,
+      propertyId: map['PROPERTY_ID'] ?? '',
     );
   }
 
-  /// ✅ Convert BookingModel to Firestore-friendly map
+  // Convert BookingModel → Firestore document
   Map<String, dynamic> toMap() {
     return {
       'NAME': name,
       'EMAIL': email,
-      'CONTACT': contact, // keep as string to avoid type conflict later
+      'CONTACT': contact,
       'DATE': date,
+      'ADDED_DATE': addedDate, // Firestore stores DateTime directly
+     
       'PROPERTY_ID': propertyId,
     };
   }

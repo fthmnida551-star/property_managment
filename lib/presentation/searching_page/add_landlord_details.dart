@@ -17,14 +17,19 @@ class AddLandlordDetails extends StatefulWidget {
   final String from;
   final PropertyModel? property;
   final Map<String, dynamic> propertyMap;
-  const AddLandlordDetails({super.key, required this.propertyMap, required this.from, required this.property});
+  const AddLandlordDetails({
+    super.key,
+    required this.propertyMap,
+    required this.from,
+    required this.property,
+  });
 
   @override
   State<AddLandlordDetails> createState() => _AddLandlordDetailsState();
 }
 
 class _AddLandlordDetailsState extends State<AddLandlordDetails> {
-  FirebaseFirestore fdb =  FirebaseFirestore.instance;
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
   final frmKey = GlobalKey<FormState>();
   Widget divider = SizedBox(height: 10);
   bool isOwnProperty = false;
@@ -37,15 +42,27 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
     emailCtlr.clear();
     contactCtlr.clear();
   }
-  void initstate() {
-    super.initState();
-    if (widget.from =="EDIT" && widget.property==null){
-      nameCtlr.text =widget.property!.ownername;
-       emailCtlr.text =widget.property!.email;
-        contactCtlr.text =widget.property!.contact;
-         isOwnProperty =widget.property!.isOwner;
-       _saveButtonMode = SaveButtonMode.edit;
+
+  setControllersForUpdate() {
+    
+    log('reached here owner page : ${widget.from}    property: ${widget.property}');
+    if (widget.from == "Edit" && widget.property != null) {
+      nameCtlr.text = widget.property!.ownername;
+      emailCtlr.text = widget.property!.email;
+      contactCtlr.text = widget.property!.contact;
+      isOwnProperty = widget.property!.isOwner;
+      _saveButtonMode = SaveButtonMode.edit;
     }
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setControllersForUpdate();
   }
 
   @override
@@ -152,31 +169,36 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
           text: 'Submit',
           onTap: () async {
             if (frmKey.currentState!.validate()) {
-              if (_saveButtonMode == SaveButtonMode.save) {
+              // if (_saveButtonMode == SaveButtonMode.save) {
                 Map<String, dynamic> ownerDetails = {
                   "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
                   "OWNER_NAME": nameCtlr.text.trim(),
                   // "OWNER_CONTACT": int.tryParse(contactCtlr.text.trim()),
-                  "OWNER_CONTACT":contactCtlr.text.trim(),
+                  "OWNER_CONTACT": contactCtlr.text.trim(),
                   "OWNER_EMAIL": emailCtlr.text.trim(),
+                  
                 };
                 Map<String, dynamic> finaldetails = {
                   ...widget.propertyMap,
                   ...ownerDetails,
                 };
                 log("asdfghjkl $finaldetails");
-                 if (_saveButtonMode == SaveButtonMode.save) {
-                await addProperties(finaldetails);
-              } else {
-                await updateproperty(widget.property!.id,finaldetails);
-              }
-               addProperties(finaldetails);
+                if (_saveButtonMode == SaveButtonMode.save) {
+                  await addProperties(finaldetails);
+                } else {
+                  await updateproperty(widget.property!.id, finaldetails);
+                }
                 _clearControllers();
-              }
+              // }
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (contex) => BottomNavigationWidget(currentIndex: 1, propertytype: [], price: null, sqft: null,),
+                  builder: (contex) => BottomNavigationWidget(
+                    currentIndex: 1,
+                    propertytype: [],
+                    price: null,
+                    sqft: null,
+                  ),
                 ),
               );
             }
@@ -186,18 +208,20 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
     );
   }
 
-   addProperties(Map<String, dynamic> propertyData) async {
+  addProperties(Map<String, dynamic> propertyData) async {
     await fdb.collection("PROPERTIES").add(propertyData).then((
       DocumentReference<Map<String, dynamic>> docRef,
     ) {
       final String id = docRef.id;
 
       log("Insert Data with $id");
-      
-
     });
   }
- Future<void> updateproperty(String id, Map<String, dynamic> updatedData) async {
+
+  Future<void> updateproperty(
+    String id,
+    Map<String, dynamic> updatedData,
+  ) async {
     try {
       await fdb.collection("PROPERTIES").doc(id).update(updatedData);
       log("Properties updated successfully");
@@ -205,5 +229,4 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       log("Error updating properties: $e");
     }
   }
-
 }

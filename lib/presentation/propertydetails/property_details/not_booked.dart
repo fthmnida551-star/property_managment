@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
@@ -13,12 +14,10 @@ import 'package:property_managment/presentation/propertydetails/widget/row.dart'
 import 'package:property_managment/presentation/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/presentation/searching_page/add_property.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:property_managment/widget/bottom_navigation_bar.dart';
 
 class NotBookedPropertyScreen extends StatefulWidget {
   final String userName;
- 
-  
-  
   final PropertyModel property;
   NotBookedPropertyScreen({
     super.key,
@@ -53,6 +52,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
     super.initState();
     getUserRole();
   }
+  FirebaseFirestore fdb = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -68,8 +68,27 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                     height: 250,
                     child: PageView(
                       children: [
-                        Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        Image.asset(AssetResource.property, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
+                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
+                         Image.network(
+                      widget.property.image[0],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+                    Image.network(
+                      widget.property.image[1],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+                    Image.network(
+                      widget.property.image[2],
+                      fit: BoxFit.cover,
+                      height: 209,
+                      width: 356,
+                    ),
+
                       ],
                     ),
                   ),
@@ -96,10 +115,8 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           itemBuilder: (BuildContext context) => [
                             if(userRole!="Agent")
                             PopupMenuItem(
-                              child: InkWell(
-                                onTap: () {
-                                  // use rootNavigator so it works even after popup closes
-                                  Navigator.of(
+                              onTap: () {
+                                 Navigator.of(
                                     context,
                                     rootNavigator: true,
                                   ).push(
@@ -107,42 +124,38 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                       builder: (context) => AddProperty(from: 'Edit', property: widget.property,),
                                     ),
                                   );
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit, color: AppColors.black),
-                                    Text('Edit'),
-                                  ],
-                                ),
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit, color: AppColors.black),
+                                  Text('Edit'),
+                                ],
                               ),
                             ),
                             PopupMenuItem(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  dltAlert(context);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete, color: AppColors.black),
-                                    Text('Delete'),
-                                  ],
-                                ),
+                              onTap: (){
+
+                                   dltAlert(context,widget.property);
+                                  
+                                 
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete, color: AppColors.black),
+                                  Text('Delete'),
+                                ],
                               ),
                             ),
                             PopupMenuItem(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
+                              onTap: () {
                                   showLandlordPopup(context, widget.property);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.person, color: AppColors.black),
-                                    SizedBox(width: 8),
-                                    Text('Landlord'),
-                                  ],
-                                ),
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.person, color: AppColors.black),
+                                  SizedBox(width: 8),
+                                  Text('Landlord'),
+                                ],
                               ),
                             ),
                           ],
@@ -596,4 +609,6 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
     );
   }
   
+
+
 }
