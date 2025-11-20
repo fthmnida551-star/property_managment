@@ -45,9 +45,9 @@ dependencies:
   cloudinary_public: ^0.23.1
   image_picker: ^1.0.7
   interactive_bottom_sheet: ^1.1.0
-  google_maps_flutter: ^2.6.0
-  geocoding: ^3.0.0
-  location: ^6.0.2
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
+  geocoding: ^4.0.0
   shared_preferences: ^2.2.2
   flutter_riverpod: ^2.5.1
 

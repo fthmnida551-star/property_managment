@@ -112,16 +112,28 @@ class _PropertyContainerState extends State<PropertyContainer> {
               "${widget.property.price}",
               style: TextStyle(fontSize: 44.sp, color: AppColors.black),
             ),
-            Row(
-              children: [
-                Icon(Icons.location_on_outlined, size: 20),
-                Text(
-                  // 'Azizi Aliyah,al jaddaf, Dubai',
-                  widget.property.location,
-                  style: TextStyle(fontSize: 19.sp, color: AppColors.black),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Icon(Icons.location_on_outlined, size: 20),
+            //     Text(
+            //       // 'Azizi Aliyah,al jaddaf, Dubai',
+            //       widget.property.location,
+            //       style: TextStyle(fontSize: 19.sp, color: AppColors.black),
+            //     ),
+            //   ],
+            // ),
+            if (widget.property.latitude != null && widget.property.longitude != null)
+  Padding(
+    padding: EdgeInsets.only(top: 4.0),
+    child: Text(
+      "Lat: ${widget.property.latitude},  Lng: ${widget.property.longitude}",
+      style: TextStyle(
+        fontSize: 14,
+        color: Colors.grey[700],
+      ),
+    ),
+  ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

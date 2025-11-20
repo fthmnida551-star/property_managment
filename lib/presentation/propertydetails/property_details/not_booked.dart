@@ -412,20 +412,32 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       SizedBox(height: 10),
 
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            widget.property.location,
-                            // 'KARAVATTOM, MALAPPURAM',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     Icon(Icons.location_on, color: AppColors.black),
+                      //     SizedBox(width: 5),
+                      //     Text(
+                      //       widget.property.location,
+                      //       // 'KARAVATTOM, MALAPPURAM',
+                      //       style: TextStyle(
+                      //         fontSize: 15,
+                      //         color: AppColors.black,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      if (widget.property.latitude != null && widget.property.longitude != null)
+  Padding(
+    padding: EdgeInsets.only(top: 4.0),
+    child: Text(
+      "Lat: ${widget.property.latitude},  Lng: ${widget.property.longitude}",
+      style: TextStyle(
+        fontSize: 14,
+        color: Colors.grey[700],
+      ),
+    ),
+  ),
+
 
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---

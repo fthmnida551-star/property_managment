@@ -11,6 +11,7 @@ import 'package:property_managment/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/theme/app_colors.dart';
 import 'package:property_managment/core/theme/asset_resource.dart';
 import 'package:property_managment/firebase/save_button.dart';
+import 'package:property_managment/location/pick_location.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/presentation/searching_page/add_landlord_details.dart';
 import 'package:property_managment/presentation/searching_page/widget/dropdown._form_field.dart';
@@ -30,6 +31,9 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
+  double? latitude;
+double? longitude;
+
   String? _selectedValue;
   final List<String> _items = ['APARTMENT', 'VILLA', 'LAND'];
   final formKey = GlobalKey<FormState>();
@@ -174,66 +178,6 @@ class _AddPropertyState extends State<AddProperty> {
             key: formKey,
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: GestureDetector(
-                // onTap: pickImg,
-                //     child: Container(
-                //       width: 368,
-                //       height: 200,
-                //       decoration: BoxDecoration(
-                //         color: AppColors.searchbar,
-                //         borderRadius: BorderRadius.circular(8),
-                //         border: BoxBorder.all(
-                //           width: 1,
-                //           color: AppColors.opacitygreyColor,
-                //         ),
-                //         image: _selectedImage != null
-                //             ? DecorationImage(
-                //                 image: FileImage(_selectedImage!),
-                //                 fit: BoxFit.cover,
-                //               )
-                //             : null,
-                //       ),
-                //       child: _selectedImage == null
-                //           ? Center(
-                //               child: Container(
-                //                 height: 50,
-                //                 width: 50,
-                //                 decoration: BoxDecoration(
-                //                   color: AppColors.greenColor,
-                //                   borderRadius: BorderRadius.circular(40),
-                //                 ),
-                //                 child: Center(
-                //                   child: SvgPicture.asset(AssetResource.camera),
-                //                 ),
-                //               ),
-                //             )
-                //           : Align(
-                //               alignment: Alignment.topRight,
-                //               child: Padding(
-                //                 padding: const EdgeInsets.all(8.0),
-                //                 child: GestureDetector(
-                //                   onTap: () {
-                //                     setState(() {
-                //                       _selectedImage = null; // remove image
-                //                     });
-                //                   },
-                //                   child: const CircleAvatar(
-                //                     radius: 16,
-                //                     backgroundColor: Colors.black54,
-                //                     child: Icon(
-                //                       Icons.close,
-                //                       color: Colors.white,
-                //                       size: 18,
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ),
-                //             ),
-                //     ),
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
@@ -580,6 +524,30 @@ class _AddPropertyState extends State<AddProperty> {
                     return null;
                   },
                 ),
+                SizedBox(height: 10),
+
+ElevatedButton(
+  onPressed: () async {
+    final pickedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PickLocationScreen(),
+      ),
+    );
+
+    if (pickedLocation != null) {
+      setState(() {
+        latitude = pickedLocation.latitude;
+        longitude = pickedLocation.longitude;
+      });
+
+      // Optional: Fill text field automatically
+      locationCtlr.text = "${pickedLocation.latitude}, ${pickedLocation.longitude}";
+    }
+  },
+  child: Text("Pick Location on Map"),
+),
+
               ],
             ),
           ),
@@ -608,11 +576,12 @@ class _AddPropertyState extends State<AddProperty> {
                   "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
                   'CARPARKING': carparking ? "yes" : "no",
                   "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
-
                   "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
                   "AMINITIES": aminitiesctlr.text.trim(),
                   "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
                   "PROPERTY LOCATION": locationCtlr.text.trim(),
+                  "LATITUDE": latitude,
+                 "LONGITUDE": longitude,
                   "ADDED_DATE": DateTime.now(),
                   "IMAGE": imageUrls,
                 };

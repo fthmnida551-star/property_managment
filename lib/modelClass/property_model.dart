@@ -128,6 +128,10 @@ class PropertyModel {
   final String bookingid;
   final DateTime addedDate;
   final List<String> image;
+  final double? latitude;
+  final double? longitude;
+
+
 
   PropertyModel({
     required this.id,
@@ -151,6 +155,8 @@ class PropertyModel {
     required this.bookingid,
     required this.addedDate,
     required this.image,
+     this.latitude,
+      this.longitude,
   });
 
   /// Convert model to Map (for Firestore or JSON)
@@ -177,6 +183,8 @@ class PropertyModel {
       'BOOKING_ID': bookingid,
       'ADDED_DATE': addedDate,
       'IMAGE': image, // ✅ Added list of image URLs
+      "LATITUDE": latitude,
+      "LONGITUDE": longitude,
     };
   }
 
@@ -208,6 +216,9 @@ class PropertyModel {
       image: map['IMAGE'] != null
           ? List<String>.from(map['IMAGE'])
           : [], // ✅ Safely handle empty or missing image field
+
+      latitude: (map['LATITUDE'] != null) ? map['LATITUDE'].toDouble() : null,
+    longitude: (map['LONGITUDE'] != null) ? map['LONGITUDE'].toDouble() : null,    
     );
   }
 }
