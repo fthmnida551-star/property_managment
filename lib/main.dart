@@ -1,24 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:property_managment/firebase/firebase_service.dart';
 import 'package:property_managment/firebase_options.dart';
-import 'package:property_managment/presentation/auth/sign%20up.dart';
-import 'package:property_managment/presentation/propertydetails/property_details/booked.dart';
-import 'package:property_managment/presentation/searching_page/filter.dart';
-import 'package:property_managment/presentation/auth/login.dart';
-import 'package:property_managment/presentation/dashboard/booked_details/booked_details.dart';
-import 'package:property_managment/presentation/profile/profile.dart';
-import 'package:property_managment/presentation/propertydetails/widget/popup_mssg_cntnr.dart';
-import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
+import 'package:property_managment/features/users/screens/users_screen.dart';
 
-import 'package:property_managment/presentation/propertydetails/propertydetails.dart';
-import 'package:property_managment/presentation/dashboard/dashboard.dart';
-import 'package:property_managment/presentation/splashscreen.dart';
-import 'package:property_managment/presentation/profile/users_screen.dart';
-import 'package:property_managment/widget/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
 
 void main() async {
@@ -29,7 +16,7 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
-  runApp(const MyApp());
+  runApp( const ProviderScope(child: MyApp()));
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
@@ -47,7 +34,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-          home: BottomNavigationWidget(currentIndex: 0, propertytype: [], price: null, sqft: null,),
+          home: UsersScreen(),
           debugShowCheckedModeBanner: false,
         );
       },
