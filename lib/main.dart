@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:property_managment/features/auth/screens/splashscreen.dart';
 import 'package:property_managment/firebase_options.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-          home: UsersScreen(),
+          home:UsersScreen(),
           debugShowCheckedModeBanner: false,
         );
       },

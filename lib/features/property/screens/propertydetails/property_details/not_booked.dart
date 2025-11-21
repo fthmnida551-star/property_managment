@@ -500,8 +500,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                         text: 'Sqft',
                                         details: "${widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
-                                      ),
-                                      // Divider(thickness: 1),
+                                      ),                                    // Divider(thickness: 1),
                                      
                                     ],
                                   ),
@@ -558,12 +557,9 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                         ),
                       ),
                       
-                      SizedBox(height: 8),
-                     
-                    ],
-                    
-                  ),
-                  
+                      SizedBox(height: 8),                   
+                    ],                   
+                  ),                 
                 ),
             ],
           ),
@@ -607,7 +603,4 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
       ),
     );
   }
-  
-
-
 }
