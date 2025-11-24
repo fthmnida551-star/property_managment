@@ -1,38 +1,42 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/date_picker.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/features/property/screens/propertydetails/animated_tick.dart';
 
-class BookingDetails extends StatefulWidget {
+class BookingDetails extends ConsumerWidget {
   final String propertyId;
   final BookingModel? bookedData;
   
-  const BookingDetails({
+   BookingDetails({
     super.key,
     required this.propertyId,
     required this.bookedData,
   
   });
 
-  @override
-  State<BookingDetails> createState() => _BookingDetailsState();
-}
-
-class _BookingDetailsState extends State<BookingDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
   final formKey = GlobalKey<FormState>();
+
   Widget divider = SizedBox(height: 10);
+
   TextEditingController namectlr = TextEditingController();
+
   TextEditingController contactCtlr = TextEditingController();
+
   TextEditingController emailCtlr = TextEditingController();
+
   TextEditingController datectlr = TextEditingController();
+
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   _clearControllers() {
@@ -42,25 +46,21 @@ class _BookingDetailsState extends State<BookingDetails> {
   }
 
   editBooking() {
-    if (widget.bookedData != null) {
-      namectlr.text = widget.bookedData!.name;
-      contactCtlr.text = widget.bookedData!.contact;
-      emailCtlr.text = widget.bookedData!.email;
-      datectlr.text = widget.bookedData!.date;
+    if (bookedData != null) {
+      namectlr.text = bookedData!.name;
+      contactCtlr.text = bookedData!.contact;
+      emailCtlr.text = bookedData!.email;
+      datectlr.text = bookedData!.date;
       _saveButtonMode = SaveButtonMode.edit;
     }
-    setState(() {});
+    
   }
 
+  // @override
   @override
-  void initState() {
-    super.initState();
-    editBooking();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    log('contains: ${widget.bookedData}');
+  Widget build(BuildContext context,WidgetRef ref) {
+    final repo=ref.watch(bookingRepoProvider);
+    log('contains: $bookedData');
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -174,15 +174,15 @@ class _BookingDetailsState extends State<BookingDetails> {
                 "CONTACT": int.tryParse(contactCtlr.text.trim()),
                 "EMAIL": emailCtlr.text.trim(),
                 "DATE": datectlr.text.trim(),
-                "PROPERTY_ID": widget.propertyId,
+                "PROPERTY_ID": propertyId,
                 "ADDED_DATE": DateTime.now(),
                 
               };
 
               if (_saveButtonMode == SaveButtonMode.save) {
-                await addbookingDetails(bookingDetails);
+                await repo.addbookingDetails(bookingDetails);
               } else {
-                await updateBooking(widget.bookedData!.id, bookingDetails);
+                await repo.updateBooking(bookedData!.id, bookingDetails);
               }
               _clearControllers();
               Navigator.push(
@@ -194,32 +194,5 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       ),
     );
-  }
-
-  addbookingDetails(Map<String, dynamic> bookingData) async {
-    await fdb.collection("BOOKING DETAILS").add(bookingData).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-
-      log("Insert Data with $id");
-      fdb.collection("PROPERTIES").doc(bookingData['PROPERTY_ID']).update({
-        'BOOKING_ID': id,
-        'IS_BOOKED': 'YES',
-        'ADDED_DATE': DateTime.now(),
-      });
-    });
-  }
-
-  Future<void> updateBooking(
-    String id,
-    Map<String, dynamic> updatedData,
-  ) async {
-    try {
-      await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
-      log("Booking updated successfully");
-    } catch (e) {
-      log("Error updating booking: $e");
-    }
   }
 }

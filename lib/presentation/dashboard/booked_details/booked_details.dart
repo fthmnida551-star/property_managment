@@ -281,7 +281,7 @@ import 'package:property_managment/features/property/controllers/property_cntlr.
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:riverpod/src/framework.dart';
 

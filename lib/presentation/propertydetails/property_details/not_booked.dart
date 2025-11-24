@@ -6,7 +6,7 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/dlt_alert.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';

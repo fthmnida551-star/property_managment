@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-          home:UsersScreen(),
+          home:Splashscreen(),
           debugShowCheckedModeBanner: false,
         );
       },

@@ -7,7 +7,7 @@ import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/dlt_alert.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
@@ -35,17 +35,15 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   void getUserRole()async{
     final prefs =await SharedPreferences.getInstance();
     userRole =prefs.getString("role")??'';
-    setState(() {
-      
-    });
+    
   } 
 
-  @override
-  void initState() {
-    super.initState();
-    getUserRole();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserRole();
    
-  }
+  // }
 
   @override
   @override
