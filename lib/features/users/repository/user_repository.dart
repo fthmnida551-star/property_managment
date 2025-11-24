@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:property_managment/core/constant/firebase_const.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 
@@ -23,6 +22,19 @@ class USersRepository{
       },
     );
   }
-
-
+ 
+  Future<void> updateUser(String id, Map<String, dynamic> updatedData) async {
+  try {
+    await service.users.doc(id).update(updatedData);
+    log("User updated successfully");
+  } catch (e) {
+    log("Error updating user: $e");
+  }
 }
+void deleteUser(String id) async {
+    await service.users.doc(id).delete();
+  getAllUsersList();
+  }
+}
+
+

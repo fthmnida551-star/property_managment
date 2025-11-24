@@ -27,7 +27,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   List<Widget> get _pages => [
     Center(child: DashboardScreen()),
-    Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
+    Center(child: Searchingpage()),//propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
     Center(child: Notificationscreen()),
     Center(child: Profilescreen()),
   ];

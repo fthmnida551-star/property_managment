@@ -6,8 +6,8 @@ class GreenButton extends StatefulWidget {
   final double? width;
   final double? height;
   final String text;
-  final VoidCallback onTap;
-  const GreenButton({this.width, this.height,required this.text,required this.onTap, super.key});
+  final VoidCallback? onTap;
+  const GreenButton({this.width, this.height,required this.text, this.onTap, super.key});
   @override
   State<GreenButton> createState() => _GreenButtonState();
 }

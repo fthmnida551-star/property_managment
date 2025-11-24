@@ -146,7 +146,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                       if (!RegExp(r'^[A-Z]').hasMatch(value)) {
                         return 'First letter must be a capital letter';
                       }
-                      return null;}
+                      return null;}, readOnly: false,
                   ),
                 ),
                 SizedBox(height: 18),
@@ -162,7 +162,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                       return 'Please enter a valid email address';
                      }
                      return null;
-                      },
+                      }, readOnly: false,
                   ),
                 ),
                 // SizedBox(height: 18),

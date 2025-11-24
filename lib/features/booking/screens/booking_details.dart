@@ -111,7 +111,7 @@ class BookingDetails extends ConsumerWidget {
                       return 'First letter must be a capital letter';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -128,7 +128,7 @@ class BookingDetails extends ConsumerWidget {
                       return 'Contact number must be 10 digits';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -143,7 +143,7 @@ class BookingDetails extends ConsumerWidget {
                       return 'Please enter a valid email address';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 CalendarPickerContainer(
