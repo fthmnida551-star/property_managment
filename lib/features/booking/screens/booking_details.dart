@@ -12,7 +12,7 @@ import 'package:property_managment/features/booking/controller/booking_controlle
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/features/property/screens/propertydetails/animated_tick.dart';
 
-class BookingDetails extends ConsumerWidget {
+class BookingDetails extends ConsumerStatefulWidget {
   final String propertyId;
   final BookingModel? bookedData;
   
@@ -23,6 +23,11 @@ class BookingDetails extends ConsumerWidget {
   
   });
 
+  @override
+  ConsumerState<BookingDetails> createState() => _BookingDetailsState();
+}
+
+class _BookingDetailsState extends ConsumerState<BookingDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   final formKey = GlobalKey<FormState>();
@@ -46,21 +51,26 @@ class BookingDetails extends ConsumerWidget {
   }
 
   editBooking() {
-    if (bookedData != null) {
-      namectlr.text = bookedData!.name;
-      contactCtlr.text = bookedData!.contact;
-      emailCtlr.text = bookedData!.email;
-      datectlr.text = bookedData!.date;
+    if (widget.bookedData != null) {
+      namectlr.text = widget.bookedData!.name;
+      contactCtlr.text = widget.bookedData!.contact;
+      emailCtlr.text = widget.bookedData!.email;
+      datectlr.text = widget.bookedData!.date;
       _saveButtonMode = SaveButtonMode.edit;
     }
     
   }
 
-  // @override
+   @override
+   void initState() {
+    // TODO: implement initState
+    super.initState();
+    editBooking();
+  }
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context) {
     final repo=ref.watch(bookingRepoProvider);
-    log('contains: $bookedData');
+    log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -174,7 +184,7 @@ class BookingDetails extends ConsumerWidget {
                 "CONTACT": int.tryParse(contactCtlr.text.trim()),
                 "EMAIL": emailCtlr.text.trim(),
                 "DATE": datectlr.text.trim(),
-                "PROPERTY_ID": propertyId,
+                "PROPERTY_ID": widget.propertyId,
                 "ADDED_DATE": DateTime.now(),
                 
               };
@@ -182,7 +192,7 @@ class BookingDetails extends ConsumerWidget {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addbookingDetails(bookingDetails);
               } else {
-                await repo.updateBooking(bookedData!.id, bookingDetails);
+                await repo.updateBooking(widget.bookedData!.id, bookingDetails);
               }
               _clearControllers();
               Navigator.push(

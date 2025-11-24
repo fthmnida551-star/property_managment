@@ -39,6 +39,9 @@ class PropertyRepo {
     );
   }
 
+
+
+
   // void getAllPropertyDetailsList() async {
   //     propertyDetailsList.clear();
 
@@ -134,19 +137,21 @@ class PropertyRepo {
 
 
 }
-class BookingRepository {
-final FirebaseService service;
-BookingRepository(this.service);
+// class BookingRepository {
+// final FirebaseService service;
+// BookingRepository(this.service);
 
-  Future<void> deleteBooking({
-    required String bookingId,
-    required String propertyId,
-  }) async {
-    await service.bookingdetails. doc(bookingId).delete();
+//   Future<void> deleteBooking({
+//     required String bookingId,
+//     required String propertyId,
+//   }) async {
+//     await service.bookingdetails. doc(bookingId).delete();
 
-    await service.bookingdetails. doc(propertyId).update({
-      'IS_BOOKED': 'NO',
-    });
-  }
-}
+//     await service.bookingdetails. doc(propertyId).update({
+//       'IS_BOOKED': 'NO',
+//     });
+  // }
+// }
+
+
 

@@ -21,4 +21,14 @@ BookingRepo(this.service);
       log("Error updating booking: $e");
     }
   }
+
+   deleteBooking(String id, String propertyId) async {
+    await service.bookingdetails
+        .doc(id)
+        .delete();
+    await service.properties.doc(propertyId).update({
+      'IS_BOOKED': 'NO',
+    });
+    // getAllPropertyDetails();
+  }
 }

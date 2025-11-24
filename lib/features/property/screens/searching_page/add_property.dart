@@ -24,11 +24,16 @@ import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_landlord_details.dart';
 import 'package:property_managment/features/property/screens/searching_page/widget/dropdown._form_field.dart';
 
-class AddProperty extends ConsumerWidget {
+class AddProperty extends ConsumerStatefulWidget {
   final String from;
   final PropertyModel? property;
   AddProperty({super.key, required this.from, required this.property});
 
+  @override
+  ConsumerState<AddProperty> createState() => _AddPropertyState();
+}
+
+class _AddPropertyState extends ConsumerState<AddProperty> {
   double? latitude;
 
   double? longitude;
@@ -46,24 +51,30 @@ class AddProperty extends ConsumerWidget {
   bool carparking = false;
 
   TextEditingController propertyTypeCtlr = TextEditingController();
+
   TextEditingController priceCtlr = TextEditingController();
+
   TextEditingController buildingNamectlr = TextEditingController();
+
   TextEditingController bhkctlr = TextEditingController();
+
   TextEditingController bathroomctlr = TextEditingController();
+
   TextEditingController carpetAreactlr = TextEditingController();
+
   TextEditingController maintenancectlr = TextEditingController();
+
   TextEditingController building = TextEditingController();
+
   TextEditingController propertySqrftCtlr = TextEditingController();
+
   TextEditingController aminitiesctlr = TextEditingController();
+
   TextEditingController descriptionCtlr = TextEditingController();
+
   TextEditingController locationCtlr = TextEditingController();
 
   // File? file1;
-
-  // File? file2;
-
-  // File? file3;
-
   List<String> imageFile = [];
 
   // final ImagePicker _picker = ImagePicker();
@@ -84,22 +95,22 @@ class AddProperty extends ConsumerWidget {
   }
 
   setControllersForUpdate() {
-    log('reached here : $from    property: $property');
-    if (from == "Edit" && property != null) {
-      propertyTypeCtlr.text = property!.propertyType;
-      _selectedValue = property!.propertyType;
-      readytoMove = property!.readyToMove;
-      carparking = property!.carParking;
-      priceCtlr.text = property!.price.toString();
-      buildingNamectlr.text = property!.name;
-      bhkctlr.text = property!.bhk.toString();
-      bathroomctlr.text = property!.bathrooms.toString();
-      maintenancectlr.text = property!.maintenance.toString();
-      aminitiesctlr.text = property!.aminities.toString();
-      propertySqrftCtlr.text = property!.sqft.toString();
-      descriptionCtlr.text = property!.description;
-      locationCtlr.text = property!.location;
-      imageFile = property!.image;
+    log('reached here : ${widget.from}    property: ${widget.property}');
+    if (widget.from == "Edit" && widget.property != null) {
+      propertyTypeCtlr.text = widget.property!.propertyType;
+      _selectedValue = widget.property!.propertyType;
+      readytoMove = widget.property!.readyToMove;
+      carparking = widget.property!.carParking;
+      priceCtlr.text = widget.property!.price.toString();
+      buildingNamectlr.text = widget.property!.name;
+      bhkctlr.text = widget.property!.bhk.toString();
+      bathroomctlr.text = widget.property!.bathrooms.toString();
+      maintenancectlr.text = widget.property!.maintenance.toString();
+      aminitiesctlr.text = widget.property!.aminities.toString();
+      propertySqrftCtlr.text = widget.property!.sqft.toString();
+      descriptionCtlr.text = widget.property!.description;
+      locationCtlr.text = widget.property!.location;
+      imageFile = widget.property!.image;
       _saveButtonMode = SaveButtonMode.edit;
     }
   }
@@ -107,24 +118,6 @@ class AddProperty extends ConsumerWidget {
   List<File> files = [];
 
   // pickImg() async {
-  //   final picked = await picker.pickImage(
-  //     source: ImageSource.gallery,
-  //     maxWidth: 1600,
-  //   );
-  //   if (picked == null) return;
-
-  //   files.add(File(picked.path));
-  //   if (files.isEmpty) return;
-
-  //   if (files.isNotEmpty) file1 = files[0];
-  //   if (files.length > 1) file2 = files[1];
-  //   if (files.length > 2) file3 = files[2];
-
-  //   print("File1: ${file1?.path}");
-  //   print("File2: ${file2?.path}");
-  //   print("File3: ${file3?.path}");
-  // }
-
   pickImg(WidgetRef ref) async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
@@ -136,9 +129,14 @@ class AddProperty extends ConsumerWidget {
     ref.read(propertyImagesProvider.notifier).addImage(File(picked.path));
   }
 
-  // @override
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+void initState() {
+    // TODO: implement initState
+    super.initState();
+    setControllersForUpdate();
+  }
+  @override
+  Widget build(BuildContext context) {
     final repo = ref.watch(propertyFormProvider);
     final pickedImages = ref.watch(propertyImagesProvider);
     final isLoading = ref.watch(loadingProvider);
@@ -755,7 +753,6 @@ class AddProperty extends ConsumerWidget {
     );
   }
 
-
   Future<void> _handleNext(BuildContext context, WidgetRef ref) async {
   if (!formKey.currentState!.validate()) return;
 
@@ -815,8 +812,8 @@ class AddProperty extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) => AddLandlordDetails(
           propertyMap: propertyDetailsAll,
-          from: from,
-          property: property,
+          from: widget.from,
+          property: widget.property,
         ),
       ),
     );
@@ -826,7 +823,6 @@ class AddProperty extends ConsumerWidget {
     ref.read(loadingProvider.notifier).state = false; // hide loader
   }
 }
-
 }
 
 void alertForImgAdd(BuildContext context) {
