@@ -1,144 +1,36 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
+import 'package:property_managment/features/home/controller/dashboard_controller.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/home/screens/widget/bookingcontainer.dart';
 import 'package:property_managment/features/home/screens/widget/container_widget.dart';
 
+class DashboardScreen extends ConsumerWidget {
+  DashboardScreen({super.key});
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
-
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseFirestore fdb = FirebaseFirestore.instance;
-  int totalproperty = 0;
-  int bookedproperty = 0;
-  int vacantproperty = 0;
+
   List<BookingModel> bookedDetails = [];
+
   PropertyModel? property;
 
-  Future<int> getUserCount() async {
-    try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('PROPERTIES')
-          .get();
-
-      int count = snapshot.size;
-      print('Total properties: $count');
-      return count;
-    } catch (e) {
-      print('Error getting user count: $e');
-      return 0;
-    }
-  }
-
-  Future<int> getBookedCount() async {
-    try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('BOOKING DETAILS')
-          .get();
-
-      int count = snapshot.size;
-      print('Booked: $count');
-      return count;
-    } catch (e) {
-      print('Error getting booked count: $e');
-      return 0;
-    }
-  }
-
-  //
-  Future<void> getBookedProperty() async {
-    try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('BOOKING DETAILS')
-          .orderBy("ADDED_DATE", descending: true)
-          .get();
-
-      print('Docs count: ${snapshot.docs.length}');
-
-      // Temporary list to store fetched data
-      List<BookingModel> tempList = [];
-
-      for (var element in snapshot.docs) {
-        final String id = element.id;
-        final Map<String, dynamic> data =
-            element.data() as Map<String, dynamic>;
-        tempList.add(BookingModel.fromMap(id, data));
-      }
-
-      // ✅ Update state once with all fetched data
-      setState(() {
-        bookedDetails = tempList;
-      });
-
-      log("Fetched booked details: ${bookedDetails.length}");
-    } catch (e) {
-      log("Error while reading booked property: $e");
-    }
-  }
-
-  Future<PropertyModel?> getPropertyById(String propertyId) async {
-  try {
-    if (propertyId.isEmpty) {
-      log("Empty propertyId passed!");
-      return null;
-    }
-
-    final doc = await fdb.collection('PROPERTIES').doc(propertyId).get();
-
-    if (doc.exists && doc.data() != null) {
-      final data = doc.data()!;
-      data['id'] = doc.id;
-
-      return PropertyModel.fromMap(data, doc.id);
-    } else {
-      log("No property found for ID: $propertyId");
-      return null;
-    }
-  } catch (e) {
-    log("Error fetching property: $e");
-    return null;
-  }
-}
-
-
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _loadPropertyCount();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookedAsync = ref.watch(bookedpropertyListProvider);
+    final propertyCountAsync = ref.watch(propertyListProvider);
+    final bookedcountAsync = ref.watch(bookedListProvider);
+    final total = ref.watch(propertyListProvider).value ?? 0;
+    final booked = ref.watch(bookedListProvider).value ?? 0;
+    final vacant = total - booked;
 
-  void _loadPropertyCount() async {
-    int count = await getUserCount();
-    int booked = await getBookedCount();
-    await getBookedProperty();
-
-    setState(() {
-      totalproperty = count;
-      bookedproperty = booked;
-      if (totalproperty > bookedproperty) {
-        vacantproperty = totalproperty - bookedproperty;
-      } else {
-        vacantproperty = 0;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarWidget(
@@ -184,11 +76,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ),
                           SizedBox(height: 5),
-                          Text(
-                            '$bookedproperty',
-                            style: AppTextstyle.propertyLargeTextstyle(
-                              context,
-                              fontColor: AppColors.greenColor,
+
+                          bookedcountAsync.when(
+                            data: (count) => Text(
+                              '$count',
+                              style: AppTextstyle.propertyLargeTextstyle(
+                                context,
+                                fontColor: AppColors.greenColor,
+                              ),
+                            ),
+                            loading: () => const Text("..........."),
+                            error: (e, s) => Text(
+                              "0",
+                              style: AppTextstyle.propertyLargeTextstyle(
+                                context,
+                                fontColor: AppColors.redcolor,
+                              ),
                             ),
                           ),
                         ],
@@ -214,7 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          '$vacantproperty',
+                          '$vacant',
                           style: AppTextstyle.propertyLargeTextstyle(
                             context,
                             fontColor: AppColors.redcolor,
@@ -249,11 +152,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 100),
-                      child: Text(
-                        "$totalproperty",
-                        style: AppTextstyle.propertyLargeTextstyle(
-                          context,
-                          fontColor: AppColors.yellowcolor,
+                      child: propertyCountAsync.when(
+                        data: (count) => Text(
+                          "$count",
+                          style: AppTextstyle.propertyLargeTextstyle(
+                            context,
+                            fontColor: AppColors.yellowcolor,
+                          ),
+                        ),
+                        loading: () => CircularProgressIndicator(),
+                        error: (e, s) => Text(
+                          "0",
+                          style: AppTextstyle.propertyLargeTextstyle(
+                            context,
+                            fontColor: AppColors.redcolor,
+                          ),
                         ),
                       ),
                     ),
@@ -280,38 +193,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             SizedBox(height: 5),
+
             Expanded(
-              child: ListView.builder(
-                itemCount: bookedDetails.length,
-                itemBuilder: (context, index) {
-                  final booking = bookedDetails[index];
+              child: bookedAsync.when(
+                data: (bookedList) {
+                  if (bookedList.isEmpty) {
+                    return const Center(child: Text("No bookings available"));
+                  }
 
-                  return FutureBuilder<PropertyModel?>(
-                    future: getPropertyById(booking.propertyId),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(),
-                        );
-                      }
+                  return ListView.builder(
+                    itemCount: bookedList.length,
+                    itemBuilder: (context, index) {
+                      final booking = bookedList[index];
 
-                      final property = snapshot.data!;
+                      final propertyAsync = ref.watch(
+                        propertyByIdProvider(booking.propertyId),
+                      );
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: BookingConatainerWidget(
-                          bookedProperty: booking,
-                          property: property,
-                        ),
+                      return propertyAsync.when(
+                        data: (property) {
+                          if (property == null) return SizedBox.shrink();
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: BookingConatainerWidget(
+                              bookedProperty: booking,
+                              property: property,
+                            ),
+                          );
+                        },
+                        loading: () => SizedBox(),
+                        error: (e, s) => Text("Error loading property"),
                       );
                     },
                   );
                 },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, s) => Center(child: Text("Error loading bookings")),
               ),
             ),
-
-     
           ],
         ),
       ),

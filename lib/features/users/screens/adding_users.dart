@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,7 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
-import 'package:property_managment/features/users/controllers.dart';
+import 'package:property_managment/features/users/controller/user_controllers.dart';
 import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
@@ -37,20 +36,20 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     namectrlr.clear();
     emailctrlr.clear();
     passWordctrlr.clear();
-  }
+   }
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   if (widget.users != null) {
-  //     namectrlr.text = widget.users!.name;
-  //     emailctrlr.text = widget.users!.email;
-  //     passWordctrlr.text = widget.users!.password;
-  //     _selectedRole = widget.users!.role;
-  //     _saveButtonMode = SaveButtonMode.edit;
-  //   }
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.users != null) {
+      namectrlr.text = widget.users!.name;
+      emailctrlr.text = widget.users!.email;
+      passWordctrlr.text = widget.users!.password;
+      _selectedRole = widget.users!.role;
+      _saveButtonMode = SaveButtonMode.edit;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +253,8 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addUsers(userDetails);
               } else {
-                //await updateUser(widget.users!.id, userDetails);
+                await repo. updateUser(widget.users!.id, userDetails);
+                //await repo.updateUser(widget.users!.id, userDetails);
               }
               _clearControllers();
               Navigator.pushReplacement(
@@ -268,21 +268,4 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     );
   }
 
-  addUsers(Map<String, dynamic> userDetails) {
-    fdb.collection("STAFF").add(userDetails).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-      log("adding users");
-    });
-  }
-
-  updateUser(String id, Map<String, dynamic> updatedData) async {
-    try {
-      await fdb.collection("STAFF").doc(id).update(updatedData);
-      log("User updated successfully");
-    } catch (e) {
-      log("Error updating user: $e");
-    }
-  }
-}
+ }

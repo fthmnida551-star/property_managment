@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,27 +34,18 @@ class BookingConatainerWidget extends StatefulWidget {
 }
 
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
-  // getPropertyImage() async{
-  //   print("22222222222222222  ${widget.bookedProperty.propertyId}");
-  //   property = await getPropertyById(widget.bookedProperty.propertyId);
-  //   log("propertyyyyyy $property");
-  //   if(property != null)
-  //   {log("wwwwwwwww ${property!.image}");}
 
-  // }
 
   @override
   Widget build(BuildContext context) {
-    // if(property != null)log(property!.image[0]);
+  
 
     return InkWell(
       onTap: () async {
         print(" Booking tapped!");
         print("Property ID from booking: ${widget.bookedProperty.propertyId}");
 
-        //  property = await getPropertyById(widget.bookedProperty.propertyId);
-
-        // print("Fetched property: ${widget.property.name ?? 'NULL'}");
+        
 
         try {
           if (widget.property != null) {
