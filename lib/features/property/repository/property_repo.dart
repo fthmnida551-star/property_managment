@@ -39,32 +39,6 @@ class PropertyRepo {
     );
   }
 
-  // void getAllPropertyDetailsList() async {
-  //     propertyDetailsList.clear();
-
-  //     try {
-  //       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
-  //           .collection('PROPERTIES')
-  //           .orderBy('ADDED_DATE', descending: true)
-  //           .get();
-
-  //       for (var element in querySnapshot.docs) {
-  //         // final String id = element.id;
-  //         final Map<String, dynamic> data = element.data();
-  //         data.keys.forEach((element) => log(element));
-  //         log("Document keys: ${data.keys}");
-  //         log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
-  //         log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
-
-  //         // Make sure PropertyModel.fromJson can handle the ID
-  //         propertyDetailsList.add(PropertyModel.fromMap(data, element.id));
-  //       }
-  // // Refresh the UI
-  //     } catch (e) {
-  //       debugPrint("Error fetching property details: $e");
-  //     }
-  //   }
-
   Stream<List<PropertyModel>> getFilteredPropertyListStream(
     List<String> propertytype,
     RangeValues? price,
@@ -106,31 +80,6 @@ class PropertyRepo {
     });
   }
 
-  Stream<List<PropertyModel>> searchPropertiesStream(String query) {
-    if (query.isEmpty) {
-      return getAllPropertyDetailsList(); // reuse your main stream
-    }
-
-    final lowerQuery = query.toLowerCase();
-
-    log(lowerQuery);
-    return service.properties.snapshots().map((snapshot) {
-      log("jjjjjjj");
-      final all = snapshot.docs.map((doc) {
-        return PropertyModel.fromMap(
-          doc.data() as Map<String, dynamic>,
-          doc.id,
-        );
-      }).toList();
-
-      log("all length ${all.length}");
-
-      return all.where((property) {
-        return property.name.toLowerCase().contains(lowerQuery) ||
-            property.location.toLowerCase().contains(lowerQuery);
-      }).toList();
-    });
-  }
 
 
 }

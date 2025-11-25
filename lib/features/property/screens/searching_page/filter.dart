@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'dart:developer';
 
-
-
-class FilterSortPage extends StatefulWidget {
+class FilterSortPage extends ConsumerStatefulWidget {
   int initialIndex;
   FilterSortPage({super.key, required this.initialIndex});
 
   @override
-  State<FilterSortPage> createState() => _FilterSortPageState();
+  ConsumerState<FilterSortPage> createState() => _FilterSortPageState();
 }
 
-class _FilterSortPageState extends State<FilterSortPage> {
+class _FilterSortPageState extends ConsumerState<FilterSortPage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   // late int selectedIndex;
@@ -31,8 +31,6 @@ class _FilterSortPageState extends State<FilterSortPage> {
 
   // 🔹 List to store selected property types
   List<String> selectedproperty = [];
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +107,17 @@ class _FilterSortPageState extends State<FilterSortPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               // setState(() {
-                                // Reset all filters
-                                propertyTypes.updateAll((key, value) => false);
-                                priceRange = const RangeValues(1000, 100000);
-                                sqftRange = const RangeValues(100, 50000);
-                                selectedproperty.clear(); // clear list too
-                             
+                              // Reset all filters
+                              propertyTypes.updateAll((key, value) => false);
+                              priceRange = const RangeValues(1000, 100000);
+                              sqftRange = const RangeValues(100, 50000);
+                              selectedproperty.clear(); // clear list too
+                              ref.read(typeFilterProvider.notifier).state =
+                                  null;
+                              ref.read(priceFilterProvider.notifier).state =
+                                  null;
+                              ref.read(sqftFilterProvider.notifier).state =
+                                  null;
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -124,6 +127,7 @@ class _FilterSortPageState extends State<FilterSortPage> {
                                   duration: Duration(seconds: 2),
                                 ),
                               );
+                              Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey.shade300,
@@ -144,78 +148,44 @@ class _FilterSortPageState extends State<FilterSortPage> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              log("hhhhhhhhhhhhhhhhh");
                               selectedproperty.clear();
 
+                              // Collect selected property types
                               propertyTypes.forEach((key, value) {
                                 if (value == true) {
                                   selectedproperty.add(key.toUpperCase());
                                 }
                               });
 
-                              log(
-                                "Selected Properties: $selectedproperty",
-                              ); // ✅ Debug check
-
+                              // ---- VALIDATION ----
                               if (selectedproperty.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
                                       'Please select at least one property type!',
                                     ),
-                                    duration: Duration(seconds: 2),
                                   ),
                                 );
                                 return;
                               }
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BottomNavigationWidget(
-                                    currentIndex: 1,
-                                    propertytype: selectedproperty,
-                                    price: priceRange,
-                                    sqft: sqftRange,
-                                  ),
-                                ),
-                              );
+                              // ---- SAVE FILTERS INTO RIVERPOD ----
+
+                              // TYPE FILTER
+                              ref.read(typeFilterProvider.notifier).state =
+                                  selectedproperty;
+
+                              // PRICE FILTER
+                              ref.read(priceFilterProvider.notifier).state =
+                                  priceRange;
+
+                              // SQFT FILTER
+                              ref.read(sqftFilterProvider.notifier).state =
+                                  sqftRange;
+
+                              Navigator.pop(context);
                             },
 
-                            // onPressed: () {
-                            //   selectedproperty.clear(); // reset selections
-
-                            //   propertyTypes.forEach((key, value) {
-                            //     if (value == true) {
-                            //       selectedproperty.add(key.toUpperCase());
-                            //     }
-                            //   });
-
-                            //   //🔸 Show Snackbar if nothing selected
-                            //   if (selectedproperty.isEmpty) {
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       const SnackBar(
-                            //         content: Text(
-                            //             'Please select at least one property type!'),
-                            //         duration: Duration(seconds: 2),
-                            //       ),
-                            //     );
-                            //     return;
-                            //   }
-
-                            // 🔸 Navigate if valid
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => BottomNavigationWidget(
-                            //         currentIndex: 1,
-                            //         propertytype: selectedproperty,
-                            //         price: priceRange,
-                            //         sqft: sqftRange,
-                            //       ),
-                            //     ),
-                            //   );
-                            // },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.greenColor,
                               shape: RoundedRectangleBorder(

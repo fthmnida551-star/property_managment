@@ -104,11 +104,12 @@ class AddLandlordDetails extends ConsumerWidget {
                   value: isOwnProperty,
                   onChanged: (value) {
                     // isOwnProperty = value ?? false;
-                     ref.read(isOwnPropertyProvider.notifier).state = value ?? false;
+                    ref.read(isOwnPropertyProvider.notifier).state =
+                        value ?? false;
                     // ref.read(propertyFormProvider.notifier).updateIsOwner(isOwnProperty);
-                     ref.read(propertyFormProvider.notifier)
-        .updateIsOwner(value ?? false);
-                   
+                    ref
+                        .read(propertyFormProvider.notifier)
+                        .updateIsOwner(value ?? false);
                   },
                 ),
 
@@ -124,11 +125,12 @@ class AddLandlordDetails extends ConsumerWidget {
                       if (!RegExp(r'^[A-Z]').hasMatch(value)) {
                         return 'First letter must be a capital letter';
                       }
-                       ref
-                        .read(propertyFormProvider.notifier)
-                        .updateOwnerName(value);
+                      ref
+                          .read(propertyFormProvider.notifier)
+                          .updateOwnerName(value);
                       return null;
-                    }, readOnly: false,
+                    },
+                    readOnly: false,
                   ),
                   divider,
                   TextFieldContainer(
@@ -144,11 +146,12 @@ class AddLandlordDetails extends ConsumerWidget {
                       if (value.length != 10) {
                         return 'Contact number must be 10 digits';
                       }
-                       ref
-                        .read(propertyFormProvider.notifier)
-                        .updateContact(value);
+                      ref
+                          .read(propertyFormProvider.notifier)
+                          .updateContact(value);
                       return null;
-                    }, readOnly: false,
+                    },
+                    readOnly: false,
                   ),
                   divider,
                   TextFieldContainer(
@@ -162,11 +165,12 @@ class AddLandlordDetails extends ConsumerWidget {
                       if (!value.contains('@')) {
                         return 'Please enter a valid email address';
                       }
-                       ref
-                        .read(propertyFormProvider.notifier)
-                        .updateEmail(value);
+                      ref
+                          .read(propertyFormProvider.notifier)
+                          .updateEmail(value);
                       return null;
-                    }, readOnly: false,
+                    },
+                    readOnly: false,
                   ),
                   divider,
                   // CalendarPickerContainer(hintText: 'date'),
@@ -178,11 +182,7 @@ class AddLandlordDetails extends ConsumerWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: isLoading 
-        ?CircularProgressIndicator(
-          color: AppColors.greenColor,
-          padding: EdgeInsets.symmetric(horizontal: 140),)
-        :GreenButton(
+        child: GreenButton(
           text: 'Submit',
           onTap: () async {
             if (frmKey.currentState!.validate()) {
@@ -200,11 +200,13 @@ class AddLandlordDetails extends ConsumerWidget {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addProperties(finaldetails);
               } else {
-                await  repo.updateproperty(property!.id, finaldetails);
+                await repo.updateproperty(property!.id, finaldetails);
               }
-              _clearControllers();
-              //  ref.read(propertyFormProvider.notifier).clear();
-              
+              // _clearControllers();
+              ref.read(propertyFormProvider.notifier).clear();
+              ref.read(propertyImagesProvider.notifier).clear();
+              ref.read(propertyFormProvider.notifier).updateIsOwner(false);
+
               Navigator.push(
                 context,
                 MaterialPageRoute(

@@ -235,17 +235,7 @@ class AddProperty extends ConsumerWidget {
                         width: 100,
                         decoration: BoxDecoration(
                           color: AppColors.searchbar,
-                          // image: file2 != null
-                          //     ? DecorationImage(
-                          //         image: FileImage(file2!),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : imageFile.length > 1
-                          //     ? DecorationImage(
-                          //         image: NetworkImage(imageFile[1]),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : null,
+                         
                           image: pickedImages.length > 1
                               ? DecorationImage(
                                   image: FileImage(pickedImages[1]),
@@ -264,7 +254,6 @@ class AddProperty extends ConsumerWidget {
                             color: AppColors.opacitygreyColor,
                           ),
                         ),
-                        // child: file2 == null && imageFile.length > 1
                         child: (pickedImages.isEmpty && imageFile.isEmpty)
                             ? Center(
                                 child: Container(
@@ -288,17 +277,7 @@ class AddProperty extends ConsumerWidget {
                         width: 100,
                         decoration: BoxDecoration(
                           color: AppColors.searchbar,
-                          // image: file3 != null
-                          //     ? DecorationImage(
-                          //         image: FileImage(file3!),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : imageFile.length > 2
-                          //     ? DecorationImage(
-                          //         image: NetworkImage(imageFile[2]),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : null,
+                         
                           image: pickedImages.length > 2
                               ? DecorationImage(
                                   image: FileImage(pickedImages[2]),
@@ -317,7 +296,6 @@ class AddProperty extends ConsumerWidget {
                             color: AppColors.opacitygreyColor,
                           ),
                         ),
-                        // child: file3 == null && imageFile.length < 2
                         child: (pickedImages.isEmpty && imageFile.isEmpty)
                             ? Center(
                                 child: Container(
@@ -598,28 +576,7 @@ class AddProperty extends ConsumerWidget {
                 ),
                 SizedBox(height: 10),
 
-                // ElevatedButton(
-                //   onPressed: () async {
-                //     final pickedLocation = await Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => const PickLocationScreen(),
-                //       ),
-                //     );
-
-                //     if (pickedLocation != null) {
-                //       () {
-                //         latitude = pickedLocation.latitude;
-                //         longitude = pickedLocation.longitude;
-                //       };
-
-                //       // Optional: Fill text field automatically
-                //       locationCtlr.text =
-                //           "${pickedLocation.latitude}, ${pickedLocation.longitude}";
-                //     }
-                //   },
-                //   child: Text("Pick Location on Map"),
-                // ),
+                
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -629,7 +586,7 @@ class AddProperty extends ConsumerWidget {
                       color: AppColors.greenColor,
                       borderRadius: BorderRadius.circular(15)
                     ),
-                    // alignment: Alignment.centerRight,
+                  
                     child: InkWell(
                       
                       onTap: () async {
@@ -643,17 +600,11 @@ class AddProperty extends ConsumerWidget {
                         if (pickedLocation != null) {
                           latitude = pickedLocation.latitude;
                           longitude = pickedLocation.longitude;
-                    
-                          // 🔥 Convert to place name
                           String address = await convertLatLngToAddress(
                             latitude!,
                             longitude!,
                           );
-                    
-                          // Auto-fill text box
                           locationCtlr.text = address;
-                    
-                          // Save to Riverpod state if needed
                           ref
                               .read(propertyFormProvider.notifier)
                               .updateLocation(address);
@@ -762,9 +713,7 @@ class AddProperty extends ConsumerWidget {
   ref.read(loadingProvider.notifier).state = true; // show loader
 
   try {
-    //----------------------------------------------------------------------
-    // 1. Upload images OR use existing ones
-    //----------------------------------------------------------------------
+   
     final pickedFiles = ref.read(propertyImagesProvider);
     List<String> finalImageUrls = [];
 
@@ -784,9 +733,6 @@ class AddProperty extends ConsumerWidget {
       return;
     }
 
-    //----------------------------------------------------------------------
-    // 2. Build data map
-    //----------------------------------------------------------------------
     final propertyDetailsAll = {
       "PROPERTY TYPE": _selectedValue,
       "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
@@ -807,9 +753,7 @@ class AddProperty extends ConsumerWidget {
       "IMAGE": finalImageUrls,
     };
 
-    //----------------------------------------------------------------------
-    // 3. Navigate
-    //----------------------------------------------------------------------
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -823,7 +767,7 @@ class AddProperty extends ConsumerWidget {
   } catch (e) {
     debugPrint("Error uploading property: $e");
   } finally {
-    ref.read(loadingProvider.notifier).state = false; // hide loader
+    ref.read(loadingProvider.notifier).state = false; 
   }
 }
 

@@ -213,19 +213,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       ),
                       SizedBox(height: 15),
                       // --- Location ---
-                      // Row(
-                      //   children: [
-                      //     Icon(Icons.location_on, color: AppColors.black),
-                      //     SizedBox(width: 5),
-                      //     Text(
-                      //       widget.property.location,
-                      //       style: TextStyle(
-                      //         fontSize: 15,
-                      //         color: AppColors.black,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                   
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         FutureBuilder<String>(
@@ -426,24 +414,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(bottom: 8.0),
-                      //   child: Column(
-                      //     children: [
-                      //       SizedBox(
-                      //         height: 300,
-                              
-                      //         child: Image.network(
-                      //           "https://maps.googleapis.com/maps/api/staticmap?"
-                      //           "center=${widget.property.latitude},${widget.property.longitude}"
-                      //           "&zoom=16&size=600x300&markers=color:red%7C${widget.property.latitude},${widget.property.longitude}"
-                      //           "&key=YOUR_GOOGLE_MAPS_API_KEY",
-                      //           fit: BoxFit.cover,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                    
                     ],
                   ),
                 ),
@@ -465,50 +436,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       SizedBox(height: 10),
 
                       // --- Location ---
-                      // Row(
-                      //   children: [
-                      //     Icon(Icons.location_on, color: AppColors.black),
-                      //     SizedBox(width: 5),
-                      //     Text(
-                      //       widget.property.location,
-                      //       // 'KARAVATTOM, MALAPPURAM',
-                      //       style: TextStyle(
-                      //         fontSize: 15,
-                      //         color: AppColors.black,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      //                    if (widget.property.latitude != null && widget.property.longitude != null)
-                      // FutureBuilder<String>(
-                      //   future: convertLatLngToAddress(
-                      //     widget.property.latitude!,
-                      //     widget.property.longitude!,
-                      //   ),
-                      //   builder: (context, snapshot) {
-                      //     String text = "Loading location...";
-
-                      //     if (snapshot.connectionState == ConnectionState.done) {
-                      //       text = snapshot.data ?? "Unknown location";
-                      //     }
-
-                      //     return Row(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Icon(Icons.location_on, color: AppColors.black),
-                      //         SizedBox(width: 5),
-                      //         Expanded(
-                      //           child: Text(
-                      //             text,
-                      //             style: TextStyle(fontSize: 15, color: AppColors.black),
-                      //             maxLines: 2,
-                      //             overflow: TextOverflow.ellipsis,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     );
-                      //   },
-                      // ),
+                     
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         Row(
@@ -650,13 +578,6 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    // 'Location : Karyavattom, Trivandrum \n(Near Technopark Greenfield stadium)\n'
-                                    // 'Project : Impact Milestone-Premium residential Apartment\n'
-                                    // 'Flat Type: 2 BHK Spacious Living & Dining\n'
-                                    // 'Area : [insert Sq.Ft - Eg. 1050 Sq.Ft]\n'
-                                    // 'car parking: Yes\n'
-                                    // 'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
-                                    // 'Status : Ready To Move',
                                     widget.property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
@@ -689,7 +610,6 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                 padding: EdgeInsets.all(16.0),
                 child: SizedBox(
                   height: 50,
-
                   child: ElevatedButton(
                     onPressed: () {
                       log("property id is  ${widget.property.id}");
