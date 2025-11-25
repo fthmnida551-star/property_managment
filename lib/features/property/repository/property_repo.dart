@@ -39,6 +39,18 @@ class PropertyRepo {
     );
   }
 
+ 
+deleteProperty(PropertyModel property) async {
+  await service.properties
+      .doc(property.id)
+      .delete();
+  if (property.isBooked == true) {
+    await service.bookingdetails
+        .doc(property.bookingid)
+        .delete();
+  }
+  // getAllPropertyDetails();
+}
 
 
 

@@ -132,7 +132,8 @@ class BookedPropertyScreen extends ConsumerWidget {
                             PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
-                                  dltAlert(context, property);
+                                  // dltAlert(context, property);
+                                  dltAlert(context, property, ref);
                                   Navigator.pop(context);
                                 },
                                 child: Row(

@@ -45,12 +45,12 @@ class _BookedDetailsState extends State<BookedDetails> {
       
     });
   }
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserRole();
-  }
+// @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//     getUserRole();
+//   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,11 +150,11 @@ class _BookedDetailsState extends State<BookedDetails> {
                   Button(
                     text: 'Delete',
                     onTap: () async {
-                      deleteBookingProperty(
-                        widget.property.bookingid,
-                        widget.property.id,
-                      ); // pass the booking document ID
-
+                      // deleteBookingProperty(
+                      //   widget.property.bookingid,
+                      //   widget.property.id,
+                      // ); // pass the booking document ID
+                       
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -228,36 +228,36 @@ class _BookedDetailsState extends State<BookedDetails> {
     );
   }
 
-  Future<BookingModel?> getBooking(String bookingId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> doc = await fdb
-          .collection('BOOKING')
-          .doc(bookingId)
-          .get();
+  // Future<BookingModel?> getBooking(String bookingId) async {
+  //   try {
+  //     DocumentSnapshot<Map<String, dynamic>> doc = await fdb
+  //         .collection('BOOKING')
+  //         .doc(bookingId)
+  //         .get();
 
-      if (doc.exists && doc.data() != null) {
-        // Merge Firestore ID with document data
-        final data = doc.data()!;
-        data['id'] = doc.id;
-        return BookingModel.fromMap(bookingId,data);
-      } else {
-        print("No property found for ID: $bookingId");
-        return null;
-      }
-    } catch (e) {
-      print("Error fetching property: $e");
-      return null;
-    }
-  }
+  //     if (doc.exists && doc.data() != null) {
+  //       // Merge Firestore ID with document data
+  //       final data = doc.data()!;
+  //       data['id'] = doc.id;
+  //       return BookingModel.fromMap(bookingId,data);
+  //     } else {
+  //       print("No property found for ID: $bookingId");
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching property: $e");
+  //     return null;
+  //   }
+  // }
 
 
-  void deleteBookingProperty(String bookingId, String propertyId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();
-    await fdb.collection('PROPERTIES').doc(propertyId).update({
-      'IS_BOOKED': 'NO',
-    });
-    await fdb.collection('PROPERTIES').doc(propertyId).set({
-      "BOOKING_ID": FieldValue.delete(),
-    }, SetOptions(merge: true));
-  }
+  // void deleteBookingProperty(String bookingId, String propertyId) async {
+  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();
+  //   await fdb.collection('PROPERTIES').doc(propertyId).update({
+  //     'IS_BOOKED': 'NO',
+  //   });
+  //   await fdb.collection('PROPERTIES').doc(propertyId).set({
+  //     "BOOKING_ID": FieldValue.delete(),
+  //   }, SetOptions(merge: true));
+  // }
 }

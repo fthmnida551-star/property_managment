@@ -45,14 +45,14 @@ class Searchingpage extends ConsumerWidget {
   TextEditingController srchbrcntlr = TextEditingController();
   BookingModel? bookingData;
 
-  getPropertyBookingData(String bookingId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
-      if (value.exists) {
-        Map<String, dynamic> data = value.data()!;
-        bookingData = BookingModel.fromMap(value.id, data);
-      }
-    });
-  }
+  // getPropertyBookingData(String bookingId) async {
+  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
+  //     if (value.exists) {
+  //       Map<String, dynamic> data = value.data()!;
+  //       bookingData = BookingModel.fromMap(value.id, data);
+  //     }
+  //   });
+  // }
 
   // @override
   // void initState() {
@@ -341,7 +341,8 @@ class Searchingpage extends ConsumerWidget {
                     textColor: AppColors.white,
                     color: AppColors.booked,
                     onTap: () async {
-                      await getPropertyBookingData(item.bookingid);
+                      // await getPropertyBookingData(item.bookingid);
+                      await 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
