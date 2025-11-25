@@ -36,7 +36,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     namectrlr.clear();
     emailctrlr.clear();
     passWordctrlr.clear();
-   }
+  }
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final repo=ref.read(UserRepositoryProvider);
+    final repo = ref.read(userRepositoryProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -242,7 +242,6 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
         child: GreenButton(
           text: _saveButtonMode == SaveButtonMode.save ? 'Submit' : 'Update',
           onTap: () async {
-            
             if (formkey.currentState!.validate()) {
               Map<String, dynamic> userDetails = {
                 "USER_NAME": namectrlr.text.trim(),
@@ -253,7 +252,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addUsers(userDetails);
               } else {
-                await repo. updateUser(widget.users!.id, userDetails);
+                await repo.updateUser(widget.users!.id, userDetails);
                 //await repo.updateUser(widget.users!.id, userDetails);
               }
               _clearControllers();
@@ -262,10 +261,9 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 MaterialPageRoute(builder: (context) => UsersScreen()),
               );
             }
-           },
+          },
         ),
       ),
     );
   }
-
- }
+}

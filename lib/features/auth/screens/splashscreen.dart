@@ -18,7 +18,7 @@ class _SplashscreenState extends ConsumerState<Splashscreen> {
   void initState() {
     super.initState();
      Future.microtask(() {
-      ref.read(LoginRepositoryProvider).checkLoginStatus(context);
+      ref.read(loginRepositoryProvider).checkLoginStatus(context);
     });
     //checkLoginStatus();
   }
@@ -55,11 +55,11 @@ class _SplashscreenState extends ConsumerState<Splashscreen> {
 //       );
 //     }
 //   }
-
+ 
   // ✅ The required build() method — this fixes your error!
   @override
   Widget build(BuildContext context) {
-    final repo=ref.read(LoginRepositoryProvider);
+    final repo=ref.read(loginRepositoryProvider);
     return Scaffold(
       backgroundColor: AppColors.greenColor,
       body: Center(

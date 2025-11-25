@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 
-
-void deleteAlert(BuildContext context,{required VoidCallback onConfirm}) {
+void deleteAlert(BuildContext context, {required VoidCallback onConfirm}) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -44,8 +43,8 @@ void deleteAlert(BuildContext context,{required VoidCallback onConfirm}) {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.pop(context); 
-                    onConfirm(); 
+                    Navigator.pop(context);
+                    onConfirm();
                   },
                   child: Container(
                     height: 50.h,

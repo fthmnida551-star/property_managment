@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   bool _obscurePassword = true;
-  final _saveButtonMode = SaveButtonMode.save;
+  final saveButtonMode = SaveButtonMode.save;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailcntrlr = TextEditingController();
   final TextEditingController passwordcntrlr = TextEditingController();

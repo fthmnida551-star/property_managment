@@ -6,4 +6,6 @@ class  FirebaseService {
   CollectionReference get properties=>fdb.collection("PROPERTIES");
   CollectionReference get bookingdetails=>fdb.collection("BOOKING DETAILS");
   CollectionReference get uploads=>fdb.collection("uploads");
+  CollectionReference get notifications=>fdb.collection("NOTIFICATION");
+
 }

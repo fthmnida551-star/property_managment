@@ -9,6 +9,8 @@ import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/features/users/controller/user_controllers.dart';
 import 'package:property_managment/features/users/screens/adding_users.dart';
 import 'package:property_managment/features/users/screens/widget/delete_alert.dart';
+
+// ignore: must_be_immutable
 class UsersScreen extends ConsumerWidget {
   UsersScreen({super.key});
 
@@ -120,7 +122,9 @@ class UsersScreen extends ConsumerWidget {
                               deleteAlert(
                                 context,
                                 onConfirm: () {
-                                ref.read(UserRepositoryProvider).deleteUser(item.id);
+                                  ref
+                                      .read(userRepositoryProvider)
+                                      .deleteUser(item.id);
                                 },
                               );
                             },
@@ -153,6 +157,4 @@ class UsersScreen extends ConsumerWidget {
       ),
     );
   }
-
- 
 }
