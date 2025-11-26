@@ -92,46 +92,7 @@ deleteProperty(PropertyModel property) async {
   //     }
   //   }
 
-  Stream<List<PropertyModel>> getFilteredPropertyListStream(
-    List<String> propertytype,
-    RangeValues? price,
-    RangeValues? sqft,
-  ) {
-    Query baseQuery = service.properties;
-
-    // Filter 1: Property Type
-    if (propertytype.isNotEmpty) {
-      baseQuery = baseQuery.where("PROPERTY TYPE", whereIn: propertytype);
-    }
-
-    // Filter 2: Price Range (Firestore supports range on one field)
-    if (price != null) {
-      baseQuery = baseQuery
-          .where("PROPERTY PRICE", isGreaterThanOrEqualTo: price.start)
-          .where("PROPERTY PRICE", isLessThanOrEqualTo: price.end);
-    }
-
-    // Convert snapshots → model list
-    return baseQuery.snapshots().map((snapshot) {
-      final results = snapshot.docs.map((doc) {
-        return PropertyModel.fromMap(
-          doc.data() as Map<String, dynamic>,
-          doc.id,
-        );
-      }).toList();
-
-      // Apply SQFT range in memory
-      if (sqft != null) {
-        return results.where((property) {
-          double propertySqft = double.tryParse(property.sqft.toString()) ?? 0;
-
-          return propertySqft >= sqft.start && propertySqft <= sqft.end;
-        }).toList();
-      }
-
-      return results;
-    });
-  }
+  
 
   
 

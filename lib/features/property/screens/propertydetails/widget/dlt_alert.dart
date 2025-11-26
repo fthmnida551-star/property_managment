@@ -114,17 +114,3 @@ void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
     ),
   );
 }
-
-// deleteProperty(PropertyModel property) async {
-//   await FirebaseFirestore.instance
-//       .collection("PROPERTIES")
-//       .doc(property.id)
-//       .delete();
-//   if (property.isBooked == true) {
-//     await FirebaseFirestore.instance
-//         .collection("BOOKING DETAILS")
-//         .doc(property.bookingid)
-//         .delete();
-//   }
-//   // getAllPropertyDetails();
-// }

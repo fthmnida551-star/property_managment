@@ -14,7 +14,7 @@ import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
-class AddLandlordDetails extends ConsumerWidget {
+class AddLandlordDetails extends ConsumerStatefulWidget {
   final String from;
   final PropertyModel? property;
   final Map<String, dynamic> propertyMap;
@@ -25,6 +25,11 @@ class AddLandlordDetails extends ConsumerWidget {
     required this.property,
   });
 
+  @override
+  ConsumerState<AddLandlordDetails> createState() => _AddLandlordDetailsState();
+}
+
+class _AddLandlordDetailsState extends ConsumerState<AddLandlordDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   final frmKey = GlobalKey<FormState>();
@@ -32,7 +37,6 @@ class AddLandlordDetails extends ConsumerWidget {
   Widget divider = SizedBox(height: 10);
 
   // bool isOwnProperty = false;
-
   TextEditingController nameCtlr = TextEditingController();
 
   TextEditingController emailCtlr = TextEditingController();
@@ -48,11 +52,13 @@ class AddLandlordDetails extends ConsumerWidget {
   }
 
   setControllersForUpdate() {
-    log('reached here owner page : $from    property: $property');
-    if (from == "Edit" && property != null) {
-      nameCtlr.text = property!.ownername;
-      emailCtlr.text = property!.email;
-      contactCtlr.text = property!.contact;
+    log(
+      'reached here owner page : ${widget.from}    property: ${widget.property}',
+    );
+    if (widget.from == "Edit" && widget.property != null) {
+      nameCtlr.text = widget.property!.ownername;
+      emailCtlr.text = widget.property!.email;
+      contactCtlr.text = widget.property!.contact;
       // isOwnProperty = property!.isOwner;
       _saveButtonMode = SaveButtonMode.edit;
     }
@@ -61,9 +67,15 @@ class AddLandlordDetails extends ConsumerWidget {
     // });
   }
 
-  // @override
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setControllersForUpdate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final repo = ref.read(propertyRepoProvider);
     final isOwnProperty = ref.watch(isOwnPropertyProvider);
     final isLoading = ref.watch(loadingProvider);
@@ -174,7 +186,6 @@ class AddLandlordDetails extends ConsumerWidget {
                     readOnly: false,
                   ),
                   divider,
-                  // CalendarPickerContainer(hintText: 'date'),
                 ],
               ],
             ),
@@ -194,14 +205,14 @@ class AddLandlordDetails extends ConsumerWidget {
                 "OWNER_EMAIL": emailCtlr.text.trim(),
               };
               Map<String, dynamic> finaldetails = {
-                ...propertyMap,
+                ...widget.propertyMap,
                 ...ownerDetails,
               };
               log("asdfghjkl $finaldetails");
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addProperties(finaldetails,userName.value!);
               } else {
-                await repo.updateproperty(property!.id, finaldetails);
+                await repo.updateproperty(widget.property!.id, finaldetails);
               }
               // _clearControllers();
               ref.read(propertyFormProvider.notifier).clear();
