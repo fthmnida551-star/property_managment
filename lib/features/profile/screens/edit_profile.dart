@@ -30,7 +30,7 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
   TextEditingController roleCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   File? _selectedImage;
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker(); 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,

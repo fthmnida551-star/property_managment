@@ -68,6 +68,8 @@ class ProfileRepository {
     });
   }
 
+  
+
   Future<void> saveUserData(UserModel user) async{
     await service.users.doc(user.id).set(user.toMap());
   }

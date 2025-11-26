@@ -17,7 +17,7 @@ class Notificationscreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 15),
           child: Text(
             'Notification',
             style: TextStyle(
