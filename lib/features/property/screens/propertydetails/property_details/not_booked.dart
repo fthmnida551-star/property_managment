@@ -153,7 +153,11 @@ class _NotBookedPropertyScreenState
                               child: GestureDetector(
                                 onTap: () {
                                   // dltAlert(context, property);
-                                  dltAlert(context, widget.property, ref);
+                                  WidgetsBinding.instance.addPostFrameCallback((
+                                    _,
+                                  ) {
+                                    dltAlert(context, widget.property, ref);
+                                  });
                                   Navigator.pop(context);
                                 },
                                 child: Row(
@@ -231,8 +235,8 @@ class _NotBookedPropertyScreenState
                         style: TextStyle(fontSize: 14, color: AppColors.black),
                       ),
                       SizedBox(height: 15),
+
                       // --- Location ---
-                   
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         FutureBuilder<String>(
@@ -431,7 +435,6 @@ class _NotBookedPropertyScreenState
                           fit: BoxFit.cover,
                         ),
                       ),
-                    
                     ],
                   ),
                 ),
@@ -450,8 +453,8 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
+
                       // --- Location ---
-                     
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         Row(

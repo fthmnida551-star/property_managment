@@ -56,8 +56,6 @@ class BookedPropertyScreen extends ConsumerWidget {
                     height: 250,
                     child: PageView(
                       children: [
-                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
                         if (property.image.isNotEmpty)
                           Image.network(
                             property.image[0],
@@ -133,7 +131,11 @@ class BookedPropertyScreen extends ConsumerWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   // dltAlert(context, property);
-                                  dltAlert(context, property, ref);
+                                  WidgetsBinding.instance.addPostFrameCallback((
+                                    _,
+                                  ) {
+                                    dltAlert(context,property, ref);
+                                  });
                                   Navigator.pop(context);
                                 },
                                 child: Row(
