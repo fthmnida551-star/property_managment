@@ -1,41 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
+import 'package:property_managment/features/notification/controllers/notification_controller.dart';
 import 'package:property_managment/features/notification/screens/widget/notification_container.dart';
 
+// ignore: must_be_immutable
+class Notificationscreen extends ConsumerWidget {
+  Notificationscreen({super.key});
 
-class Notificationscreen extends StatefulWidget {
-  const Notificationscreen({super.key});
+  Widget divider = SizedBox(height: 12);
 
   @override
-  State<Notificationscreen> createState() => _NotificationscreenState();
-}
-
-class _NotificationscreenState extends State<Notificationscreen> {
-  Widget divider=SizedBox(height: 12,);
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pro = ref.watch(noticationProvider);
     return Scaffold(
-      appBar: AppbarWidget(child: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text('Notification',style: TextStyle(color: AppColors.white,fontWeight: FontWeight.bold,fontSize: 21),),
-      ),),
-      body:SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 18,),
-             NotificationContainer(color: AppColors.greenColor,text: 'Today',),
-             NotificationContainer(text: 'Yesterday', color: AppColors.redcolor),
-             NotificationContainer(text: '1 day ago', color: AppColors.ntfctBlue),
-             NotificationContainer(text: '12 sep 2025', color: AppColors.ntfctnYellow),
-             NotificationContainer(color: AppColors.greenColor,text: '25 sep 2025',),
-             NotificationContainer(text: '2 aug 2025', color: AppColors.redcolor),
-             NotificationContainer(text: '25 july 2025', color: AppColors.ntfctBlue),
-             NotificationContainer(text: '12 july 2025', color: AppColors.ntfctnYellow)
-          ],
+      appBar: AppbarWidget(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text(
+            'Notification',
+            style: TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 21,
+            ),
+          ),
         ),
       ),
-      );
-  }
+      body: pro.when(
+        data: (notifications) {
+          return ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: notifications.length,
+            itemBuilder: (context, index) {
+              final item = notifications[index];
 
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: NotificationContainer(
+                  text: item["message"], // message text
+                  color: item["type"] == "added"
+                      ? AppColors
+                            .greenColor // property added
+                      : AppColors.redcolor, // property booked
+                ),
+              );
+            },
+          );
+        },
+
+        loading: () => Center(child: CircularProgressIndicator()),
+
+        error: (err, stack) => Center(
+          child: Text("Error: $err", style: TextStyle(color: Colors.red)),
+        ),
+      ),
+    );
+  }
 }

@@ -1,17 +1,29 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:property_managment/core/constant/firebase_const.dart';
-import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/features/notification/repository/notification_repository.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
 class PropertyRepo {
   final FirebaseService service;
-  PropertyRepo(this.service);
+  final NotificationRepository notificationRepo;
+  PropertyRepo(this.service, this.notificationRepo);
 
-  addProperties(Map<String, dynamic> propertyData) {
-    service.properties.add(propertyData);
+  Future<void> addProperties(Map<String, dynamic> propertyData) async {
+    try {
+      await service.properties.add(propertyData);
+
+      await notificationRepo.addNotification(
+        title: "New Property Added",
+        message: "${propertyData['propertyTitle']} has been added",
+        addedStaff: "admin", // you can use user id or role
+      );
+
+      log("Property Added & Notification Sent");
+    } catch (e) {
+      log("Error adding property: $e");
+    }
   }
 
   Future<void> updateproperty(

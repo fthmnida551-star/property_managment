@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:property_managment/core/provider/firebse_provider.dart';
+import 'package:property_managment/features/notification/controllers/notification_controller.dart';
 import 'package:property_managment/features/property/repository/property_repo.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -144,7 +145,8 @@ final propertyFormProvider =
     });
 
 final propertyRepoProvider = Provider(
-  (ref) => PropertyRepo(ref.watch(firebaseServiceProvider)),
+  (ref) => PropertyRepo(ref.watch(firebaseServiceProvider),
+  ref.watch(notificationRepositoryProvider)),
 );
 
 final propertyListProvider = StreamProvider(

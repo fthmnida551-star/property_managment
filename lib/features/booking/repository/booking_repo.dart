@@ -1,11 +1,12 @@
 import 'dart:developer';
-
 import 'package:property_managment/core/constant/firebase_const.dart';
+import 'package:property_managment/features/notification/repository/notification_repository.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 
 class BookingRepo {
   final FirebaseService service;
-  BookingRepo(this.service);
+  final NotificationRepository notificationRepo;
+  BookingRepo(this.service,this.notificationRepo);
 
   addbookingDetails(Map<String, dynamic> bookingData) async {
     await service.bookingdetails.doc(bookingData['BOOKING_ID']).set(bookingData);
@@ -13,6 +14,11 @@ class BookingRepo {
       'IS_BOOKED': 'YES',
       'BOOKING_ID': bookingData['BOOKING_ID']
     });
+     await notificationRepo.addNotification(
+        title: "New Property booked",
+        message: "${bookingData['propertyTitle']} has been booked",
+        addedStaff: "admin", // you can use user id or role
+      );
   }
 
   Stream<BookingModel?> getBooking(String bookingId) {
@@ -53,5 +59,11 @@ class BookingRepo {
     await service.bookingdetails.doc(id).delete();
     await service.properties.doc(propertyId).update({'IS_BOOKED': 'NO'});
     // getAllPropertyDetails();
+     await notificationRepo.addNotification(
+        title: "booking cancelled",
+        message: "booking cancelled",
+        addedStaff: "admin", // you can use user id or role
+     );
+     
   }
 }
