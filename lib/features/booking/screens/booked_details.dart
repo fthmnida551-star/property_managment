@@ -272,7 +272,7 @@ class BookedDetails extends ConsumerWidget {
                           onTap: () async {
                             ref
                                 .read(bookingRepoProvider)
-                                .deleteBooking(property.bookingid, property.id);
+                                .deleteBooking(property.bookingid, property.id,loginName.value!);
 
                             Navigator.pushReplacement(
                               context,
