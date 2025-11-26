@@ -17,6 +17,7 @@ class BookingRepo {
      await notificationRepo.addNotification(
         title: "New Property booked",
         message: "property has been booked",
+        type: "Booked",
         addedStaff: userName, // you can use user id or role
       );
   }
@@ -62,8 +63,9 @@ class BookingRepo {
      await notificationRepo.addNotification(
         title: "booking cancelled",
         message: "booking cancelled",
+        type: "Cancelled",
         addedStaff: userName, // you can use user id or role
-     );
+     ); 
      
   }
 }

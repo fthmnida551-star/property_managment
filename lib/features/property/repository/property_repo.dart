@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:property_managment/core/constant/firebase_const.dart';
 import 'package:property_managment/features/notification/repository/notification_repository.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -12,11 +10,14 @@ class PropertyRepo {
 
   Future<void> addProperties(Map<String, dynamic> propertyData, String userName) async {
     try {
+      final docRef = await service.properties.add(propertyData);
+
       await service.properties.add(propertyData);
 
       await notificationRepo.addNotification(
         title: "New Property Added",
         message: "${propertyData['propertyTitle']} has been added",
+        type: "Added",
         addedStaff: userName, // you can use user id or role
       );
 
