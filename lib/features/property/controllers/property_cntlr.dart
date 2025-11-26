@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:property_managment/core/provider/firebse_provider.dart';
 import 'package:property_managment/features/property/repository/property_repo.dart';
 import 'package:property_managment/modelClass/property_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PropertyFormState {
   final String name;
@@ -169,6 +170,14 @@ class PropertyImagesNotifier extends StateNotifier<List<File>> {
     state = [];
   }
 }
+
+
+
+
+final userRoleProvider = FutureProvider<String>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString("role") ?? "";
+});
 
 
 final searchProvider = StateProvider<String>((ref) => "");

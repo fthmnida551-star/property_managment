@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -24,7 +25,7 @@ class Searchingpage extends ConsumerWidget {
   List<PropertyModel> propertyDetailsList = [];
   List<PropertyModel> filterPropertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
-  String userRole = "";
+  // String userRole = "";
   // getUserRole() async {
   //   final prefs = await SharedPreferences.getInstance();
   //   // final Set<String> keyss = prefs.getKeys();
@@ -33,23 +34,15 @@ class Searchingpage extends ConsumerWidget {
   // }
 
   TextEditingController srchbrcntlr = TextEditingController();
-  BookingModel? bookingData;
+  // BookingModel? bookingData;
 
-  getPropertyBookingData(String bookingId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
-      if (value.exists) {
-        Map<String, dynamic> data = value.data()!;
-        bookingData = BookingModel.fromMap(value.id, data);
-      }
-    });
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getUserRole();
-  //   getAllPropertyDetailsList();
-  //   getFilteredPropertyList(widget.propertytype, widget.price, widget.sqft);
+  // getPropertyBookingData(String bookingId) async {
+  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
+  //     if (value.exists) {
+  //       Map<String, dynamic> data = value.data()!;
+  //       bookingData = BookingModel.fromMap(value.id, data);
+  //     }
+  //   });
   // }
 
   @override
@@ -57,14 +50,7 @@ class Searchingpage extends ConsumerWidget {
     final properties = ref.watch(propertyListProvider);
     final repo = ref.read(propertyRepoProvider);
     final list = ref.watch(localFilteredListProvider);
-
-
-    // /// 🔥 FILTER STREAM
-    // final filter = ref.watch(
-    //   filteredPropertyProvider(
-    //     FilterParams(types: propertytype, price: price, sqft: sqft),
-    //   ),
-    // );
+    final userRole = ref.watch(userRoleProvider);
 
     return Scaffold(
       backgroundColor: AppColors.propertyContainer,
@@ -242,119 +228,59 @@ class Searchingpage extends ConsumerWidget {
     );
   }
 
-  /// 🔥 UI builder for property list
-  // Widget _buildList(
-  //   List<PropertyModel> list,
-  //   BuildContext context,
-  //   WidgetRef ref,
-  // ) {
-  //   return asyncData.when(
-  //     data: (list) {
-  //       if (list == null || list.isEmpty) {
-  //         return SizedBox(
-  //           height: 300,
-  //           child: Center(
-  //             child: Text(
-  //               "No properties",
-  //               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-  //             ),
-  //           ),
-  //         );
-  //       }
-  //       List<PropertyModel> filterList = list;
-  //       final search = ref.watch(searchProvider);
-  //       if (search.isNotEmpty) {
-  //         filterList = list
-  //             .where(
-  //               (element) =>
-  //                   element.location.toLowerCase().contains(
-  //                     search.toLowerCase(),
-  //                   ) ||
-  //                   element.name.toLowerCase().contains(search.toLowerCase()),
-  //             )
-  //             .toList();
-  //       }
-
-  //       return ListView.builder(
-  //         shrinkWrap: true,
-  //         physics: NeverScrollableScrollPhysics(),
-  //         itemCount: filterList.length,
-  //         itemBuilder: (_, index) {
-  //           final item = filterList[index];
-
-  //           return item.isBooked
-  //               ? PropertyContainer(
-  //                   text: 'Booked',
-  //                   textColor: AppColors.white,
-  //                   color: AppColors.booked,
-  //                   onTap: () async {
-  //                     await getPropertyBookingData(item.bookingid);
-  //                     Navigator.push(
-  //                       context,
-  //                       MaterialPageRoute(
-  //                         builder: (_) => BookedPropertyScreen(
-  //                           property: item,
-  //                           bookedData: bookingData,
-  //                         ),
-  //                       ),
-  //                     );
-  //                   },
-  //                   property: item,
-  //                 )
-  //               : PropertyContainer(text: 'Book Now', property: item);
-  //         },
-  //       );
-  //     },
-  //     loading: () => Center(child: CircularProgressIndicator()),
-  //     error: (e, _) => Text("Error: $e"),
-  //   );
-  // }
   Widget _buildList(
-  List<PropertyModel> list,
-  BuildContext context,
-  WidgetRef ref,
-) {
-  if (list.isEmpty) {
-    return SizedBox(
-      height: 300,
-      child: Center(
-        child: Text(
-          "No properties",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    List<PropertyModel> list,
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    if (list.isEmpty) {
+      return SizedBox(
+        height: 300,
+        child: Center(
+          child: Text(
+            "No properties",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: list.length,
+      itemBuilder: (_, index) {
+        final item = list[index];
+
+        return item.isBooked
+            ? PropertyContainer(
+                text: 'Booked',
+                textColor: AppColors.white,
+                color: AppColors.booked,
+                onTap: () async {
+                  log("item.isBooked ${item.isBooked} bbb ${item.bookingid}");
+                  // await getPropertyBookingData(item.bookingid);
+                  // ref.watch(bookingProvider.from()).
+                  final bookingData = ref.watch(
+                    bookingProvider(item.bookingid),
+                  );
+                  log("bookingData $bookingData");
+                  Future.delayed(Duration(seconds: 5));
+                  log("bookingData1111 $bookingData");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BookedPropertyScreen(
+                        property: item,
+                        bookedData: bookingData.value,
+                      ),
+                    ),
+                  );
+                },
+                property: item,
+              )
+            : PropertyContainer(text: 'Book Now', property: item);
+      },
     );
   }
-
-  return ListView.builder(
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),
-    itemCount: list.length,
-    itemBuilder: (_, index) {
-      final item = list[index];
-
-      return item.isBooked
-          ? PropertyContainer(
-              text: 'Booked',
-              textColor: AppColors.white,
-              color: AppColors.booked,
-              onTap: () async {
-                await getPropertyBookingData(item.bookingid);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BookedPropertyScreen(
-                      property: item,
-                      bookedData: bookingData,
-                    ),
-                  ),
-                );
-              },
-              property: item,
-            )
-          : PropertyContainer(text: 'Book Now', property: item);
-    },
-  );
-}
-
 }
