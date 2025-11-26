@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:property_managment/core/constant/firebase_const.dart';
 import 'package:property_managment/features/notification/repository/notification_repository.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -10,14 +8,17 @@ class PropertyRepo {
   final NotificationRepository notificationRepo;
   PropertyRepo(this.service, this.notificationRepo);
 
-  Future<void> addProperties(Map<String, dynamic> propertyData) async {
+  Future<void> addProperties(Map<String, dynamic> propertyData, String userName) async {
     try {
+      final docRef = await service.properties.add(propertyData);
+
       await service.properties.add(propertyData);
 
       await notificationRepo.addNotification(
         title: "New Property Added",
         message: "${propertyData['propertyTitle']} has been added",
-        addedStaff: "admin", // you can use user id or role
+        type: "Added",
+        addedStaff: userName, // you can use user id or role
       );
 
       log("Property Added & Notification Sent");
@@ -92,46 +93,7 @@ deleteProperty(PropertyModel property) async {
   //     }
   //   }
 
-  Stream<List<PropertyModel>> getFilteredPropertyListStream(
-    List<String> propertytype,
-    RangeValues? price,
-    RangeValues? sqft,
-  ) {
-    Query baseQuery = service.properties;
-
-    // Filter 1: Property Type
-    if (propertytype.isNotEmpty) {
-      baseQuery = baseQuery.where("PROPERTY TYPE", whereIn: propertytype);
-    }
-
-    // Filter 2: Price Range (Firestore supports range on one field)
-    if (price != null) {
-      baseQuery = baseQuery
-          .where("PROPERTY PRICE", isGreaterThanOrEqualTo: price.start)
-          .where("PROPERTY PRICE", isLessThanOrEqualTo: price.end);
-    }
-
-    // Convert snapshots → model list
-    return baseQuery.snapshots().map((snapshot) {
-      final results = snapshot.docs.map((doc) {
-        return PropertyModel.fromMap(
-          doc.data() as Map<String, dynamic>,
-          doc.id,
-        );
-      }).toList();
-
-      // Apply SQFT range in memory
-      if (sqft != null) {
-        return results.where((property) {
-          double propertySqft = double.tryParse(property.sqft.toString()) ?? 0;
-
-          return propertySqft >= sqft.start && propertySqft <= sqft.end;
-        }).toList();
-      }
-
-      return results;
-    });
-  }
+  
 
   
 

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:property_managment/core/constant/firebase_const.dart';
 
 class NotificationRepository {
@@ -9,12 +8,14 @@ class NotificationRepository {
     required String title,
     required String message,
     required String addedStaff,
+    required String type,
   }) async {
     log("reached here");
     await service.notifications.add({
       "title": title,
       "message": message,
-      "type": addedStaff,
+      "type": type,
+      "addedStaff":addedStaff,
       "timestamp": DateTime.now().millisecondsSinceEpoch,
     });
   }

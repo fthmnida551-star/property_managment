@@ -71,7 +71,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
             Text(
               _saveButtonMode == SaveButtonMode.save
                   ? 'Add User'
-                  : 'Edit User', // 🟩 CHANGED: dynamic title
+                  : 'Edit User',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
