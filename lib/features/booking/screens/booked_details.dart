@@ -35,6 +35,7 @@ class BookedDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRole = ref.watch(userRoleProvider);
+    final loginName=ref.watch(userNameProvider);
     final bookingData = ref.watch(bookingProvider(bookedProperty.id));
     return Scaffold(
       appBar: AppbarWidget(
@@ -270,7 +271,7 @@ class BookedDetails extends ConsumerWidget {
                     onTap: () async {
                       ref
                           .read(bookingRepoProvider)
-                          .deleteBooking(property.bookingid, property.id);
+                          .deleteBooking(property.bookingid, property.id,loginName.value!);
 
                       Navigator.pushReplacement(
                         context,

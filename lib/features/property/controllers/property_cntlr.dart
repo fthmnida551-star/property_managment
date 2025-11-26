@@ -181,6 +181,11 @@ final userRoleProvider = FutureProvider<String>((ref) async {
   return prefs.getString("role") ?? "";
 });
 
+final userNameProvider = FutureProvider<String>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString("name") ?? "";
+});
+
 
 final searchProvider = StateProvider<String>((ref) => "");
 final filterProvider = StateProvider<String>((ref) => 'All');

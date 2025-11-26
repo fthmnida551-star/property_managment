@@ -67,6 +67,7 @@ class AddLandlordDetails extends ConsumerWidget {
     final repo = ref.read(propertyRepoProvider);
     final isOwnProperty = ref.watch(isOwnPropertyProvider);
     final isLoading = ref.watch(loadingProvider);
+    final userName =ref.watch(userNameProvider);
 
     return Scaffold(
       appBar: AppbarWidget(
@@ -198,7 +199,7 @@ class AddLandlordDetails extends ConsumerWidget {
               };
               log("asdfghjkl $finaldetails");
               if (_saveButtonMode == SaveButtonMode.save) {
-                await repo.addProperties(finaldetails);
+                await repo.addProperties(finaldetails,userName.value!);
               } else {
                 await repo.updateproperty(property!.id, finaldetails);
               }

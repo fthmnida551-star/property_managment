@@ -9,6 +9,7 @@ import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/features/property/screens/propertydetails/animated_tick.dart';
 
@@ -69,6 +70,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
   @override
   Widget build(BuildContext context) {
     final repo = ref.watch(bookingRepoProvider);
+    final username=ref.watch(userNameProvider);
     log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
@@ -193,7 +195,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
               };
 
               if (_saveButtonMode == SaveButtonMode.save) {
-                await repo.addbookingDetails(bookingDetails);
+                await repo.addbookingDetails(bookingDetails,username.value!);
               } else {
                 await repo.updateBooking(widget.bookedData!.id, bookingDetails);
               }

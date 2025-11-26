@@ -10,14 +10,14 @@ class PropertyRepo {
   final NotificationRepository notificationRepo;
   PropertyRepo(this.service, this.notificationRepo);
 
-  Future<void> addProperties(Map<String, dynamic> propertyData) async {
+  Future<void> addProperties(Map<String, dynamic> propertyData, String userName) async {
     try {
       await service.properties.add(propertyData);
 
       await notificationRepo.addNotification(
         title: "New Property Added",
         message: "${propertyData['propertyTitle']} has been added",
-        addedStaff: "admin", // you can use user id or role
+        addedStaff: userName, // you can use user id or role
       );
 
       log("Property Added & Notification Sent");

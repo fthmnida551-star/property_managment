@@ -6,6 +6,7 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/location/convert_class.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -39,10 +40,11 @@ class BookedPropertyScreen extends ConsumerWidget {
   } 
 
   // @override
-  @override
+
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     final repo=ref.read(bookingRepoProvider);
+    final loginanme=ref.watch(userNameProvider);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -474,7 +476,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                         //   property.bookingid,
                                         //   property.id,
                                         // );
-                                        repo.deleteBooking(property.bookingid,property.id,);
+                                        repo.deleteBooking(property.bookingid,property.id,loginanme.value!);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -774,7 +776,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                         //   widget.property.bookingid,
                                         //   widget.property.id,
                                         // );
-                                       repo.deleteBooking(property.bookingid,property.id,);
+                                       repo.deleteBooking(property.bookingid,property.id,loginanme.value!);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
