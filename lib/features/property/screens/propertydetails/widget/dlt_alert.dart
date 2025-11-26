@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
-void dltAlert(BuildContext context, PropertyModel property) {
+void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -47,7 +49,8 @@ void dltAlert(BuildContext context, PropertyModel property) {
               children: [
                 InkWell(
                   onTap: () {
-                    deleteProperty(property);
+                    // deleteProperty(property);
+                    ref.read(propertyRepoProvider).deleteProperty(property);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -112,16 +115,16 @@ void dltAlert(BuildContext context, PropertyModel property) {
   );
 }
 
-deleteProperty(PropertyModel property) async {
-  await FirebaseFirestore.instance
-      .collection("PROPERTIES")
-      .doc(property.id)
-      .delete();
-  if (property.isBooked == true) {
-    await FirebaseFirestore.instance
-        .collection("BOOKING DETAILS")
-        .doc(property.bookingid)
-        .delete();
-  }
-  // getAllPropertyDetails();
-}
+// deleteProperty(PropertyModel property) async {
+//   await FirebaseFirestore.instance
+//       .collection("PROPERTIES")
+//       .doc(property.id)
+//       .delete();
+//   if (property.isBooked == true) {
+//     await FirebaseFirestore.instance
+//         .collection("BOOKING DETAILS")
+//         .doc(property.bookingid)
+//         .delete();
+//   }
+//   // getAllPropertyDetails();
+// }

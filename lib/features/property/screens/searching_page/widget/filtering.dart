@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 
-class FilteringContainer extends StatefulWidget {
+class FilteringContainer extends StatelessWidget {
   final String text;
   final double width;
   final VoidCallback onTap;
@@ -14,18 +14,13 @@ class FilteringContainer extends StatefulWidget {
   });
 
   @override
-  State<FilteringContainer> createState() => _FilteringContainerState();
-}
-
-class _FilteringContainerState extends State<FilteringContainer> {
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(1.0),
       child: GestureDetector(
-       onTap:  widget.onTap,
+       onTap:  onTap,
         child: Container(
-          width: widget.width,
+          width: width,
           height: 32.h,
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -38,7 +33,7 @@ class _FilteringContainerState extends State<FilteringContainer> {
             children: [
               SizedBox(width: 10),
               Text(
-                widget.text,
+                text,
                 style: TextStyle(fontSize: 12.sp, color: AppColors.black),
               ),
               SizedBox(width: 5),

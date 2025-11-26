@@ -15,12 +15,11 @@ import 'package:property_managment/features/property/screens/propertydetails/ani
 class BookingDetails extends ConsumerStatefulWidget {
   final String propertyId;
   final BookingModel? bookedData;
-  
-   BookingDetails({
+
+  BookingDetails({
     super.key,
     required this.propertyId,
     required this.bookedData,
-  
   });
 
   @override
@@ -58,18 +57,18 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
       datectlr.text = widget.bookedData!.date;
       _saveButtonMode = SaveButtonMode.edit;
     }
-    
   }
 
-   @override
-   void initState() {
+  @override
+  void initState() {
     // TODO: implement initState
     super.initState();
     editBooking();
   }
+
   @override
   Widget build(BuildContext context) {
-    final repo=ref.watch(bookingRepoProvider);
+    final repo = ref.watch(bookingRepoProvider);
     log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
@@ -121,7 +120,8 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                       return 'First letter must be a capital letter';
                     }
                     return null;
-                  }, readOnly: false,
+                  },
+                  readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -138,7 +138,8 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                       return 'Contact number must be 10 digits';
                     }
                     return null;
-                  }, readOnly: false,
+                  },
+                  readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -153,7 +154,8 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                       return 'Please enter a valid email address';
                     }
                     return null;
-                  }, readOnly: false,
+                  },
+                  readOnly: false,
                 ),
                 divider,
                 CalendarPickerContainer(
@@ -179,6 +181,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
           onTap: () async {
             if (formKey.currentState!.validate()) {
               Map<String, dynamic> bookingDetails = {};
+              String id = DateTime.now().millisecondsSinceEpoch.toString();
               bookingDetails = {
                 "NAME": namectlr.text.trim(),
                 "CONTACT": int.tryParse(contactCtlr.text.trim()),
@@ -186,7 +189,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                 "DATE": datectlr.text.trim(),
                 "PROPERTY_ID": widget.propertyId,
                 "ADDED_DATE": DateTime.now(),
-                
+                'BOOKING_ID':id
               };
 
               if (_saveButtonMode == SaveButtonMode.save) {

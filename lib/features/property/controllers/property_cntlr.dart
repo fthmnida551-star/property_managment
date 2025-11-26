@@ -157,36 +157,6 @@ final isOwnPropertyProvider = StateProvider<bool>((ref) => false);
 final loadingProvider = StateProvider<bool>((ref) => false);
 
 
-class FilterParams {
-  final List<String> types;
-  final RangeValues? price;
-  final RangeValues? sqft;
-
-  FilterParams({required this.types, required this.price, required this.sqft});
-}
-
-final filteredPropertyProvider = StreamProvider.family((
-  ref,
-  FilterParams params,
-) {
-  final repo = ref.read(propertyRepoProvider);
-  return repo.getFilteredPropertyListStream(
-    params.types,
-    params.price,
-    params.sqft,
-  );
-});
-
-final searchQueryProvider = StateProvider<String>((ref) => "");
-
-final searchPropertyProvider =
-    StreamProvider.family<List<PropertyModel>, String>((ref, query) {
-      final repo = ref.watch(propertyRepoProvider);
-      
-      return repo.searchPropertiesStream(query);
-    }
-);
-
 final propertyImagesProvider = StateNotifierProvider<PropertyImagesNotifier, List<File>>(
   (ref) => PropertyImagesNotifier(),
 );
@@ -211,3 +181,60 @@ final userRoleProvider = FutureProvider<String>((ref) async {
   return prefs.getString("role") ?? "";
 });
 
+
+final searchProvider = StateProvider<String>((ref) => "");
+final filterProvider = StateProvider<String>((ref) => 'All');
+
+
+// filterSction
+
+final typeFilterProvider = StateProvider<List<String>?>((ref) => null);
+final priceFilterProvider = StateProvider<RangeValues?>((ref) => null);
+final sqftFilterProvider = StateProvider<RangeValues?>((ref) => null);
+
+
+final localFilteredListProvider = Provider<List<PropertyModel>>((ref) {
+  final allList = ref.watch(propertyListProvider).value ?? [];
+
+  final search = ref.watch(searchProvider);
+  final type = ref.watch(typeFilterProvider);
+  final price = ref.watch(priceFilterProvider);
+  final sqft = ref.watch(sqftFilterProvider);
+
+  List<PropertyModel> result = allList;
+
+  // 🔍 Search
+  if (search.isNotEmpty) {
+    result = result.where((item) =>
+        item.name.toLowerCase().contains(search.toLowerCase()) ||
+        item.location.toLowerCase().contains(search.toLowerCase())
+    ).toList();
+  }
+
+ // 🏠 Type filter (supports multiple types)
+if (type != null && type.isNotEmpty) {
+  result = result.where((item) {
+    final itemType = item.propertyType.trim().toUpperCase();
+    return type.contains(itemType);
+  }).toList();
+}
+
+
+  // 💰 Price filter
+  if (price != null) {
+    result = result.where((item) =>
+        item.price >= price.start &&
+        item.price <= price.end
+    ).toList();
+  }
+
+  // 📐 Sqft filter
+  if (sqft != null) {
+    result = result.where((item) =>
+        item.sqft >= sqft.start &&
+        item.sqft <= sqft.end
+    ).toList();
+  }
+
+  return result;
+});

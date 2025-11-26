@@ -45,7 +45,7 @@ class BookingModel {
       'CONTACT': contact,
       'DATE': date,
       'ADDED_DATE': addedDate, // Firestore stores DateTime directly
-     
+     'BOOKING_ID' : id,
       'PROPERTY_ID': propertyId,
       
     };

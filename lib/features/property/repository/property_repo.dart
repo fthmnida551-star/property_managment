@@ -50,6 +50,21 @@ class PropertyRepo {
           .toList(),
     );
   }
+  
+ 
+deleteProperty(PropertyModel property) async {
+  await service.properties
+      .doc(property.id)
+      .delete();
+  if (property.isBooked == true) {
+    await service.bookingdetails
+        .doc(property.bookingid)
+        .delete();
+  }
+  // getAllPropertyDetails();
+}
+
+
 
   // void getAllPropertyDetailsList() async {
   //     propertyDetailsList.clear();
@@ -118,47 +133,7 @@ class PropertyRepo {
     });
   }
 
-  Stream<List<PropertyModel>> searchPropertiesStream(String query) {
-    if (query.isEmpty) {
-      return getAllPropertyDetailsList(); // reuse your main stream
-    }
+  
 
-    final lowerQuery = query.toLowerCase();
 
-    log(lowerQuery);
-    return service.properties.snapshots().map((snapshot) {
-      log("jjjjjjj");
-      final all = snapshot.docs.map((doc) {
-        return PropertyModel.fromMap(
-          doc.data() as Map<String, dynamic>,
-          doc.id,
-        );
-      }).toList();
-
-      log("all length ${all.length}");
-
-      return all.where((property) {
-        return property.name.toLowerCase().contains(lowerQuery) ||
-            property.location.toLowerCase().contains(lowerQuery);
-      }).toList();
-    });
-  }
 }
-// class BookingRepository {
-// final FirebaseService service;
-// BookingRepository(this.service);
-
-//   Future<void> deleteBooking({
-//     required String bookingId,
-//     required String propertyId,
-//   }) async {
-//     await service.bookingdetails. doc(bookingId).delete();
-
-//     await service.bookingdetails. doc(propertyId).update({
-//       'IS_BOOKED': 'NO',
-//     });
-  // }
-// }
-
-
-
