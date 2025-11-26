@@ -102,7 +102,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return "First letter must be capital";
                       }
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -121,7 +121,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return 'Please enter a valid email address';
                       }
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),

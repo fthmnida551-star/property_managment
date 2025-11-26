@@ -2,12 +2,17 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
+import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
+import 'package:property_managment/location/concert_section.dart';
+import 'package:property_managment/location/convert_class.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/dlt_alert.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
@@ -22,12 +27,7 @@ class NotBookedPropertyScreen extends StatefulWidget {
     super.key,
     required this.userName,
     required this.property,
-    
   });
-   
-
-  
-
   // const NotBookedPropertyScreen({super.key});
   @override
   State<NotBookedPropertyScreen> createState() =>
@@ -52,8 +52,10 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
     getUserRole();
   }
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ) {
+    // final repoBook= ref.watch(bookingRepoProvider);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -69,25 +71,27 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       children: [
                         // Image.asset(AssetResource.building1, fit: BoxFit.cover),
                         // Image.asset(AssetResource.property, fit: BoxFit.cover),
-                         Image.network(
-                      widget.property.image[0],
-                      fit: BoxFit.cover,
-                      height: 209,
-                      width: 356,
-                    ),
-                    Image.network(
-                      widget.property.image[1],
-                      fit: BoxFit.cover,
-                      height: 209,
-                      width: 356,
-                    ),
-                    Image.network(
-                      widget.property.image[2],
-                      fit: BoxFit.cover,
-                      height: 209,
-                      width: 356,
-                    ),
-
+                        if (widget.property.image.isNotEmpty)
+                          Image.network(
+                            widget.property.image[0],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
+                          ),
+                        if (widget.property.image.length > 1)
+                          Image.network(
+                            widget.property.image[1],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
+                          ),
+                        if (widget.property.image.length > 2)
+                          Image.network(
+                            widget.property.image[2],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
+                          ),
                       ],
                     ),
                   ),
@@ -112,29 +116,29 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           ),
 
                           itemBuilder: (BuildContext context) => [
-                            if(userRole!="Agent")
-                            PopupMenuItem(
-                              onTap: () {
-                                 Navigator.of(
+                            if (userRole != "Agent")
+                              PopupMenuItem(
+                                onTap: () {
+                                  Navigator.of(
                                     context,
                                     rootNavigator: true,
                                   ).push(
                                     MaterialPageRoute(
-                                      builder: (context) => AddProperty(from: 'Edit', property: widget.property,),
+                                      builder: (context) => AddProperty(from: 'Edit', property:widget. property,),
                                     ),
                                   );
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit, color: AppColors.black),
-                                  Text('Edit'),
-                                ],
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.edit, color: AppColors.black),
+                                    Text('Edit'),
+                                  ],
+                                ),
                               ),
-                            ),
                             PopupMenuItem(
                               onTap: (){
 
-                                   dltAlert(context,widget.property);
+                                   dltAlert(context, widget.property);
                                   
                                  
                               },
@@ -147,7 +151,8 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                             ),
                             PopupMenuItem(
                               onTap: () {
-                                  showLandlordPopup(context, widget.property);
+                                  // showLandlordPopup(context, property);
+                                showLandlordPopup(context, widget.property);
                               },
                               child: Row(
                                 children: [
@@ -213,19 +218,55 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       ),
                       SizedBox(height: 15),
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            widget.property.location,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
-                            ),
+                      // Row(
+                      //   children: [
+                      //     Icon(Icons.location_on, color: AppColors.black),
+                      //     SizedBox(width: 5),
+                      //     Text(
+                      //       widget.property.location,
+                      //       style: TextStyle(
+                      //         fontSize: 15,
+                      //         color: AppColors.black,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      if (widget.property.latitude != null &&
+                          widget.property.longitude != null)
+                        FutureBuilder<String>(
+                          future: convertLatLngToAddress(
+                            widget.property.latitude!,
+                            widget.property.longitude!,
                           ),
-                        ],
-                      ),
+                          builder: (context, snapshot) {
+                            String text = "Loading location...";
+
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              text = snapshot.data ?? "Unknown location";
+                            }
+
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.location_on, color: AppColors.black),
+                                SizedBox(width: 5),
+                                Expanded(
+                                  child: Text(
+                                    text,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: AppColors.black,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
                       ExpansionTileTheme(
@@ -290,7 +331,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                       ),
                                       Divider(thickness: 1),
                                       RowWidget(
-                                        text: '${widget.property.readyToMove}',
+                                        text: '${ widget.property.readyToMove}',
                                         icons: Icons.check_circle_outline,
                                       ),
                                       Divider(thickness: 1),
@@ -323,19 +364,19 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                     children: [
                                       DetailsTable(
                                         text: 'Bedrooms',
-                                        details: '${widget.property.bhk}',
+                                        details: '${ widget.property.bhk}',
                                         icons: Icons.bed,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Carpet Area',
-                                        details: '${widget.property.sqft}',
+                                        details: '${ widget.property.sqft}',
                                         icons: Icons.check_box_outline_blank,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Bathrooms',
-                                        details: '${widget.property.bathrooms}',
+                                        details: '${ widget.property.bathrooms}',
                                         icons: Icons.bathtub,
                                       ),
                                     ],
@@ -348,12 +389,12 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: '${widget.property.carParking}',
+                                  text: '${ widget.property.carParking}',
                                   icons: Icons.directions_car,
                                 ),
                                 RowWidget(
                                   text:
-                                      'Maintenance (Monthly) ${widget.property.price}',
+                                      'Maintenance (Monthly) ${ widget.property.price}',
                                   icons: Icons.currency_bitcoin,
                                 ),
                               ],
@@ -373,7 +414,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    widget.property.description,
+                                     widget.property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -390,18 +431,36 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Column(
+                      //     children: [
+                      //       SizedBox(
+                      //         height: 300,
+                              
+                      //         child: Image.network(
+                      //           "https://maps.googleapis.com/maps/api/staticmap?"
+                      //           "center=${widget.property.latitude},${widget.property.longitude}"
+                      //           "&zoom=16&size=600x300&markers=color:red%7C${widget.property.latitude},${widget.property.longitude}"
+                      //           "&key=YOUR_GOOGLE_MAPS_API_KEY",
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
 
-              if (widget.property.propertyType == 'LAND')
+              if ( widget.property.propertyType == 'LAND')
                 Padding(
                   padding: EdgeInsets.all(26.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.property.price}',
+                        '${ widget.property.price}',
                         style: TextStyle(
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -411,20 +470,64 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                       SizedBox(height: 10),
 
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            widget.property.location,
-                            // 'KARAVATTOM, MALAPPURAM',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
+                      // Row(
+                      //   children: [
+                      //     Icon(Icons.location_on, color: AppColors.black),
+                      //     SizedBox(width: 5),
+                      //     Text(
+                      //       widget.property.location,
+                      //       // 'KARAVATTOM, MALAPPURAM',
+                      //       style: TextStyle(
+                      //         fontSize: 15,
+                      //         color: AppColors.black,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      //                    if (widget.property.latitude != null && widget.property.longitude != null)
+                      // FutureBuilder<String>(
+                      //   future: convertLatLngToAddress(
+                      //     widget.property.latitude!,
+                      //     widget.property.longitude!,
+                      //   ),
+                      //   builder: (context, snapshot) {
+                      //     String text = "Loading location...";
+
+                      //     if (snapshot.connectionState == ConnectionState.done) {
+                      //       text = snapshot.data ?? "Unknown location";
+                      //     }
+
+                      //     return Row(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Icon(Icons.location_on, color: AppColors.black),
+                      //         SizedBox(width: 5),
+                      //         Expanded(
+                      //           child: Text(
+                      //             text,
+                      //             style: TextStyle(fontSize: 15, color: AppColors.black),
+                      //             maxLines: 2,
+                      //             overflow: TextOverflow.ellipsis,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   },
+                      // ),
+                      if (widget.property.latitude != null &&
+                          widget.property.longitude != null)
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: AppColors.black),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: AddressWidget(
+                                lat: widget.property.latitude!,
+                                lng: widget.property.longitude!,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
@@ -468,7 +571,13 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Text('Property Overview',style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                                    child: Text(
+                                      'Property Overview',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
 
@@ -483,25 +592,37 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                       DetailsTable(
+                                      // DetailsTable(
+                                      //   text: 'Location',
+                                      //   details: "${widget.property.location}",
+                                      //   icons: Icons.location_on,
+                                      // ),
+                                      DetailsTable(
                                         text: 'Location',
-                                        details: "${widget.property.location}",
+                                        detailsWidget: AddressWidget(
+                                          lat: widget.property.latitude!,
+                                          lng: widget.property.longitude!,
+                                          style: TextStyle(
+                                            color: AppColors.black,
+                                          ),
+                                        ),
                                         icons: Icons.location_on,
                                       ),
+
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Property Type',
-                                        details: "${widget.property.propertyType}",
+                                        details:
+                                            "${widget.property.propertyType}",
                                         icons: Icons.landslide_outlined,
                                       ),
                                       Divider(thickness: 1),
-                                      
+
                                       DetailsTable(
                                         text: 'Sqft',
-                                        details: "${widget.property.sqft}",
+                                        details: "${ widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
-                                      ),
-                                      // Divider(thickness: 1),
+                                      ),                                    // Divider(thickness: 1),
                                      
                                     ],
                                   ),
@@ -513,7 +634,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: widget.property.aminities,
+                                  text:  widget.property.aminities,
                                   icons: Icons.business_outlined,
                                 ),
                               ],
@@ -540,7 +661,7 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                                     // 'car parking: Yes\n'
                                     // 'Amenities : Swimming Pool, Gym,\n 24*7 Security Power Backup\n'
                                     // 'Status : Ready To Move',
-                                    widget.property.description,
+                                     widget.property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -557,57 +678,54 @@ class _NotBookedPropertyScreenState extends State<NotBookedPropertyScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      
+
                       SizedBox(height: 8),
-                     
                     ],
-                    
                   ),
-                  
                 ),
             ],
           ),
         ),
-     
-        bottomNavigationBar: userRole == "Agent" ? null
-         : Padding(
-          padding: EdgeInsets.all(16.0),
-          child: SizedBox(
-            height: 50,
-            
-            child: ElevatedButton(
-              onPressed: () {
-                log("property id is  ${widget.property.id}");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        BookingDetails(propertyId: widget.property.id, bookedData: null,),
+
+        bottomNavigationBar: userRole == "Agent"
+            ? null
+            : Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(
+                  height: 50,
+
+                  child: ElevatedButton(
+                    onPressed: () {
+                      log("property id is  ${widget.property.id}");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookingDetails(
+                            propertyId: widget.property.id,
+                            bookedData: null,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.greenColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                    ),
+
+                    child: Text(
+                      'Booking Now',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.whitecolor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.greenColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
                 ),
               ),
-             
-              child: Text(
-                'Booking Now',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: AppColors.whitecolor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
-  
-
-
 }

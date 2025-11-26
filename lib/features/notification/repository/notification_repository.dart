@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:property_managment/core/constant/firebase_const.dart';
 
 class NotificationRepository {
@@ -8,6 +10,7 @@ class NotificationRepository {
     required String message,
     required String addedStaff,
   }) async {
+    log("reached here");
     await service.notifications.add({
       "title": title,
       "message": message,

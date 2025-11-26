@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
@@ -10,32 +11,36 @@ import 'package:property_managment/core/utils/checkbox.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
-class AddLandlordDetails extends StatefulWidget {
+class AddLandlordDetails extends ConsumerWidget {
   final String from;
   final PropertyModel? property;
   final Map<String, dynamic> propertyMap;
-  const AddLandlordDetails({
+  AddLandlordDetails({
     super.key,
     required this.propertyMap,
     required this.from,
     required this.property,
   });
 
-  @override
-  State<AddLandlordDetails> createState() => _AddLandlordDetailsState();
-}
-
-class _AddLandlordDetailsState extends State<AddLandlordDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
   final frmKey = GlobalKey<FormState>();
+
   Widget divider = SizedBox(height: 10);
-  bool isOwnProperty = false;
+
+  // bool isOwnProperty = false;
+
   TextEditingController nameCtlr = TextEditingController();
+
   TextEditingController emailCtlr = TextEditingController();
+
   TextEditingController contactCtlr = TextEditingController();
+
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
+
   _clearControllers() {
     nameCtlr.clear();
     emailCtlr.clear();
@@ -43,29 +48,26 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
   }
 
   setControllersForUpdate() {
-    
-    log('reached here owner page : ${widget.from}    property: ${widget.property}');
-    if (widget.from == "Edit" && widget.property != null) {
-      nameCtlr.text = widget.property!.ownername;
-      emailCtlr.text = widget.property!.email;
-      contactCtlr.text = widget.property!.contact;
-      isOwnProperty = widget.property!.isOwner;
+    log('reached here owner page : $from    property: $property');
+    if (from == "Edit" && property != null) {
+      nameCtlr.text = property!.ownername;
+      emailCtlr.text = property!.email;
+      contactCtlr.text = property!.contact;
+      // isOwnProperty = property!.isOwner;
       _saveButtonMode = SaveButtonMode.edit;
     }
-    setState(() {
-      
-    });
+    // setState(() {
+
+    // });
   }
 
+  // @override
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    setControllersForUpdate();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final repo = ref.read(propertyRepoProvider);
+    final isOwnProperty = ref.watch(isOwnPropertyProvider);
+    final isLoading = ref.watch(loadingProvider);
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -100,10 +102,13 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                 CheckboxWithListenable(
                   text: 'Own Property',
                   value: isOwnProperty,
-                  onChanged: (newValue) {
-                    setState(() {
-                      isOwnProperty = newValue ?? false;
-                    });
+                  onChanged: (value) {
+                    // isOwnProperty = value ?? false;
+                     ref.read(isOwnPropertyProvider.notifier).state = value ?? false;
+                    // ref.read(propertyFormProvider.notifier).updateIsOwner(isOwnProperty);
+                     ref.read(propertyFormProvider.notifier)
+        .updateIsOwner(value ?? false);
+                   
                   },
                 ),
 
@@ -119,8 +124,11 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                       if (!RegExp(r'^[A-Z]').hasMatch(value)) {
                         return 'First letter must be a capital letter';
                       }
+                       ref
+                        .read(propertyFormProvider.notifier)
+                        .updateOwnerName(value);
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                   divider,
                   TextFieldContainer(
@@ -136,8 +144,11 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                       if (value.length != 10) {
                         return 'Contact number must be 10 digits';
                       }
+                       ref
+                        .read(propertyFormProvider.notifier)
+                        .updateContact(value);
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                   divider,
                   TextFieldContainer(
@@ -151,8 +162,11 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
                       if (!value.contains('@')) {
                         return 'Please enter a valid email address';
                       }
+                       ref
+                        .read(propertyFormProvider.notifier)
+                        .updateEmail(value);
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                   divider,
                   // CalendarPickerContainer(hintText: 'date'),
@@ -164,31 +178,33 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: GreenButton(
+        child: isLoading 
+        ?CircularProgressIndicator(
+          color: AppColors.greenColor,
+          padding: EdgeInsets.symmetric(horizontal: 140),)
+        :GreenButton(
           text: 'Submit',
           onTap: () async {
             if (frmKey.currentState!.validate()) {
-              // if (_saveButtonMode == SaveButtonMode.save) {
-                Map<String, dynamic> ownerDetails = {
-                  "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
-                  "OWNER_NAME": nameCtlr.text.trim(),
-                  // "OWNER_CONTACT": int.tryParse(contactCtlr.text.trim()),
-                  "OWNER_CONTACT": contactCtlr.text.trim(),
-                  "OWNER_EMAIL": emailCtlr.text.trim(),
-                  
-                };
-                Map<String, dynamic> finaldetails = {
-                  ...widget.propertyMap,
-                  ...ownerDetails,
-                };
-                log("asdfghjkl $finaldetails");
-                if (_saveButtonMode == SaveButtonMode.save) {
-                  await addProperties(finaldetails);
-                } else {
-                  await updateproperty(widget.property!.id, finaldetails);
-                }
-                _clearControllers();
-              // }
+              Map<String, dynamic> ownerDetails = {
+                "IS_OWN_PROPERTY": isOwnProperty ? "YES" : "NO",
+                "OWNER_NAME": nameCtlr.text.trim(),
+                "OWNER_CONTACT": contactCtlr.text.trim(),
+                "OWNER_EMAIL": emailCtlr.text.trim(),
+              };
+              Map<String, dynamic> finaldetails = {
+                ...propertyMap,
+                ...ownerDetails,
+              };
+              log("asdfghjkl $finaldetails");
+              if (_saveButtonMode == SaveButtonMode.save) {
+                await repo.addProperties(finaldetails);
+              } else {
+                await  repo.updateproperty(property!.id, finaldetails);
+              }
+              _clearControllers();
+              //  ref.read(propertyFormProvider.notifier).clear();
+              
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -205,27 +221,5 @@ class _AddLandlordDetailsState extends State<AddLandlordDetails> {
         ),
       ),
     );
-  }
-
-  addProperties(Map<String, dynamic> propertyData) async {
-    await fdb.collection("PROPERTIES").add(propertyData).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-
-      log("Insert Data with $id");
-    });
-  }
-
-  Future<void> updateproperty(
-    String id,
-    Map<String, dynamic> updatedData,
-  ) async {
-    try {
-      await fdb.collection("PROPERTIES").doc(id).update(updatedData);
-      log("Properties updated successfully");
-    } catch (e) {
-      log("Error updating properties: $e");
-    }
   }
 }

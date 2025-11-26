@@ -1,20 +1,22 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/date_picker.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/features/property/screens/propertydetails/animated_tick.dart';
 
-class BookingDetails extends StatefulWidget {
+class BookingDetails extends ConsumerStatefulWidget {
   final String propertyId;
   final BookingModel? bookedData;
   
-  const BookingDetails({
+   BookingDetails({
     super.key,
     required this.propertyId,
     required this.bookedData,
@@ -22,17 +24,24 @@ class BookingDetails extends StatefulWidget {
   });
 
   @override
-  State<BookingDetails> createState() => _BookingDetailsState();
+  ConsumerState<BookingDetails> createState() => _BookingDetailsState();
 }
 
-class _BookingDetailsState extends State<BookingDetails> {
+class _BookingDetailsState extends ConsumerState<BookingDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
   final formKey = GlobalKey<FormState>();
+
   Widget divider = SizedBox(height: 10);
+
   TextEditingController namectlr = TextEditingController();
+
   TextEditingController contactCtlr = TextEditingController();
+
   TextEditingController emailCtlr = TextEditingController();
+
   TextEditingController datectlr = TextEditingController();
+
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   _clearControllers() {
@@ -49,17 +58,18 @@ class _BookingDetailsState extends State<BookingDetails> {
       datectlr.text = widget.bookedData!.date;
       _saveButtonMode = SaveButtonMode.edit;
     }
-    setState(() {});
+    
   }
 
-  @override
-  void initState() {
+   @override
+   void initState() {
+    // TODO: implement initState
     super.initState();
     editBooking();
   }
-
   @override
   Widget build(BuildContext context) {
+    final repo=ref.watch(bookingRepoProvider);
     log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
@@ -111,7 +121,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       return 'First letter must be a capital letter';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -128,7 +138,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       return 'Contact number must be 10 digits';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
@@ -143,7 +153,7 @@ class _BookingDetailsState extends State<BookingDetails> {
                       return 'Please enter a valid email address';
                     }
                     return null;
-                  },
+                  }, readOnly: false,
                 ),
                 divider,
                 CalendarPickerContainer(
@@ -180,9 +190,9 @@ class _BookingDetailsState extends State<BookingDetails> {
               };
 
               if (_saveButtonMode == SaveButtonMode.save) {
-                await addbookingDetails(bookingDetails);
+                await repo.addbookingDetails(bookingDetails);
               } else {
-                await updateBooking(widget.bookedData!.id, bookingDetails);
+                await repo.updateBooking(widget.bookedData!.id, bookingDetails);
               }
               _clearControllers();
               Navigator.push(
@@ -194,32 +204,5 @@ class _BookingDetailsState extends State<BookingDetails> {
         ),
       ),
     );
-  }
-
-  addbookingDetails(Map<String, dynamic> bookingData) async {
-    await fdb.collection("BOOKING DETAILS").add(bookingData).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-
-      log("Insert Data with $id");
-      fdb.collection("PROPERTIES").doc(bookingData['PROPERTY_ID']).update({
-        'BOOKING_ID': id,
-        'IS_BOOKED': 'YES',
-        'ADDED_DATE': DateTime.now(),
-      });
-    });
-  }
-
-  Future<void> updateBooking(
-    String id,
-    Map<String, dynamic> updatedData,
-  ) async {
-    try {
-      await fdb.collection("BOOKING DETAILS").doc(id).update(updatedData);
-      log("Booking updated successfully");
-    } catch (e) {
-      log("Error updating booking: $e");
-    }
   }
 }

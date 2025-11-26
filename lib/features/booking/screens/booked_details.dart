@@ -10,7 +10,7 @@ import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/property_details/booked.dart';
 import 'package:property_managment/features/property/screens/searching_page/widget/property_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -178,7 +178,6 @@ class _BookedDetailsState extends State<BookedDetails> {
                   //   text: 'Delete',
                   //   onTap: () {
                   //     deleteBookingProperty()
-
                   //     Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
