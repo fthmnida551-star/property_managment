@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
+import 'package:property_managment/location/convert_class.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/dlt_alert.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
@@ -15,8 +18,7 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-class BookedPropertyScreen extends StatefulWidget {
+class BookedPropertyScreen extends ConsumerWidget {
   PropertyModel property;
   BookingModel? bookedData;
   BookedPropertyScreen({
@@ -24,32 +26,23 @@ class BookedPropertyScreen extends StatefulWidget {
     required this.property,
     required this.bookedData,
   });
-  @override
-  State<BookedPropertyScreen> createState() => _BookedPropertyScreenState();
-}
-
-class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
   List<PropertyModel> propertyDetails = [];
+
   FirebaseFirestore fdb = FirebaseFirestore.instance;
+
   String userRole ="";
+
   void getUserRole()async{
     final prefs =await SharedPreferences.getInstance();
     userRole =prefs.getString("role")??'';
-    setState(() {
-      
-    });
+    
   } 
 
-  @override
-  void initState() {
-    super.initState();
-    getUserRole();
-   
-  }
-
+  // @override
   @override
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final repo=ref.read(bookingRepoProvider);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -65,40 +58,27 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       children: [
                         // Image.asset(AssetResource.building1, fit: BoxFit.cover),
                         // Image.asset(AssetResource.property, fit: BoxFit.cover),
-                          InkWell(
-                            onTap: () {
-                              
-                            },
-                            child: Image.network(
-                                                  widget.property.image[0],
-                                                  fit: BoxFit.cover,
-                                                  height: 209,
-                                                  width: 356,
-                                                ),
+                        if (property.image.isNotEmpty)
+                          Image.network(
+                            property.image[0],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
                           ),
-                    InkWell(
-                      onTap: () {
-                        
-                      },
-                      child: Image.network(
-                        widget.property.image[1],
-                        fit: BoxFit.cover,
-                        height: 209,
-                        width: 356,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        
-                      },
-                      child: Image.network(
-                        widget.property.image[2],
-                        fit: BoxFit.cover,
-                        height: 209,
-                        width: 356,
-                      ),
-                    ),
-
+                        if (property.image.length > 1)
+                          Image.network(
+                            property.image[1],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
+                          ),
+                        if (property.image.length > 2)
+                          Image.network(
+                            property.image[2],
+                            fit: BoxFit.cover,
+                            height: 209,
+                            width: 356,
+                          ),
                       ],
                     ),
                   ),
@@ -123,36 +103,37 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                             color: AppColors.whitecolor,
                           ),
                           itemBuilder: (BuildContext context) => [
-                            if (userRole!="Agent")
-                            PopupMenuItem(
-                              child: InkWell(
-                                onTap: () {
-                                  // use rootNavigator so it works even after popup closes
-                                  Navigator.of(
-                                    context,
-                                    rootNavigator: true,
-                                  ).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AddProperty(
-                                        from: 'Edit',
-                                        property: widget.property,
+                            if (userRole != "Agent")
+                              PopupMenuItem(
+                                child: InkWell(
+                                  onTap: () {
+                                    // use rootNavigator so it works even after popup closes
+                                    Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => AddProperty(
+                                          from: 'Edit',
+                                          property: property,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },
 
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.edit, color: AppColors.black),
-                                    Text('Edit'),
-                                  ],
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.edit, color: AppColors.black),
+                                      Text('Edit'),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                           PopupMenuItem(
+                            PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
-                                  dltAlert(context,widget.property);
+                                  // dltAlert(context, property);
+                                  dltAlert(context, property, ref);
                                   Navigator.pop(context);
                                 },
                                 child: Row(
@@ -163,12 +144,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                               ),
                             ),
-                            
+
                             PopupMenuItem(
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context, widget.property);
+                                  showLandlordPopup(context, property);
                                 },
                                 child: Row(
                                   children: [
@@ -192,8 +173,8 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       padding: EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 10,
-                      ), 
-                       decoration: BoxDecoration(
+                      ),
+                      decoration: BoxDecoration(
                         color: AppColors.whitecolor,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -206,15 +187,15 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
               ),
 
               // --- Property Content Section ---
-              if (widget.property.propertyType == 'APARTMENT' ||
-                  widget.property.propertyType == "VILLA")
+              if (property.propertyType == 'APARTMENT' ||
+                  property.propertyType == "VILLA")
                 Padding(
                   padding: EdgeInsets.all(26.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.property.price}',
+                        '${property.price}',
                         style: TextStyle(
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -223,33 +204,48 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        widget.property.name.toUpperCase(),
+                        property.name.toUpperCase(),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',
+                        'BHK :${property.bathrooms}\n SQFT :${property.sqft}',
                         style: TextStyle(fontSize: 14, color: AppColors.black),
                       ),
                       SizedBox(height: 15),
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            widget.property.location,
-                            // 'KARAVATTOM, MALAPPURAM',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
+                      // Row(
+                      //   children: [
+                      //     Icon(Icons.location_on, color: AppColors.black),
+                      //     SizedBox(width: 5),
+                      //     Text(
+                      //       widget.property.location,
+                      //       // 'KARAVATTOM, MALAPPURAM',
+                      //       style: TextStyle(
+                      //         fontSize: 15,
+                      //         color: AppColors.black,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      if (property.latitude != null &&
+                          property.longitude != null)
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: AppColors.black),
+                            
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: AddressWidget(
+                                lat: property.latitude!,
+                                lng: property.longitude!,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-
+                          ],
+                        ),
+                        
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
                       ExpansionTileTheme(
@@ -293,7 +289,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Property Overview\n${widget.property.name},\n${widget.property.location}',
+                                      'Property Overview\n${property.name},\n${property.location}',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ),
@@ -309,12 +305,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       RowWidget(
-                                        text: widget.property.propertyType,
+                                        text: property.propertyType,
                                         icons: Icons.apartment,
                                       ),
                                       Divider(thickness: 1),
                                       RowWidget(
-                                        text: '${widget.property.readyToMove}',
+                                        text: '${property.readyToMove}',
                                         icons: Icons.check_circle_outline,
                                       ),
                                     ],
@@ -344,19 +340,19 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     children: [
                                       DetailsTable(
                                         text: 'Bedrooms',
-                                        details: "${widget.property.bathrooms}",
+                                        details: "${property.bathrooms}",
                                         icons: Icons.bed,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Carpet Area',
-                                        details: "${widget.property.sqft}",
+                                        details: "${property.sqft}",
                                         icons: Icons.check_box_outline_blank,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Bathrooms',
-                                        details: "${widget.property.bathrooms}",
+                                        details: "${property.bathrooms}",
                                         icons: Icons.bathtub,
                                       ),
                                     ],
@@ -369,12 +365,12 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: "${widget.property.carParking}",
+                                  text: "${property.carParking}",
                                   icons: Icons.directions_car,
                                 ),
                                 RowWidget(
                                   text:
-                                      "Maintenance (Monthly) ${widget.property.price}",
+                                      "Maintenance (Monthly) ${property.price}",
                                   icons: Icons.currency_bitcoin,
                                 ),
                               ],
@@ -394,7 +390,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    widget.property.description,
+                                    property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -438,84 +434,85 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               children: [
                                 Icon(Icons.person, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(widget.bookedData!.name),
+                                Text(bookedData!.name),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.phone, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(widget.bookedData!.contact),
+                                Text(bookedData!.contact),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(widget.bookedData!.email),
+                                Text(bookedData!.email),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${widget.bookedData!.date}"),
+                                Text("${bookedData!.date}"),
                               ],
                             ),
-                            if (userRole!="Agent")
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  
-                                  Button(
-                                    width: 150,
-                                    height: 40,
-                                    text: 'Delete',
-                                    onTap: () async {
-                                      await deleteUser(
-                                        widget.property.bookingid,
-                                        widget.property.id,
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              BottomNavigationWidget(
-                                                currentIndex: 1,
-                                                propertytype: [],
-                                                price: null,
-                                                sqft: null,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icons.delete_outline_outlined,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Button(
-                                    width: 150,
-                                    height: 40,
-                                    text: 'Edit',
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BookingDetails(
-                                            propertyId: widget.property.id,
-                                            bookedData: widget.bookedData,
-                                            
+                            if (userRole != "Agent")
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Button(
+                                      width: 150,
+                                      height: 40,
+                                      text: 'Delete',
+                                      onTap: () async {
+                                        // await deleteUser(
+                                        //   property.bookingid,
+                                        //   property.id,
+                                        // );
+                                        repo.deleteBooking(property.bookingid,property.id,);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                BottomNavigationWidget(
+                                                  currentIndex: 1,
+                                                  propertytype: [],
+                                                  price: null,
+                                                  sqft: null,
+                                                ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icons.edit_outlined,
-                                  ),
-                                ],
+                                        );
+                                      },
+                                      icon: Icons.delete_outline_outlined,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Button(
+                                      width: 150,
+                                      height: 40,
+                                      text: 'Edit',
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                BookingDetails(
+                                                  propertyId:
+                                                      property.id,
+                                                  bookedData: bookedData,
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icons.edit_outlined,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                             SizedBox(height: 10),
                           ],
                         ),
@@ -524,14 +521,14 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                   ),
                 ),
 
-              if (widget.property.propertyType == 'LAND')
+              if (property.propertyType == 'LAND')
                 Padding(
                   padding: EdgeInsets.all(26.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.property.price}',
+                        '${property.price}',
                         style: TextStyle(
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -546,7 +543,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                           Icon(Icons.location_on, color: AppColors.black),
                           SizedBox(width: 5),
                           Text(
-                            widget.property.location,
+                            property.location,
                             style: TextStyle(
                               fontSize: 15,
                               color: AppColors.black,
@@ -621,20 +618,26 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                     children: [
                                       DetailsTable(
                                         text: 'Location',
-                                        details: widget.property.location,
+                                        detailsWidget: AddressWidget(
+                                          lat: property.latitude!,
+                                          lng: property.longitude!,
+                                          style: TextStyle(
+                                            color: AppColors.black,
+                                          ),
+                                        ),
                                         icons: Icons.location_on,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Property Type',
-                                        details: widget.property.propertyType,
+                                        details: property.propertyType,
                                         icons: Icons.landslide_outlined,
                                       ),
                                       Divider(thickness: 1),
 
                                       DetailsTable(
                                         text: 'Sqft',
-                                        details: "${widget.property.sqft}",
+                                        details: "${property.sqft}",
                                         icons: Icons.check_box_outline_blank,
                                       ),
                                     ],
@@ -647,7 +650,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: widget.property.aminities,
+                                  text: property.aminities,
                                   icons: Icons.business_outlined,
                                 ),
                               ],
@@ -667,7 +670,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    widget.property.description,
+                                    property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -684,6 +687,18 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
+                      
+//                      Padding(
+//   padding: EdgeInsets.only(bottom: 8.0),
+//   child: Image.network(
+//     "https://maps.googleapis.com/maps/api/staticmap?"
+//     "center=${widget.property.latitude},${widget.property.longitude}"
+//     "&zoom=16&size=600x300&markers=color:red%7C${widget.property.latitude},${widget.property.longitude}"
+//     "&key=YOUR_GOOGLE_MAPS_API_KEY",
+//     fit: BoxFit.cover,
+//   ),
+// ),
+
                       SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -714,21 +729,21 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                               children: [
                                 Icon(Icons.person, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${widget.bookedData!.name}"),
+                                Text("${bookedData!.name}"),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.phone, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${widget.bookedData!.contact}"),
+                                Text("${bookedData!.contact}"),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(widget.bookedData!.email),
+                                Text(bookedData!.email),
                               ],
                             ),
                             Row(
@@ -739,7 +754,7 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 ),
 
                                 SizedBox(width: 8),
-                                Text("${widget.bookedData!.date}"),
+                                Text("${bookedData!.date}"),
                                 // Text('Date\n2-3-2025'),
                               ],
                             ),
@@ -749,44 +764,44 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  if(userRole!="Agent")
-                                  Button(
-                                    width: 150,
-                                    height: 40,
-                                    text: 'Delete',
-                                    onTap: () async {
-                                      await deleteUser(
-                                        widget.property.bookingid,
-                                        widget.property.id
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              BottomNavigationWidget(
-                                                currentIndex: 1,
-                                                propertytype: [],
-                                                price: null,
-                                                sqft: null,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icons.delete_outline_outlined,
-                                  ),
+                                  if (userRole != "Agent")
+                                    Button(
+                                      width: 150,
+                                      height: 40,
+                                      text: 'Delete',
+                                      onTap: () async {
+                                        // await deleteB(
+                                        //   widget.property.bookingid,
+                                        //   widget.property.id,
+                                        // );
+                                       repo.deleteBooking(property.bookingid,property.id,);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                BottomNavigationWidget(
+                                                  currentIndex: 1,
+                                                  propertytype: [],
+                                                  price: null,
+                                                  sqft: null,
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icons.delete_outline_outlined,
+                                    ),
                                   SizedBox(width: 10),
                                   Button(
                                     width: 150,
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
-                                     
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => BookingDetails(
-                                            propertyId: widget.property.id,
-                                            bookedData: widget.bookedData,
+                                            propertyId: property.id,
+                                            bookedData: bookedData,
                                           ),
                                         ),
                                       );
@@ -808,16 +823,5 @@ class _BookedPropertyScreenState extends State<BookedPropertyScreen> {
         ),
       ),
     );
-  }
-
-  deleteUser(String id, String propertyId) async {
-    await fdb
-        .collection("BOOKING DETAILS")
-        .doc(widget.property.bookingid)
-        .delete();
-         await fdb.collection('PROPERTIES').doc(propertyId).update({
-      'IS_BOOKED': 'NO',
-    });
-    // getAllPropertyDetails();
   }
 }

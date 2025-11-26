@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
-import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/features/home/screens/dashboard.dart';
 import 'package:property_managment/features/notification/screens/notificationscreen.dart';
 import 'package:property_managment/features/profile/screens/profile.dart';
@@ -27,7 +26,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   List<Widget> get _pages => [
     Center(child: DashboardScreen()),
-    Center(child: Searchingpage(propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
+    Center(child: Searchingpage()),//propertytype: widget.propertytype, price: widget.price,sqft: widget.sqft,)),
     Center(child: Notificationscreen()),
     Center(child: Profilescreen()),
   ];

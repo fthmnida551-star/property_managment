@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   bool _obscurePassword = true;
-  final _saveButtonMode = SaveButtonMode.save;
+  final saveButtonMode = SaveButtonMode.save;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailcntrlr = TextEditingController();
   final TextEditingController passwordcntrlr = TextEditingController();
