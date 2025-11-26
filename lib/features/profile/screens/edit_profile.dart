@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
@@ -10,17 +11,18 @@ import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
+import 'package:property_managment/features/profile/controllers/profileControllers.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends ConsumerStatefulWidget {
   final UserModel loginUser;
   const EditProfileScreen({super.key, required this.loginUser});
 
   @override
-  State<EditProfileScreen> createState() => _EditprofileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditprofileScreenState();
 }
 
-class _EditprofileScreenState extends State<EditProfileScreen> {
+class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
   final _formkey = GlobalKey< FormState >();
   bool obscurePassword = false;
   TextEditingController nameCtlr = TextEditingController();
@@ -35,11 +37,11 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
       // imageQuality: 80,
     );
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
+    // if (pickedFile != null) {
+    //   setState(() {
+    //     _selectedImage = File(pickedFile.path);
+    //   });
+    // }
   }
 
   @override
@@ -53,6 +55,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final repo=ref.read(profileRepositoryProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -218,6 +221,7 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
                                 : Icon(Icons.visibility_outlined),
                             onPressed: () {
                               setState(() {
+                              
                                 obscurePassword = !obscurePassword;
                               });
                             },
@@ -246,7 +250,8 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
              "USER_EMAIL": emailCtrl.text.trim(),
              "USER_PASSWORD": passwordCtrl.text.trim(),
             };
-            await updatePerson(userDetails);
+            //await updatePerson(userDetails);
+            ref.read(updateProfileControllerProvider);
             }
             Navigator.push(
               context,
@@ -259,13 +264,13 @@ class _EditprofileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-  updatePerson(Map<String, dynamic> userDetails) async {
-    FirebaseFirestore.instance.collection("STAFF").doc(widget.loginUser.id)
-     .update(userDetails).then((value) {
-    log("Updated successfully");
-  }).onError((e, stackTrace) {
-    log("Error is $e", name: "oxdo");
-  });
-  }
+  // updatePerson(Map<String, dynamic> userDetails) async {
+  //   FirebaseFirestore.instance.collection("STAFF").doc(widget.loginUser.id)
+  //    .update(userDetails).then((value) {
+  //   log("Updated successfully");
+  // }).onError((e, stackTrace) {
+  //   log("Error is $e", name: "oxdo");
+  // });
+  // }
    
 }
