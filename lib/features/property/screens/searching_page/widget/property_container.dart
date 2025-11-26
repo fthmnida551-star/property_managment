@@ -48,6 +48,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
+        margin: EdgeInsets.only(bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,41 +121,45 @@ class _PropertyContainerState extends State<PropertyContainer> {
             //     ),
             //   ],
             // ),
-          if (widget.property.latitude != null && widget.property.longitude != null)
-  FutureBuilder(
-    future: convertLatLngToAddress(
-      widget.property.latitude!,
-      widget.property.longitude!,
-    ),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Padding(
-          padding: EdgeInsets.only(top: 4.0),
-          child: Text(
-            "Fetching location...",
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-          ),
-        );
-      }
+            if (widget.property.latitude != null &&
+                widget.property.longitude != null)
+              FutureBuilder(
+                future: convertLatLngToAddress(
+                  widget.property.latitude!,
+                  widget.property.longitude!,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        "Fetching location...",
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                    );
+                  }
 
-      if (snapshot.hasError) {
-        return Text("Error loading address");
-      }
+                  if (snapshot.hasError) {
+                    return Text("Error loading address");
+                  }
 
-      return Padding(
-        padding: EdgeInsets.only(top: 4.0),
-        child: Text(
-         (snapshot.data as String?) ?? "Location not available",
+                  return Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    // child: Text(
+                    //   (snapshot.data as String?) ?? "Location not available",
 
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[700],
-          ),
-        ),
-      );
-    },
-  ),
-
+                    //   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    // ),
+                    child: Text(
+                      (snapshot.data as String?) ?? "Location not available",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    ),
+                  );
+                },
+              ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

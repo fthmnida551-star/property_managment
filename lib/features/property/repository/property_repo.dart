@@ -61,40 +61,6 @@ deleteProperty(PropertyModel property) async {
         .doc(property.bookingid)
         .delete();
   }
-  // getAllPropertyDetails();
 }
-
-
-
-  // void getAllPropertyDetailsList() async {
-  //     propertyDetailsList.clear();
-
-  //     try {
-  //       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
-  //           .collection('PROPERTIES')
-  //           .orderBy('ADDED_DATE', descending: true)
-  //           .get();
-
-  //       for (var element in querySnapshot.docs) {
-  //         // final String id = element.id;
-  //         final Map<String, dynamic> data = element.data();
-  //         data.keys.forEach((element) => log(element));
-  //         log("Document keys: ${data.keys}");
-  //         log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
-  //         log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
-
-  //         // Make sure PropertyModel.fromJson can handle the ID
-  //         propertyDetailsList.add(PropertyModel.fromMap(data, element.id));
-  //       }
-  // // Refresh the UI
-  //     } catch (e) {
-  //       debugPrint("Error fetching property details: $e");
-  //     }
-  //   }
-
-  
-
-  
-
 
 }

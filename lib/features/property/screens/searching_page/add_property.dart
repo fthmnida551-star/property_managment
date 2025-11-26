@@ -116,6 +116,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
   List<File> files = [];
 
   // pickImg() async {
+
   pickImg(WidgetRef ref) async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(
@@ -128,16 +129,18 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
   }
 
   @override
-void initState() {
+  void initState() {
     // TODO: implement initState
     super.initState();
     setControllersForUpdate();
   }
+
   @override
   Widget build(BuildContext context) {
     final repo = ref.watch(propertyFormProvider);
     final pickedImages = ref.watch(propertyImagesProvider);
     final isLoading = ref.watch(loadingProvider);
+    final loginName=ref.watch(userNameProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -155,7 +158,9 @@ void initState() {
                 ),
               ),
               Text(
-                'Add Property',
+                _saveButtonMode == SaveButtonMode.save
+                  ? 'Add Property': 'Edit Property',
+                
                 style: TextStyle(color: AppColors.white, fontSize: 19.sp),
               ),
             ],
@@ -231,7 +236,7 @@ void initState() {
                         width: 100,
                         decoration: BoxDecoration(
                           color: AppColors.searchbar,
-                         
+
                           image: pickedImages.length > 1
                               ? DecorationImage(
                                   image: FileImage(pickedImages[1]),
@@ -273,7 +278,7 @@ void initState() {
                         width: 100,
                         decoration: BoxDecoration(
                           color: AppColors.searchbar,
-                         
+
                           image: pickedImages.length > 2
                               ? DecorationImage(
                                   image: FileImage(pickedImages[2]),
@@ -376,7 +381,8 @@ void initState() {
                         .read(propertyFormProvider.notifier)
                         .updatePrice(double.parse(value));
                     return null;
-                  }, readOnly: false,
+                  },
+                  readOnly: false,
                 ),
                 divider,
                 if (propertyTypeCtlr.text == _items[0] ||
@@ -401,7 +407,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateLocation(value);
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
 
                         divider,
@@ -431,7 +438,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateBhk(int.parse(value));
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
@@ -448,7 +456,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateBathrooms(int.parse(value));
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
@@ -465,7 +474,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateSqft(double.parse(value));
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
 
                         divider,
@@ -493,7 +503,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateMaintenance(double.parse(value));
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
                       ],
                     ),
@@ -522,7 +533,8 @@ void initState() {
                                 .read(propertyFormProvider.notifier)
                                 .updateSqft(double.parse(value));
                             return null;
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
@@ -535,7 +547,8 @@ void initState() {
                             ref
                                 .read(propertyFormProvider.notifier)
                                 .updateAminities(value!);
-                          }, readOnly: false,
+                          },
+                          readOnly: false,
                         ),
                       ],
                     ),
@@ -552,11 +565,11 @@ void initState() {
                         .read(propertyFormProvider.notifier)
                         .updateDescription(value);
                     return null;
-                  }, readOnly: false,
+                  },
+                  readOnly: false,
                 ),
                 divider,
                 TextFieldContainer(
-                  
                   text: 'Location',
                   readOnly: true,
                   controllerName: locationCtlr,
@@ -572,7 +585,6 @@ void initState() {
                 ),
                 SizedBox(height: 10),
 
-                
                 Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -580,11 +592,10 @@ void initState() {
                     height: 30,
                     decoration: BoxDecoration(
                       color: AppColors.greenColor,
-                      borderRadius: BorderRadius.circular(15)
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                  
+
                     child: InkWell(
-                      
                       onTap: () async {
                         final pickedLocation = await Navigator.push(
                           context,
@@ -592,7 +603,7 @@ void initState() {
                             builder: (context) => const PickLocationScreen(),
                           ),
                         );
-                    
+
                         if (pickedLocation != null) {
                           latitude = pickedLocation.latitude;
                           longitude = pickedLocation.longitude;
@@ -606,7 +617,16 @@ void initState() {
                               .updateLocation(address);
                         }
                       },
-                      child: Center(child: Text("Pick Location",style: TextStyle(color: AppColors.white,fontSize: 15,fontWeight: FontWeight.bold),)),
+                      child: Center(
+                        child: Text(
+                          "Pick Location",
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -617,154 +637,85 @@ void initState() {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: isLoading 
-        ?CircularProgressIndicator(
-          color: AppColors.greenColor,
-          padding: EdgeInsets.symmetric(horizontal: 140),)
-        :GreenButton(
-          text: 'Next',
-          // onTap: () async {
-          //   if (formKey.currentState!.validate()) {
-          //     Map<String, dynamic> propertyDetailsAll = {};
-          //     // if (files.isNotEmpty) {
-          //     //   final imageUrls = await uploadMultipleUnsigned(
-          //     //     files,
-          //     //     cloudName: 'dcijrvaw3',
-          //     //     uploadPreset: 'property_images',
-          //     //   );
+        child: isLoading
+            ? CircularProgressIndicator(
+                color: AppColors.greenColor,
+                padding: EdgeInsets.symmetric(horizontal: 140),
+              )
+            : GreenButton(
+                text: 'Next',
+                onTap: () {
+                  if (!isLoading) _handleNext(context, ref);
+                 
+                },
 
-          //     final pickedFiles = ref.read(propertyImagesProvider);
-          //     List<String> finalImageUrls = [];
-          //     if (pickedFiles.isNotEmpty) {
-          //       // Upload the new picked files
-          //       final imageUrls = await uploadMultipleUnsigned(
-          //         pickedFiles,
-          //         cloudName: 'dcijrvaw3',
-          //         uploadPreset: 'property_images',
-          //       );
-          //       finalImageUrls = imageUrls;
-          //     } else {
-          //       // no new picks: if editing reuse existing URLs (imageFile)
-          //       finalImageUrls =
-          //           imageFile; // may be empty if adding new property with no picks
-          //     }
-
-          //     if (finalImageUrls.isEmpty) {
-          //       alertForImgAdd(context);
-          //       return;
-          //     }
-
-          //     propertyDetailsAll = {
-          //       "PROPERTY TYPE": _selectedValue,
-          //       "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-          //       "BUILDING NAME": buildingNamectlr.text.trim(),
-          //       "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-          //       "BHK": int.tryParse(bhkctlr.text.trim()),
-          //       "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-          //       "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
-          //       'CARPARKING': carparking ? "yes" : "no",
-          //       "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
-          //       "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
-          //       "AMINITIES": aminitiesctlr.text.trim(),
-          //       "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
-          //       "PROPERTY LOCATION": locationCtlr.text.trim(),
-          //       "LATITUDE": latitude,
-          //       "LONGITUDE": longitude,
-          //       "ADDED_DATE": DateTime.now(),
-          //       "IMAGE": finalImageUrls,
-          //     };
-
-          //     // clearController();
-
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => AddLandlordDetails(
-          //           propertyMap: propertyDetailsAll,
-          //           from: from,
-          //           property: property,
-          //         ),
-          //       ),
-          //     );
-          //     // } else {
-          //     //   alertForImgAdd(context);
-          //     // }
-          //   }
-          // },
-          // onTap: isLoading ? () {} : () => _handleNext(context, ref),
-          onTap: () {
-  if (!isLoading) _handleNext(context, ref);
-},
-
-
-        ),
+                 
+              ),
       ),
     );
   }
 
   Future<void> _handleNext(BuildContext context, WidgetRef ref) async {
-  if (!formKey.currentState!.validate()) return;
+    if (!formKey.currentState!.validate()) return;
 
-  ref.read(loadingProvider.notifier).state = true; // show loader
+    ref.read(loadingProvider.notifier).state = true; // show loader
 
-  try {
-   
-    final pickedFiles = ref.read(propertyImagesProvider);
-    List<String> finalImageUrls = [];
+    try {
+      final pickedFiles = ref.read(propertyImagesProvider);
+      List<String> finalImageUrls = [];
 
-    if (pickedFiles.isNotEmpty) {
-      final urls = await uploadMultipleUnsigned(
-        pickedFiles,
-        cloudName: 'dcijrvaw3',
-        uploadPreset: 'property_images',
-      );
-      finalImageUrls = urls;
-    } else {
-      finalImageUrls = imageFile;
-    }
+      if (pickedFiles.isNotEmpty) {
+        final urls = await uploadMultipleUnsigned(
+          pickedFiles,
+          cloudName: 'dcijrvaw3',
+          uploadPreset: 'property_images',
+        );
+        finalImageUrls = urls;
+      } else {
+        finalImageUrls = imageFile;
+      }
 
-    if (finalImageUrls.isEmpty) {
-      alertForImgAdd(context);
-      return;
-    }
+      if (finalImageUrls.isEmpty) {
+        alertForImgAdd(context);
+        return;
+      }
 
-    final propertyDetailsAll = {
-      "PROPERTY TYPE": _selectedValue,
-      "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-      "BUILDING NAME": buildingNamectlr.text.trim(),
-      "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-      "BHK": int.tryParse(bhkctlr.text.trim()),
-      "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-      "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
-      'CARPARKING': carparking ? "yes" : "no",
-      "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
-      "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
-      "AMINITIES": aminitiesctlr.text.trim(),
-      "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
-      "PROPERTY LOCATION": locationCtlr.text.trim(),
-      "LATITUDE": latitude,
-      "LONGITUDE": longitude,
-      "ADDED_DATE": DateTime.now(),
-      "IMAGE": finalImageUrls,
-    };
+      final propertyDetailsAll = {
+        "PROPERTY TYPE": _selectedValue,
+        "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
+        "BUILDING NAME": buildingNamectlr.text.trim(),
+        "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+        "BHK": int.tryParse(bhkctlr.text.trim()),
+        "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+        "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
+        'CARPARKING': carparking ? "yes" : "no",
+        "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
+        "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
+        "AMINITIES": aminitiesctlr.text.trim(),
+        "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
+        "PROPERTY LOCATION": locationCtlr.text.trim(),
+        "LATITUDE": latitude,
+        "LONGITUDE": longitude,
+        "ADDED_DATE": DateTime.now(),
+        "IMAGE": finalImageUrls,
+      };
 
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddLandlordDetails(
-          propertyMap: propertyDetailsAll,
-          from: widget.from,
-          property: widget.property,
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddLandlordDetails(
+            propertyMap: propertyDetailsAll,
+            from: widget.from,
+            property: widget.property,
+          ),
         ),
-      ),
-    );
-  } catch (e) {
-    debugPrint("Error uploading property: $e");
-  } finally {
-    ref.read(loadingProvider.notifier).state = false; 
+      );
+    } catch (e) {
+      debugPrint("Error uploading property: $e");
+    } finally {
+      ref.read(loadingProvider.notifier).state = false;
+    }
   }
-}
 }
 
 void alertForImgAdd(BuildContext context) {

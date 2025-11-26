@@ -50,6 +50,7 @@
 
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/firebase_const.dart';
 import 'package:property_managment/modelClass/user_model.dart';
@@ -68,8 +69,8 @@ class ProfileRepository {
     });
   }
 
-  Future<void> saveUserData(UserModel user) async{
-    await service.users.doc(user.id).set(user.toMap());
+  Future<void> saveUserData(Map<String,dynamic> user) async{
+    await service.users.doc(user['ID']).set(user,SetOptions(merge: true));
   }
    
 }
