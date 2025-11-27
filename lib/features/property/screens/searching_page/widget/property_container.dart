@@ -111,6 +111,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
               "${widget.property.price}",
               style: TextStyle(fontSize: 44.sp, color: AppColors.black),
             ),
+
             // Row(
             //   children: [
             //     Icon(Icons.location_on_outlined, size: 20),
@@ -121,46 +122,43 @@ class _PropertyContainerState extends State<PropertyContainer> {
             //     ),
             //   ],
             // ),
-            if (widget.property.latitude != null &&
-                widget.property.longitude != null)
-              FutureBuilder(
-                future: convertLatLngToAddress(
-                  widget.property.latitude!,
-                  widget.property.longitude!,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                      child: Text(
-                        "Fetching location...",
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
-                    );
-                  }
+            Row(
+              children: [
+                Icon(Icons.location_on_outlined, size: 20),
+                SizedBox(width: 2,),
+                if (widget.property.latitude != null &&
+                    widget.property.longitude != null)
+                   Expanded(
+        child: FutureBuilder(
+          future: convertLatLngToAddress(
+            widget.property.latitude!,
+            widget.property.longitude!,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text(
+                "Fetching location...",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              );
+            }
 
-                  if (snapshot.hasError) {
-                    return Text("Error loading address");
-                  }
+            if (snapshot.hasError) {
+              return Text("Error loading address");
+            }
 
-                  return Padding(
-                    padding: EdgeInsets.only(top: 4.0),
-                    // child: Text(
-                    //   (snapshot.data as String?) ?? "Location not available",
-
-                    //   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                    // ),
-                    child: Text(
-                      (snapshot.data as String?) ?? "Location not available",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                    ),
-                  );
-                },
-              ),
-
+            return Text(
+              (snapshot.data as String?) ?? "Location not available",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,  // ⬅ force to one line
+              style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+            );
+          },
+        ),
+      ),
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

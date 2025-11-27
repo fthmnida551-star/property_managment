@@ -542,19 +542,20 @@ class BookedPropertyScreen extends ConsumerWidget {
                       SizedBox(height: 10),
 
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            property.location,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
+                     if (property.latitude != null &&
+                          property.longitude != null)
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: AppColors.black),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: AddressWidget(
+                                lat: property.latitude!,
+                                lng: property.longitude!,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
