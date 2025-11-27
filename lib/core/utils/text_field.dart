@@ -9,6 +9,8 @@ class TextFieldContainer extends StatelessWidget {
   final bool readOnly;
   final TextEditingController controllerName;
   final String? Function(String?)? validator;
+  final bool? isMultiline; 
+
   const TextFieldContainer({
     super.key,
     required this.text,
@@ -16,7 +18,8 @@ class TextFieldContainer extends StatelessWidget {
     this.priffixIcon,
     required this.controllerName,
     this.validator,
-    required this.readOnly
+    required this.readOnly,
+    this.isMultiline=false,
   });
 
   @override
@@ -25,6 +28,9 @@ class TextFieldContainer extends StatelessWidget {
       controller: controllerName,
       validator: validator,
       readOnly: readOnly,
+      keyboardType: (isMultiline ??false )?TextInputType.multiline : TextInputType.text,
+      maxLines: (isMultiline ?? false) ? null : 1,
+
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.opacitygreyColor, width: 1),

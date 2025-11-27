@@ -552,8 +552,9 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                   ),
                 divider,
                 TextFieldContainer(
-                  text: 'Description/Extra Details',
+                  text: 'Description/Extra Details',                 
                   controllerName: descriptionCtlr,
+                   isMultiline: true,   
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter property description';
