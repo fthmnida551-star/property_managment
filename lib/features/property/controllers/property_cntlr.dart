@@ -152,6 +152,9 @@ final propertyRepoProvider = Provider(
 final propertyListProvider = StreamProvider(
   (ref) => ref.watch(propertyRepoProvider).getAllPropertyDetailsList(),
 );
+final propertySingleProvider = Provider((ref)=>ref.watch(propertyRepoProvider));
+
+
 
 final isOwnPropertyProvider = StateProvider<bool>((ref) => false);
 // final loadingProvider = StateProvider<bool>((ref) => false);

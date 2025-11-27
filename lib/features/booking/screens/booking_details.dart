@@ -35,11 +35,8 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
   Widget divider = SizedBox(height: 10);
 
   TextEditingController namectlr = TextEditingController();
-
   TextEditingController contactCtlr = TextEditingController();
-
   TextEditingController emailCtlr = TextEditingController();
-
   TextEditingController datectlr = TextEditingController();
 
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
@@ -71,6 +68,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
   Widget build(BuildContext context) {
     final repo = ref.watch(bookingRepoProvider);
     final username=ref.watch(userNameProvider);
+    
     log('contains: ${widget.bookedData}');
     return Scaffold(
       appBar: AppbarWidget(
@@ -194,8 +192,10 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                 'BOOKING_ID':id
               };
 
+              final prptyRepo= await ref.read(propertySingleProvider).getSingleProperty(widget.propertyId);
+
               if (_saveButtonMode == SaveButtonMode.save) {
-                await repo.addbookingDetails(bookingDetails,username.value!);
+                await repo.addbookingDetails(bookingDetails,username.value!,prptyRepo);
               } else {
                 await repo.updateBooking(widget.bookedData!.id, bookingDetails);
               }

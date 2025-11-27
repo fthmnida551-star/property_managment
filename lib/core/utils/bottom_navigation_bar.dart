@@ -56,13 +56,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               },
               backgroundColor: AppColors.greenColor,
               selectedItemColor: Colors.white,
-<<<<<<< HEAD
-              unselectedItemColor: Colors.blueGrey,
-              selectedFontSize: 26,
-           unselectedFontSize: 24,
-=======
               unselectedItemColor: const Color.fromARGB(130, 0, 0, 0),
->>>>>>> 7cdc6fc870d5fab34d6f2d1d85ec6a44be651144
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(

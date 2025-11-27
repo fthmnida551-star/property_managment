@@ -29,7 +29,7 @@ class Notificationscreen extends ConsumerWidget {
                   fontSize: 21,
                 ),
               ),
-              Padding(padding: EdgeInsetsGeometry.symmetric(horizontal: 110)),
+                      SizedBox(width: 210,) ,
               PopupMenuButton(
                icon:Icon(Icons.more_vert_outlined,color: AppColors.whiteColor,),
                 color:AppColors.white,
