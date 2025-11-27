@@ -1,14 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
-import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/auth/controller/login_controller.dart';
-import 'package:property_managment/features/auth/screens/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Splashscreen extends ConsumerStatefulWidget {
   const Splashscreen({super.key});
@@ -23,7 +18,7 @@ class _SplashscreenState extends ConsumerState<Splashscreen> {
   void initState() {
     super.initState();
      Future.microtask(() {
-      ref.read(LoginRepositoryProvider).checkLoginStatus(context);
+      ref.read(loginRepositoryProvider).checkLoginStatus(context);
     });
     //checkLoginStatus();
   }
@@ -60,11 +55,11 @@ class _SplashscreenState extends ConsumerState<Splashscreen> {
 //       );
 //     }
 //   }
-
+ 
   // ✅ The required build() method — this fixes your error!
   @override
   Widget build(BuildContext context) {
-    final repo=ref.read(LoginRepositoryProvider);
+    final repo=ref.read(loginRepositoryProvider);
     return Scaffold(
       backgroundColor: AppColors.greenColor,
       body: Center(

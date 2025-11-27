@@ -1,18 +1,25 @@
 import 'dart:developer';
-
 import 'package:property_managment/core/constant/firebase_const.dart';
+import 'package:property_managment/features/notification/repository/notification_repository.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 
 class BookingRepo {
   final FirebaseService service;
-  BookingRepo(this.service);
+  final NotificationRepository notificationRepo;
+  BookingRepo(this.service,this.notificationRepo);
 
-  addbookingDetails(Map<String, dynamic> bookingData) async {
-    await service.bookingdetails.doc(bookingData['BOOKING_ID']).set(bookingData);
+  addbookingDetails(Map<String, dynamic> bookingData,String userName) async {
+    await service.bookingdetails.doc(bookingData['BOOKING_ID']) .set(bookingData);
     await service.properties.doc(bookingData['PROPERTY_ID']).update({
       'IS_BOOKED': 'YES',
       'BOOKING_ID': bookingData['BOOKING_ID']
     });
+     await notificationRepo.addNotification(
+        title: "New Property booked",
+        message: "property has been booked",
+        type: "Booked",
+        addedStaff: userName, 
+      );
   }
 
   Stream<BookingModel?> getBooking(String bookingId) {
@@ -24,7 +31,7 @@ class BookingRepo {
           if (doc.exists && doc.data() != null) {
             final Map<String, dynamic> data =
                 doc.data()! as Map<String, dynamic>;
-            // data['id'] = doc.id;
+            
             return BookingModel.fromMap(doc.id, data);
           } else {
             print("No booking found for ID: $bookingId");
@@ -49,9 +56,16 @@ class BookingRepo {
     }
   }
 
-  deleteBooking(String id, String propertyId) async {
+  deleteBooking(String id, String propertyId,String userName) async {
     await service.bookingdetails.doc(id).delete();
     await service.properties.doc(propertyId).update({'IS_BOOKED': 'NO'});
     // getAllPropertyDetails();
+     await notificationRepo.addNotification(
+        title: "booking cancelled",
+        message: "booking cancelled",
+        type: "Cancelled",
+        addedStaff: userName, // you can use user id or role
+     ); 
+     
   }
 }

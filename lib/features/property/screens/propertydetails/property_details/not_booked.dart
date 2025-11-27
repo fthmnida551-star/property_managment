@@ -6,8 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
-import 'package:property_managment/location/concert_section.dart';
-import 'package:property_managment/location/convert_class.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/convert_class.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -153,7 +153,11 @@ class _NotBookedPropertyScreenState
                               child: GestureDetector(
                                 onTap: () {
                                   // dltAlert(context, property);
-                                  dltAlert(context, widget.property, ref);
+                                  WidgetsBinding.instance.addPostFrameCallback((
+                                    _,
+                                  ) {
+                                    dltAlert(context, widget.property, ref);
+                                  });
                                   Navigator.pop(context);
                                 },
                                 child: Row(
@@ -231,8 +235,8 @@ class _NotBookedPropertyScreenState
                         style: TextStyle(fontSize: 14, color: AppColors.black),
                       ),
                       SizedBox(height: 15),
+
                       // --- Location ---
-                   
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         FutureBuilder<String>(
@@ -431,7 +435,6 @@ class _NotBookedPropertyScreenState
                           fit: BoxFit.cover,
                         ),
                       ),
-                    
                     ],
                   ),
                 ),
@@ -450,8 +453,8 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
+
                       // --- Location ---
-                     
                       if (widget.property.latitude != null &&
                           widget.property.longitude != null)
                         Row(

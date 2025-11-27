@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:property_managment/core/provider/firebse_provider.dart';
+import 'package:property_managment/features/notification/controllers/notification_controller.dart';
 import 'package:property_managment/features/property/repository/property_repo.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -144,7 +145,8 @@ final propertyFormProvider =
     });
 
 final propertyRepoProvider = Provider(
-  (ref) => PropertyRepo(ref.watch(firebaseServiceProvider)),
+  (ref) => PropertyRepo(ref.watch(firebaseServiceProvider),
+  ref.watch(notificationRepositoryProvider)),
 );
 
 final propertyListProvider = StreamProvider(
@@ -152,7 +154,7 @@ final propertyListProvider = StreamProvider(
 );
 
 final isOwnPropertyProvider = StateProvider<bool>((ref) => false);
-final loadingProvider = StateProvider<bool>((ref) => false);
+// final loadingProvider = StateProvider<bool>((ref) => false);
 
 
 final propertyImagesProvider = StateNotifierProvider<PropertyImagesNotifier, List<File>>(
@@ -174,9 +176,11 @@ class PropertyImagesNotifier extends StateNotifier<List<File>> {
 
 
 
-final userRoleProvider = FutureProvider<String>((ref) async {
+
+
+final userNameProvider = FutureProvider<String>((ref) async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString("role") ?? "";
+  return prefs.getString("name") ?? "";
 });
 
 

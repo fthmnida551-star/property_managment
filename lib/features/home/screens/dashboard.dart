@@ -13,6 +13,7 @@ import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/home/screens/widget/bookingcontainer.dart';
 import 'package:property_managment/features/home/screens/widget/container_widget.dart';
 
+// ignore: must_be_immutable
 class DashboardScreen extends ConsumerWidget {
   DashboardScreen({super.key});
 

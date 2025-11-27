@@ -34,18 +34,12 @@ class BookingConatainerWidget extends StatefulWidget {
 }
 
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
-
-
   @override
   Widget build(BuildContext context) {
-  
-
     return InkWell(
       onTap: () async {
         print(" Booking tapped!");
         print("Property ID from booking: ${widget.bookedProperty.propertyId}");
-
-        
 
         try {
           if (widget.property != null) {
@@ -96,32 +90,40 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
                       width: 50,
                     )
                   : Container(
-                    height: 50,
+                      height: 50,
                       width: 50,
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1,color: Colors.grey.shade400),),
-                    child: Icon(Icons.image,color: Colors.grey,))
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                      child: Icon(Icons.image, color: Colors.grey),
+                    ),
             ),
             SizedBox(width: 15.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.bookedProperty.name,
-                  style: AppTextstyle.propertyMediumTextstyle(
-                    context,
-                    fontColor: AppColors.black,
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.bookedProperty.name,
+                    style: AppTextstyle.propertyMediumTextstyle(
+                      context,
+                      fontColor: AppColors.black,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(AssetResource.contact),
-                    const SizedBox(width: 5),
-                    Text(widget.bookedProperty.contact),
-                  ],
-                ),
-              ],
+                  Row(
+                    children: [
+                      SvgPicture.asset(AssetResource.contact),
+                      const SizedBox(width: 5),
+                      Text(widget.bookedProperty.contact),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

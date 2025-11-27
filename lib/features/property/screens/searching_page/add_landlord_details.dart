@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/is_loading.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/core/utils/checkbox.dart';
@@ -14,7 +15,7 @@ import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
-class AddLandlordDetails extends ConsumerWidget {
+class AddLandlordDetails extends ConsumerStatefulWidget {
   final String from;
   final PropertyModel? property;
   final Map<String, dynamic> propertyMap;
@@ -25,6 +26,11 @@ class AddLandlordDetails extends ConsumerWidget {
     required this.property,
   });
 
+  @override
+  ConsumerState<AddLandlordDetails> createState() => _AddLandlordDetailsState();
+}
+
+class _AddLandlordDetailsState extends ConsumerState<AddLandlordDetails> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   final frmKey = GlobalKey<FormState>();
@@ -32,7 +38,6 @@ class AddLandlordDetails extends ConsumerWidget {
   Widget divider = SizedBox(height: 10);
 
   // bool isOwnProperty = false;
-
   TextEditingController nameCtlr = TextEditingController();
 
   TextEditingController emailCtlr = TextEditingController();
@@ -48,11 +53,13 @@ class AddLandlordDetails extends ConsumerWidget {
   }
 
   setControllersForUpdate() {
-    log('reached here owner page : $from    property: $property');
-    if (from == "Edit" && property != null) {
-      nameCtlr.text = property!.ownername;
-      emailCtlr.text = property!.email;
-      contactCtlr.text = property!.contact;
+    log(
+      'reached here owner page : ${widget.from}    property: ${widget.property}',
+    );
+    if (widget.from == "Edit" && widget.property != null) {
+      nameCtlr.text = widget.property!.ownername;
+      emailCtlr.text = widget.property!.email;
+      contactCtlr.text = widget.property!.contact;
       // isOwnProperty = property!.isOwner;
       _saveButtonMode = SaveButtonMode.edit;
     }
@@ -61,12 +68,19 @@ class AddLandlordDetails extends ConsumerWidget {
     // });
   }
 
-  // @override
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setControllersForUpdate();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final repo = ref.read(propertyRepoProvider);
     final isOwnProperty = ref.watch(isOwnPropertyProvider);
     final isLoading = ref.watch(loadingProvider);
+    final userName =ref.watch(userNameProvider);
 
     return Scaffold(
       appBar: AppbarWidget(
@@ -173,7 +187,6 @@ class AddLandlordDetails extends ConsumerWidget {
                     readOnly: false,
                   ),
                   divider,
-                  // CalendarPickerContainer(hintText: 'date'),
                 ],
               ],
             ),
@@ -182,7 +195,11 @@ class AddLandlordDetails extends ConsumerWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: GreenButton(
+        child:isLoading? CircularProgressIndicator(
+                color: AppColors.greenColor,
+                padding: EdgeInsets.symmetric(horizontal: 140),
+              )
+        : GreenButton(
           text: 'Submit',
           onTap: () async {
             if (frmKey.currentState!.validate()) {
@@ -193,14 +210,14 @@ class AddLandlordDetails extends ConsumerWidget {
                 "OWNER_EMAIL": emailCtlr.text.trim(),
               };
               Map<String, dynamic> finaldetails = {
-                ...propertyMap,
+                ...widget.propertyMap,
                 ...ownerDetails,
               };
               log("asdfghjkl $finaldetails");
               if (_saveButtonMode == SaveButtonMode.save) {
-                await repo.addProperties(finaldetails);
+                await repo.addProperties(finaldetails,userName.value!);
               } else {
-                await repo.updateproperty(property!.id, finaldetails);
+                await repo.updateproperty(widget.property!.id, finaldetails);
               }
               // _clearControllers();
               ref.read(propertyFormProvider.notifier).clear();

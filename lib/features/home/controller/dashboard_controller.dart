@@ -13,4 +13,4 @@ final bookedpropertyListProvider=StreamProvider(
   (ref)=>ref.watch(dashboardRepositoryProvider).getBookedProperties());
 final propertyByIdProvider = StreamProvider.family<PropertyModel?, String>((ref, propertyId) {
   return ref.watch(dashboardRepositoryProvider).getPropertyById(propertyId);
-});
+}); 
