@@ -42,6 +42,8 @@ class Notificationscreen extends ConsumerWidget {
                   title: item["title"],
                   text: item["message"],
                   color: item["type"].toString().toLowerCase() == "added"
+                  ?AppColors.ntfctBlue
+                  :item["type"].toString().toLowerCase() == "booked"
                       ? AppColors.greenColor
                       : AppColors.redcolor,
                 ),

@@ -44,7 +44,7 @@ class Searchingpage extends ConsumerWidget {
               'Properties',
               style: TextStyle(
                 color: AppColors.white,
-                fontSize: 21.sp,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -258,21 +258,29 @@ class Searchingpage extends ConsumerWidget {
                   log("item.isBooked ${item.isBooked} bbb ${item.bookingid}");
                   // await getPropertyBookingData(item.bookingid);
                   // ref.watch(bookingProvider.from()).
-                  final bookingData = ref.watch(
-                    bookingProvider(item.bookingid),
-                  );
-                  log("bookingData $bookingData");
-                  Future.delayed(Duration(seconds: 5));
-                  log("bookingData1111 $bookingData");
+                  // final bookingData = await ref.read(
+                  //   bookingProvider(item.bookingid),
+                  // );
+
+                  final bookingData = await ref
+                      .read(bookingRepoProvider)
+                      .getBooking(item.bookingid);
+
+                  log("bookingData ${bookingData}");
+                  Future.delayed(Duration(seconds: 5), () {
+                    
+                  });
+                  log("bookingData1111 ${bookingData}");
+
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BookedPropertyScreen(
-                        property: item,
-                        bookedData: bookingData.value,
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookedPropertyScreen(
+                          property: item,
+                          bookedData: bookingData,
+                        ),
                       ),
-                    ),
-                  );
+                    );
                 },
                 property: item,
               )

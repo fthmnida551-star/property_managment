@@ -263,7 +263,7 @@ class _NotBookedPropertyScreenState
                                       fontSize: 15,
                                       color: AppColors.black,
                                     ),
-                                    maxLines: 2,
+                                    maxLines: 6,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -339,10 +339,6 @@ class _NotBookedPropertyScreenState
                                         icons: Icons.check_circle_outline,
                                       ),
                                       Divider(thickness: 1),
-                                      // RowWidget(
-                                      //   text: 'Owner',
-                                      //   icons: Icons.account_circle,
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -356,7 +352,7 @@ class _NotBookedPropertyScreenState
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                // Property Details Box
+                                // ------------Property Details Box-----------
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.black),
@@ -414,6 +410,9 @@ class _NotBookedPropertyScreenState
                                   color: Colors.black,
                                 ),
                               ),
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
@@ -428,13 +427,13 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -531,11 +530,6 @@ class _NotBookedPropertyScreenState
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      // DetailsTable(
-                                      //   text: 'Location',
-                                      //   details: "${widget.property.location}",
-                                      //   icons: Icons.location_on,
-                                      // ),
                                       DetailsTable(
                                         text: 'Location',
                                         detailsWidget: AddressWidget(
@@ -559,7 +553,7 @@ class _NotBookedPropertyScreenState
                                         text: 'Sqft',
                                         details: "${widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
-                                      ), // Divider(thickness: 1),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -586,6 +580,9 @@ class _NotBookedPropertyScreenState
                                   color: Colors.black,
                                 ),
                               ),
+                               expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
@@ -600,14 +597,14 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(height: 8),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
+                      // SizedBox(height: 8),
                     ],
                   ),
                 ),
