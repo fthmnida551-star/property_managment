@@ -130,10 +130,14 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                             ),
                           );
                         },
-                        child: Image.asset(
-                          AssetResource.editpic,
-                          height: 20,
-                          width: 20,
+                        child: SizedBox(
+                          height: 60.h,
+                          width: 40,
+                          child: Image.asset(
+                            AssetResource.editpic,
+                            height: 20,
+                            width: 20,
+                          ),
                         ),
                       ),
                     ],

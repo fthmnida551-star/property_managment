@@ -8,7 +8,10 @@ class PropertyRepo {
   final NotificationRepository notificationRepo;
   PropertyRepo(this.service, this.notificationRepo);
 
-  Future<void> addProperties(Map<String, dynamic> propertyData, String userName) async {
+  Future<void> addProperties(
+    Map<String, dynamic> propertyData,
+    String userName,
+  ) async {
     try {
       // final docRef = await service.properties.add(propertyData);
 
@@ -16,7 +19,7 @@ class PropertyRepo {
 
       await notificationRepo.addNotification(
         title: "New Property Added",
-        message: "${propertyData['propertyTitle']} has been added",
+        message: "${propertyData['BUILDING NAME']} has been added",
         type: "Added",
         addedStaff: userName, // you can use user id or role
       );
@@ -40,28 +43,43 @@ class PropertyRepo {
   }
 
   Stream<List<PropertyModel>> getAllPropertyDetailsList() {
-    return service.properties.orderBy('ADDED_DATE', descending: true).snapshots().map(
-      (snapshot) => snapshot.docs
-          .map(
-            (doc) => PropertyModel.fromMap(
-              doc.data() as Map<String, dynamic>,
-              doc.id,
-            ),
-          )
-          .toList(),
-    );
+    return service.properties
+        .orderBy('ADDED_DATE', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (doc) => PropertyModel.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                  doc.id,
+                ),
+              )
+              .toList(),
+        );
   }
-  
- 
-deleteProperty(PropertyModel property) async {
-  await service.properties
-      .doc(property.id)
-      .delete();
-  if (property.isBooked == true) {
-    await service.bookingdetails
-        .doc(property.bookingid)
-        .delete();
+
+Future<PropertyModel> getSingleProperty(String propertyId) async {
+  final doc = await service.properties.doc(propertyId).get();
+
+  if (doc.exists) {
+    return PropertyModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+  } else {
+    throw Exception("Property not found");
   }
 }
 
+
+  deleteProperty(PropertyModel property,String userName) async {
+    await service.properties.doc(property.id).delete();
+    if (property.isBooked == true) {
+      await service.bookingdetails.doc(property.bookingid).delete();
+    }
+
+    await notificationRepo.addNotification(
+      title: "Property Removed ",
+      message: "${property.name} has been Removed",
+      type: "Removed",
+      addedStaff: userName, // you can use user id or role
+    );
+  }
 }

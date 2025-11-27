@@ -9,6 +9,7 @@ import 'package:property_managment/features/property/controllers/property_cntlr.
 import 'package:property_managment/modelClass/property_model.dart';
 
 void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
+  
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -48,9 +49,10 @@ void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: () async{
                     // deleteProperty(property);
-                    ref.read(propertyRepoProvider).deleteProperty(property);
+                    final username = await ref.read(userNameProvider);
+                    ref.read(propertyRepoProvider).deleteProperty(property,username.value??"");
                     Navigator.push(
                       context,
                       MaterialPageRoute(

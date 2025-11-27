@@ -470,8 +470,9 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
+                                    SizedBox(width: 3,),
                                     Button(
-                                      width: 150,
+                                      width: 140,
                                       height: 40,
                                       text: 'Delete',
                                       onTap: () async {
@@ -497,7 +498,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                     ),
                                     SizedBox(width: 10),
                                     Button(
-                                      width: 150,
+                                      width: 140,
                                       height: 40,
                                       text: 'Edit',
                                       onTap: () {
@@ -515,6 +516,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                       },
                                       icon: Icons.edit_outlined,
                                     ),
+                                    SizedBox(width: 3,)
                                   ],
                                 ),
                               ),
@@ -759,8 +761,9 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   if (userRole != "Agent")
+                                  SizedBox(width: 3,),
                                     Button(
-                                      width: 150,
+                                      width: 140,
                                       height: 40,
                                       text: 'Delete',
                                       onTap: () async {
@@ -784,9 +787,9 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                       },
                                       icon: Icons.delete_outline_outlined,
                                     ),
-                                  SizedBox(width: 10),
+                                  SizedBox(width: 3),
                                   Button(
-                                    width: 150,
+                                    width: 140,
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
@@ -802,6 +805,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                     },
                                     icon: Icons.edit_outlined,
                                   ),
+                                  SizedBox(width: 10,)
                                 ],
                               ),
                             ),
