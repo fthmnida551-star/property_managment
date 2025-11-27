@@ -10,36 +10,37 @@ class BookingRepo {
   final NotificationRepository notificationRepo;
   BookingRepo(this.service, this.notificationRepo);
 
-  
-addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyModel property) async {
-  await service.bookingdetails
-      .doc(bookingData['BOOKING_ID'])
-      .set(bookingData);
+  addbookingDetails(
+    Map<String, dynamic> bookingData,
+    String userName,
+    PropertyModel property,
+  ) async {
+    await service.bookingdetails
+        .doc(bookingData['BOOKING_ID'])
+        .set(bookingData);
 
-  await service.properties
-      .doc(bookingData['PROPERTY_ID'])
-      .update({
-    'IS_BOOKED': 'YES',
-    'BOOKING_ID': bookingData['BOOKING_ID']
-  });
+    await service.properties.doc(bookingData['PROPERTY_ID']).update({
+      'IS_BOOKED': 'YES',
+      'BOOKING_ID': bookingData['BOOKING_ID'],
+    });
 
-  // ⭐ FIXED CONDITION  
-  String ownerName =
-      (property.ownername != null && property.ownername.trim().isNotEmpty)
-          ? property.ownername
-          : "PlotX";
+    // ⭐ FIXED CONDITION
+    String ownerName =
+        (property.ownername != null && property.ownername.trim().isNotEmpty)
+        ? property.ownername
+        : "PlotX";
 
-  // ⭐ USE ownerName (not property.ownername)
-  String message =
-      "$ownerName's property is booked by ${bookingData['NAME']}";
+    // ⭐ USE ownerName (not property.ownername)
+    String message =
+        "$ownerName's property is booked by ${bookingData['NAME']}";
 
-  await notificationRepo.addNotification(
-    title: "New Property booked",
-    message: message,
-    type: "Booked",
-    addedStaff: userName,
-  );
-}
+    await notificationRepo.addNotification(
+      title: "New Property booked",
+      message: message,
+      type: "Booked",
+      addedStaff: userName,
+    );
+  }
 
   // Stream<BookingModel?> getBooking(String bookingId) {
   //   log("hhhhhhhhhhh bookingId $bookingId");
@@ -48,7 +49,7 @@ addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyMod
   //       .snapshots()
   //       .map((doc) {
   //         if (doc.exists && doc.data() != null) {
-            
+
   //           final Map<String, dynamic> data =
   //               doc.data()! as Map<String, dynamic>;
 
@@ -65,27 +66,24 @@ addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyMod
   // }
 
   Future<BookingModel?> getBooking(String bookingId) async {
-  try {
-    log("Fetching booking for ID: $bookingId");
+    try {
+      log("Fetching booking for ID: $bookingId");
 
-    final doc = await service.bookingdetails.doc(bookingId).get();
+      final doc = await service.bookingdetails.doc(bookingId).get();
 
-    if (doc.exists && doc.data() != null) {
-      final Map<String, dynamic> data =
-          doc.data()! as Map<String, dynamic>;
+      if (doc.exists && doc.data() != null) {
+        final Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
 
-      return BookingModel.fromMap(doc.id, data);
-    } else {
-      print("No booking found for ID: $bookingId");
+        return BookingModel.fromMap(doc.id, data);
+      } else {
+        print("No booking found for ID: $bookingId");
+        return null;
+      }
+    } catch (e) {
+      print("Error fetching booking: $e");
       return null;
     }
-
-  } catch (e) {
-    print("Error fetching booking: $e");
-    return null;
   }
-}
-
 
   Future<void> updateBooking(
     String id,
@@ -98,8 +96,7 @@ addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyMod
       log("Error updating booking: $e");
     }
   }
-
-  deleteBooking(String id, String propertyId, String userName) async {
+deleteBooking(String id, String propertyId, String userName) async {
   // Delete booking entry
   await service.bookingdetails.doc(id).delete();
 
@@ -109,25 +106,21 @@ addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyMod
     'BOOKING_ID': null,
   });
 
-  // 🔥 Fetch property to check owner name
+  // Fetch property to check owner name
   final propertyDoc = await service.properties.doc(propertyId).get();
 
   String ownerName = "";
 
-if (propertyDoc.exists) {
-  final data = propertyDoc.data() as Map<String, dynamic>?;
+  if (propertyDoc.exists) {
+    final data = propertyDoc.data() as Map<String, dynamic>?;
+    ownerName = data?['OWNER_NAME'] ?? "";
+  }
 
-  ownerName = data?['OWNER_NAME'] ?? "";
-}
+  // Fallback if no owner
+  String finalOwnerName = ownerName.trim().isNotEmpty ? ownerName : "PlotX";
 
-
-  // 🔥 Condition: If no owner → use PlotX
-  String finalOwnerName =
-      ownerName.trim().isNotEmpty ? ownerName : "PlotX";
-
-  // 🔥 Create message
-  String message =
-      "${finalOwnerName}'s property booking has been cancelled";
+  // ✅ Clean 2-line message
+  String message = "${finalOwnerName}'s property booking\nhas been cancelled";
 
   // Add notification
   await notificationRepo.addNotification(

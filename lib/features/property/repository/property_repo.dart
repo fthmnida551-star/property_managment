@@ -67,19 +67,33 @@ Future<PropertyModel> getSingleProperty(String propertyId) async {
     throw Exception("Property not found");
   }
 }
+deleteProperty(PropertyModel property, String userName) async {
+  await service.properties.doc(property.id).delete();
 
-
-  deleteProperty(PropertyModel property,String userName) async {
-    await service.properties.doc(property.id).delete();
-    if (property.isBooked == true) {
-      await service.bookingdetails.doc(property.bookingid).delete();
-    }
-
-    await notificationRepo.addNotification(
-      title: "Property Removed ",
-      message: "${property.name} has been Removed",
-      type: "Removed",
-      addedStaff: userName, // you can use user id or role
-    );
+  if (property.isBooked == true) {
+    await service.bookingdetails.doc(property.bookingid).delete();
   }
+
+  String displayName;
+
+  if (property.name != null && property.name.trim().isNotEmpty) {
+    // CASE 1: Property has a building name
+    displayName = "${property.name}'s property";
+  } else if (property.ownername != null && property.ownername.trim().isNotEmpty) {
+    // CASE 2: Land with owner name
+    displayName = "${property.ownername}'s property";
+  } else {
+    // CASE 3: No name + No owner → generic fallback
+    displayName = "Property";
+  }
+
+  await notificationRepo.addNotification(
+    title: "Property Removed",
+    message: "$displayName has been removed",
+    type: "Removed",
+    addedStaff: userName,
+  );
+}
+
+
 }
