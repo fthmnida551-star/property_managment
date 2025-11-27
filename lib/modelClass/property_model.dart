@@ -77,7 +77,7 @@ class PropertyModel {
       'IS_BOOKED': isBooked ? "YES" : "NO",
       'BOOKING_ID': bookingid,
       'ADDED_DATE': addedDate,
-      'IMAGE': image, // ✅ Added list of image URLs
+      'IMAGE': image, 
       "LATITUDE": latitude,
       "LONGITUDE": longitude,
     };

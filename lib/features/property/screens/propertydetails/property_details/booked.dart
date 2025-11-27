@@ -7,7 +7,7 @@ import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
-import 'package:property_managment/location/convert_class.dart';
+import 'package:property_managment/core/utils/location/convert_class.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';

@@ -21,7 +21,7 @@ class _NotificationContainerState extends State<NotificationContainer> {
   Widget build(BuildContext context) {
     return Container(
       width: 350,
-      height: 88,
+      height: 70,
       decoration: BoxDecoration(
         color: AppColors.searchbar,
         borderRadius: BorderRadius.circular(20),

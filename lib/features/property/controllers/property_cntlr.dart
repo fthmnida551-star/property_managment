@@ -154,7 +154,7 @@ final propertyListProvider = StreamProvider(
 );
 
 final isOwnPropertyProvider = StateProvider<bool>((ref) => false);
-final loadingProvider = StateProvider<bool>((ref) => false);
+// final loadingProvider = StateProvider<bool>((ref) => false);
 
 
 final propertyImagesProvider = StateNotifierProvider<PropertyImagesNotifier, List<File>>(

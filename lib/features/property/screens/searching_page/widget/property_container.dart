@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
-import 'package:property_managment/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/propertydetails/property_details/not_booked.dart';
 
@@ -48,6 +48,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
+        margin: EdgeInsets.only(bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,41 +121,45 @@ class _PropertyContainerState extends State<PropertyContainer> {
             //     ),
             //   ],
             // ),
-          if (widget.property.latitude != null && widget.property.longitude != null)
-  FutureBuilder(
-    future: convertLatLngToAddress(
-      widget.property.latitude!,
-      widget.property.longitude!,
-    ),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Padding(
-          padding: EdgeInsets.only(top: 4.0),
-          child: Text(
-            "Fetching location...",
-            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-          ),
-        );
-      }
+            if (widget.property.latitude != null &&
+                widget.property.longitude != null)
+              FutureBuilder(
+                future: convertLatLngToAddress(
+                  widget.property.latitude!,
+                  widget.property.longitude!,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        "Fetching location...",
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                    );
+                  }
 
-      if (snapshot.hasError) {
-        return Text("Error loading address");
-      }
+                  if (snapshot.hasError) {
+                    return Text("Error loading address");
+                  }
 
-      return Padding(
-        padding: EdgeInsets.only(top: 4.0),
-        child: Text(
-         (snapshot.data as String?) ?? "Location not available",
+                  return Padding(
+                    padding: EdgeInsets.only(top: 4.0),
+                    // child: Text(
+                    //   (snapshot.data as String?) ?? "Location not available",
 
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[700],
-          ),
-        ),
-      );
-    },
-  ),
-
+                    //   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    // ),
+                    child: Text(
+                      (snapshot.data as String?) ?? "Location not available",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    ),
+                  );
+                },
+              ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

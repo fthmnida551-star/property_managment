@@ -56,36 +56,44 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               },
               backgroundColor: AppColors.greenColor,
               selectedItemColor: Colors.white,
+<<<<<<< HEAD
               unselectedItemColor: Colors.blueGrey,
               selectedFontSize: 26,
            unselectedFontSize: 24,
+=======
+              unselectedItemColor: const Color.fromARGB(130, 0, 0, 0),
+>>>>>>> 7cdc6fc870d5fab34d6f2d1d85ec6a44be651144
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.home),
+                    // child: SvgPicture.asset(AssetResource.home),
+                    child: Icon(Icons.home_outlined),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.search),
+                    // child: SvgPicture.asset(AssetResource.search),
+                    child: Icon(Icons.search),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.notification),
+                    // child: SvgPicture.asset(AssetResource.notification),
+                    child: Icon(Icons.message_outlined),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.profile),
+                    // child: SvgPicture.asset(AssetResource.profile),
+                    child: Icon(Icons.person_outline),
                   ),
                   label: '',
                 ),

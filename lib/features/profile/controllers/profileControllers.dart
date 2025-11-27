@@ -1,112 +1,5 @@
-// // // import 'package:flutter_riverpod/flutter_riverpod.dart';
-// // // import 'package:property_managment/core/provider/firebse_provider.dart';
-// // // import 'package:property_managment/features/profile/repository/profile_repo.dart';
-// // // import 'package:property_managment/features/users/repository.dart';
-
-// // // final ProfileRepositoryprovider = Provider(
-// // //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),);
-
-
-// // // final profileListProvider = StreamProvider(
-// // //   (ref) => ref.watch(ProfileRepositoryprovider).getUserData(),
-// // // );
-
-
-// // import 'dart:developer';
-
-// // import 'package:flutter_riverpod/flutter_riverpod.dart';
-// // import 'package:flutter_riverpod/legacy.dart';
-// // import 'package:property_managment/core/provider/firebse_provider.dart';
-// // import 'package:property_managment/features/profile/repository/profile_repo.dart';
-// // import 'package:property_managment/modelClass/user_model.dart';
-// // import 'package:shared_preferences/shared_preferences.dart';
-
-// // // Repository Provider
-// // final profileRepositoryProvider = Provider(
-// //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
-// // );
-
-// // // Profile Stream Provider (needs userId)
-// // // final profileListProvider = StreamProvider(
-// // //   (ref) async{
-// // //       final prefs = await SharedPreferences.getInstance();
-    
-// // //      final  userId =  prefs.getString('userId')??"";
-// // //     return ref.watch(profileRepositoryProvider).getUserData(userId);
-// // //   },
-// // // );
-
-// // final profileListProvider = StreamProvider.autoDispose<UserModel?>((ref) async* {
-// //   final prefs = await SharedPreferences.getInstance();
-// //   final userId = prefs.getString('userId') ?? "";
-
-// // log("fgsdfgsdfg   userId=$userId");
-// //   // get stream from repository
-// //   final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
-
-// //   // yield the stream
-// //   yield* stream;
-// // });
-
-// // class UpdateProfileController extends StateNotifier<AsyncValue<void>>{
-// //   final ProfileRepository repository;
-
-// //   UpdateProfileController(this.repository): super(const AsyncData(null));
-
-// //   Future<void> updateUser(UserModel user) async{
-// //     try{
-// //       state = const AsyncLoading();
-// //       await repository.saveUserData(user);
-// //       state = const AsyncData(null);
-// //     }catch (e, st){
-// //       state = AsyncError(e, st);
-// //     }
-// //   }
-// // }
-
-
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_riverpod/legacy.dart';
-// import 'package:property_managment/core/provider/firebse_provider.dart';
-// import 'package:property_managment/features/profile/repository/profile_repo.dart';
-// import 'package:property_managment/modelClass/user_model.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-
-// // ---------------- Repository Provider ----------------
-
-// final profileRepositoryProvider = Provider(
-//   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
-// );
-
-// // ---------------- User Stream Provider ----------------
-
-// final profileListProvider =
-//     StreamProvider.autoDispose<UserModel?>((ref) async* {
-//   final prefs = await SharedPreferences.getInstance();
-//   final userId = prefs.getString('userId') ?? "";
-
-//   final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
-
-//   yield* stream;
-// });
-
-// // ---------------- Update Controller ----------------
-
-// class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
-//   final ProfileRepository repository;
-
-//   UpdateProfileController(this.repository) : super(const AsyncData(null));
-
-  
-
-// // ---------------- Provider for Controller ----------------
-
-// final updateProfileControllerProvider =
-//     StateNotifierProvider<UpdateProfileController, AsyncValue<void>>((ref) {
-//   return UpdateProfileController(ref.watch(profileRepositoryProvider));
-// });
-// }
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:property_managment/core/provider/firebse_provider.dart';
@@ -114,19 +7,18 @@ import 'package:property_managment/features/profile/repository/profile_repo.dart
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 // ---------------- Repository Provider ----------------
 
 final profileRepositoryProvider = Provider(
   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
 );
 
-
 // ---------------- User Stream Provider ----------------
 // Reads the userId from SharedPreferences and listens to Firestore updates.
 
-final profileListProvider =
-    StreamProvider.autoDispose<UserModel?>((ref) async* {
+final profileListProvider = StreamProvider.autoDispose<UserModel?>((
+  ref,
+) async* {
   final prefs = await SharedPreferences.getInstance();
   final userId = prefs.getString('userId') ?? "";
 
@@ -137,7 +29,6 @@ final profileListProvider =
   yield* stream;
 });
 
-
 // ---------------- Update Controller ----------------
 
 class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
@@ -145,7 +36,7 @@ class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
 
   UpdateProfileController(this.repository) : super(const AsyncData(null));
 
-  Future<void> updateUser(UserModel user) async {
+  Future<void> updateUser(Map<String,dynamic> user) async {
     try {
       state = const AsyncLoading(); // start loading
 
@@ -158,10 +49,28 @@ class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
   }
 }
 
-
 // ---------------- Provider for Controller ----------------
 
 final updateProfileControllerProvider =
     StateNotifierProvider<UpdateProfileController, AsyncValue<void>>((ref) {
-  return UpdateProfileController(ref.watch(profileRepositoryProvider));
-});
+      return UpdateProfileController(ref.watch(profileRepositoryProvider));
+    });
+
+// -------------------image---------------------------
+final profileImageProvider =
+    StateNotifierProvider<ProfileImageNotifier, File?>(
+  (ref) => ProfileImageNotifier(),
+);
+
+class ProfileImageNotifier extends StateNotifier<File?> {
+  ProfileImageNotifier() : super(null);
+
+  void setImage(File file) {
+    state = file;
+  }
+
+  void clear() {
+    state = null;
+  }
+}
+
