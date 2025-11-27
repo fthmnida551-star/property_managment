@@ -11,26 +11,35 @@ class BookingRepo {
   BookingRepo(this.service,this.notificationRepo);
 
   
+addbookingDetails(Map<String, dynamic> bookingData, String userName, PropertyModel property) async {
+  await service.bookingdetails
+      .doc(bookingData['BOOKING_ID'])
+      .set(bookingData);
 
-  addbookingDetails(Map<String, dynamic> bookingData,String userName, PropertyModel property) async {
-    await service.bookingdetails.doc(bookingData['BOOKING_ID']) .set(bookingData);
-    await service.properties.doc(bookingData['PROPERTY_ID']).update({
-      'IS_BOOKED': 'YES',
-      'BOOKING_ID': bookingData['BOOKING_ID']
-    });
-     String ownerName =
+  await service.properties
+      .doc(bookingData['PROPERTY_ID'])
+      .update({
+    'IS_BOOKED': 'YES',
+    'BOOKING_ID': bookingData['BOOKING_ID']
+  });
+
+  // ⭐ FIXED CONDITION  
+  String ownerName =
       (property.ownername != null && property.ownername.trim().isNotEmpty)
           ? property.ownername
           : "PlotX";
 
-      String message = "${property.ownername}'s property is booked by ${bookingData['NAME']}";
-     await notificationRepo.addNotification(
-        title: "New Property booked",
-        message: message,
-        type: "Booked",
-        addedStaff: userName, 
-      );
-  }
+  // ⭐ USE ownerName (not property.ownername)
+  String message =
+      "$ownerName's property is booked by ${bookingData['NAME']}";
+
+  await notificationRepo.addNotification(
+    title: "New Property booked",
+    message: message,
+    type: "Booked",
+    addedStaff: userName,
+  );
+}
 
   Stream<BookingModel?> getBooking(String bookingId) {
     log("hhhhhhhhhhh bookingId $bookingId");
