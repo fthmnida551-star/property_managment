@@ -9,7 +9,7 @@ class BookingRepo {
   BookingRepo(this.service,this.notificationRepo);
 
   addbookingDetails(Map<String, dynamic> bookingData,String userName) async {
-    await service.bookingdetails.doc(bookingData['BOOKING_ID']).set(bookingData);
+    await service.bookingdetails.doc(bookingData['BOOKING_ID']) .set(bookingData);
     await service.properties.doc(bookingData['PROPERTY_ID']).update({
       'IS_BOOKED': 'YES',
       'BOOKING_ID': bookingData['BOOKING_ID']
@@ -17,7 +17,8 @@ class BookingRepo {
      await notificationRepo.addNotification(
         title: "New Property booked",
         message: "property has been booked",
-        addedStaff: userName, // you can use user id or role
+        type: "Booked",
+        addedStaff: userName, 
       );
   }
 
@@ -30,7 +31,7 @@ class BookingRepo {
           if (doc.exists && doc.data() != null) {
             final Map<String, dynamic> data =
                 doc.data()! as Map<String, dynamic>;
-            // data['id'] = doc.id;
+            
             return BookingModel.fromMap(doc.id, data);
           } else {
             print("No booking found for ID: $bookingId");
@@ -62,8 +63,9 @@ class BookingRepo {
      await notificationRepo.addNotification(
         title: "booking cancelled",
         message: "booking cancelled",
+        type: "Cancelled",
         addedStaff: userName, // you can use user id or role
-     );
+     ); 
      
   }
 }

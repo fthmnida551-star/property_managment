@@ -1,13 +1,12 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:property_managment/core/provider/is_loading.dart';
 import 'package:property_managment/core/utils/cloudinary_img/dio.dart';
-import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
@@ -16,8 +15,8 @@ import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
-import 'package:property_managment/location/concert_section.dart';
-import 'package:property_managment/location/pick_location.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/pick_location.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_landlord_details.dart';
 import 'package:property_managment/features/property/screens/searching_page/widget/dropdown._form_field.dart';
@@ -74,8 +73,6 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
 
   // File? file1;
   List<String> imageFile = [];
-
-  // final ImagePicker _picker = ImagePicker();
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   clearController() {
@@ -113,7 +110,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
     }
   }
 
-  List<File> files = [];
+  // List<File> files = [];
 
   // pickImg() async {
 

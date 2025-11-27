@@ -19,7 +19,7 @@ class _FilterSortPageState extends ConsumerState<FilterSortPage> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   // late int selectedIndex;
-  RangeValues priceRange = const RangeValues(1000, 1000000);
+  RangeValues priceRange = const RangeValues(1000, 1000000000);
   RangeValues sqftRange = const RangeValues(100, 50000);
 
   // 🔹 Keep all property types initially false
@@ -109,7 +109,7 @@ class _FilterSortPageState extends ConsumerState<FilterSortPage> {
                               // setState(() {
                               // Reset all filters
                               propertyTypes.updateAll((key, value) => false);
-                              priceRange = const RangeValues(1000, 100000);
+                              priceRange = const RangeValues(1000, 1000000000);
                               sqftRange = const RangeValues(100, 50000);
                               selectedproperty.clear(); // clear list too
                               ref.read(typeFilterProvider.notifier).state =
@@ -266,7 +266,7 @@ class _FilterSortPageState extends ConsumerState<FilterSortPage> {
             RangeSlider(
               values: priceRange,
               min: 1000,
-              max: 1000000,
+              max: 1000000000,
               divisions: 10,
               labels: RangeLabels(
                 "₹${priceRange.start.toInt()}",

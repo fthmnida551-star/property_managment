@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
-import 'package:property_managment/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/propertydetails/property_details/not_booked.dart';
 

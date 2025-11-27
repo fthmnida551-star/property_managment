@@ -42,13 +42,16 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Profile',
-              style: TextStyle(color: AppColors.whiteColor, fontSize: 21),
+            Padding(
+              padding:  EdgeInsets.only(left: 15),
+              child:  Text('Profile', style: TextStyle(color: AppColors.whiteColor, fontSize: 21,fontWeight: FontWeight.bold)),
             ),
-            GestureDetector(
-              onTap: () => logoutAlert(context),
-              child: const Icon(Icons.logout, color: AppColors.white),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: GestureDetector(
+                onTap: () => logoutAlert(context),
+                child: const Icon(Icons.logout, color: AppColors.white,fontWeight: FontWeight.bold,),
+              ),
             ),
           ],
         ),

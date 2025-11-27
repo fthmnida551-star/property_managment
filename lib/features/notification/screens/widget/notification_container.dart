@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 
 class NotificationContainer extends StatefulWidget {
+  final String title;
   final String text;
   final Color color;
   const NotificationContainer({
     super.key,
+    required this.title,
     required this.text,
     required this.color,
   });
@@ -35,9 +37,9 @@ class _NotificationContainerState extends State<NotificationContainer> {
                 color: widget.color,
                 borderRadius: BorderRadius.circular(50),
               ),
-              child: Center(
+                child: Center(
                 child: Text(
-                  "P",
+                  widget.title[0].toUpperCase(),   // first letter icon
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -51,8 +53,8 @@ class _NotificationContainerState extends State<NotificationContainer> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Propert Booked',
+              Text(
+                 widget. title,     // 🔥 DYNAMIC TITLE
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,
