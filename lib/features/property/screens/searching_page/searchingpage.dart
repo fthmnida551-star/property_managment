@@ -101,7 +101,7 @@ class Searchingpage extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(width: 1.w),
-                  if (userRole.value != "Agent")
+                  if (userRole.value == "Staff" || userRole.value =="Manager")
                     Container(
                       height: 46.h,
                       width: 46.w,

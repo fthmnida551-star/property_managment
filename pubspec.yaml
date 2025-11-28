@@ -114,4 +114,8 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
+<<<<<<< HEAD
   image_path: "assets/logo/logo.png"
+=======
+  image_path: "assets/logo/plotX.png"
+>>>>>>> 74c7f5f0a30fa6bbe694d45fff69d604a41ac4e3
