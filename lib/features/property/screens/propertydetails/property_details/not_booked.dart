@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
@@ -35,26 +36,13 @@ class NotBookedPropertyScreen extends ConsumerStatefulWidget {
 
 class _NotBookedPropertyScreenState
     extends ConsumerState<NotBookedPropertyScreen> {
-  String userRole = "";
-  void getUserRole() async {
-    final prefs = await SharedPreferences.getInstance();
-    userRole = prefs.getString("role") ?? "";
-    setState(() {});
-    log("yuio$userRole");
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserRole();
-  }
-
+  
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     // final repoBook= ref.watch(bookingRepoProvider);
+    final userRole = ref.watch(userRoleProvider);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -115,7 +103,7 @@ class _NotBookedPropertyScreenState
                           ),
 
                           itemBuilder: (BuildContext context) => [
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               PopupMenuItem(
                                 onTap: () {
                                   Navigator.of(
@@ -412,7 +400,7 @@ class _NotBookedPropertyScreenState
                               ),
                               expandedCrossAxisAlignment:
                                   CrossAxisAlignment.start,
-                                  expandedAlignment: Alignment.centerLeft,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
@@ -580,7 +568,7 @@ class _NotBookedPropertyScreenState
                                   color: Colors.black,
                                 ),
                               ),
-                               expandedCrossAxisAlignment:
+                              expandedCrossAxisAlignment:
                                   CrossAxisAlignment.start,
                               expandedAlignment: Alignment.centerLeft,
                               children: [
@@ -611,9 +599,8 @@ class _NotBookedPropertyScreenState
             ],
           ),
         ),
-        bottomNavigationBar: userRole == "Agent"
-            ? null
-            : Padding(
+        bottomNavigationBar: 
+            Padding(
                 padding: EdgeInsets.all(16.0),
                 child: SizedBox(
                   height: 50,
