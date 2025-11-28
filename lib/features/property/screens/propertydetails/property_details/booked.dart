@@ -81,8 +81,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                           ),
                       ],
                     ),
-                  ),
-
+                  ),                
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
