@@ -10,6 +10,7 @@ import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/booking_details.dart';
@@ -36,7 +37,6 @@ class NotBookedPropertyScreen extends ConsumerStatefulWidget {
 
 class _NotBookedPropertyScreenState
     extends ConsumerState<NotBookedPropertyScreen> {
-  
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   @override
@@ -56,28 +56,54 @@ class _NotBookedPropertyScreenState
                     height: 250,
                     child: PageView(
                       children: [
-                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
+                        
                         if (widget.property.image.isNotEmpty)
-                          Image.network(
-                            widget.property.image[0],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[0],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[0],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                         if (widget.property.image.length > 1)
-                          Image.network(
-                            widget.property.image[1],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[1],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[1],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                         if (widget.property.image.length > 2)
-                          Image.network(
-                            widget.property.image[2],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[2],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[2],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                       ],
                     ),
@@ -599,41 +625,40 @@ class _NotBookedPropertyScreenState
             ],
           ),
         ),
-        bottomNavigationBar: 
-            Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      log("property id is  ${widget.property.id}");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingDetails(
-                            propertyId: widget.property.id,
-                            bookedData: null,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.greenColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Booking Now',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppColors.whitecolor,
-                        fontWeight: FontWeight.bold,
-                      ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                log("property id is  ${widget.property.id}");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingDetails(
+                      propertyId: widget.property.id,
+                      bookedData: null,
                     ),
                   ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.greenColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
               ),
+              child: Text(
+                'Booking Now',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: AppColors.whitecolor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
