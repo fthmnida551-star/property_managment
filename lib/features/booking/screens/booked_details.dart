@@ -56,138 +56,6 @@ class BookedDetails extends ConsumerWidget {
         ),
       ),
 
-      // body: Padding(
-      //   padding: const EdgeInsets.all(16.0),
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       crossAxisAlignment: CrossAxisAlignment.center,
-
-      //       children: [
-      //         // PropertyContainer(text: 'abc', isShow: false, property:property,),
-      //         PropertyContainer(
-      //           text: 'Booked',
-      //           textColor: AppColors.white,
-      //           color: AppColors.booked,
-      //           onTap: () async {
-      //             Navigator.push(
-      //               context,
-      //               MaterialPageRoute(
-      //                 builder: (context) => BookedPropertyScreen(
-      //                   property: property,
-      //                   bookedData: bookedProperty,
-      //                 ),
-      //               ),
-      //             );
-      //           },
-      //           property: property,
-      //         ),
-
-      //         SizedBox(height: 16),
-      //         Row(
-      //           children: [
-      //             Icon(Icons.person_rounded, color: Colors.green),
-
-      //             SizedBox(width: 8),
-      //             Text(bookedProperty.name),
-      //             // Text('Name\nHrishilal'),
-      //           ],
-      //         ),
-
-      //         SizedBox(height: 12),
-
-      //         Row(
-      //           children: [
-      //             Icon(Icons.phone_rounded, color: Colors.green),
-
-      //             SizedBox(width: 8),
-      //             Text(bookedProperty.contact),
-      //             // Text('Mobile No\n+91 960592260'),
-      //           ],
-      //         ),
-
-      //         SizedBox(height: 12),
-
-      //         Row(
-      //           children: [
-      //             Icon(Icons.mail_rounded, color: Colors.green),
-
-      //             SizedBox(width: 8),
-      //             Text("${bookedProperty.email}"),
-      //             // Text('Email\nHrishilal@gmail.com'),
-      //           ],
-      //         ),
-
-      //         SizedBox(height: 12),
-
-      //         Row(
-      //           children: [
-      //             Icon(Icons.calendar_month_rounded, color: Colors.green),
-
-      //             SizedBox(width: 8),
-      //             Text("${bookedProperty.date}"),
-      //             // Text('Date\n2-3-2025'),
-      //           ],
-      //         ),
-
-      //         SizedBox(height: 50),
-      //         if (userRole == "Manager")
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //             children: [
-      //               Button(
-      //                 text: 'Delete',
-      //                 onTap: () async {
-      //                   ref
-      //                       .read(bookingRepoProvider)
-      //                       .deleteBooking(property.bookingid, property.id);
-      //                   Navigator.pushReplacement(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) => BottomNavigationWidget(
-      //                         currentIndex: 1,
-
-      //                         propertytype: [],
-
-      //                         price: null,
-
-      //                         sqft: null,
-      //                       ),
-      //                     ),
-      //                   );
-      //                 },
-      //                 icon: Icons.delete_outline_outlined,
-      //               ),
-
-      //               Button(
-      //                 text: 'Edit',
-      //                 onTap: () async {
-      //                   final updatedBooking = await Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) => BookingDetails(
-      //                         propertyId: property.id,
-      //                         bookedData: bookedProperty,
-      //                       ),
-      //                     ),
-      //                   );
-      //                   if (updatedBooking != null) {
-      //                     // updateBookingProperty(updatedBooking);
-      //                     ref
-      //                         .watch(bookingRepoProvider)
-      //                         .updateBooking(
-      //                           bookedProperty.id,
-      //                           bookedProperty.toMap(),
-      //                         );
-      //                   }
-      //                 },
-      //                 icon: Icons.edit_outlined,
-      //               ),
-      //             ],
-      //           ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
       body: bookingData.when(
         loading: () => Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text("Error: $e")),
@@ -263,7 +131,7 @@ class BookedDetails extends ConsumerWidget {
 
                   SizedBox(height: 50),
 
-                  if (userRole.value == "Manager" || userRole.value=='Agent')
+                  if ( userRole.value!="Agent")
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

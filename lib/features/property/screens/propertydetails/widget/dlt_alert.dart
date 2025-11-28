@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';

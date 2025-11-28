@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_managment/core/provider/is_loading.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/cloudinary_img/dio.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';

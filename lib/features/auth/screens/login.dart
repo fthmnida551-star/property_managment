@@ -219,7 +219,6 @@ class _LoginPageState extends State<LoginPage> {
                                   final prefs = await SharedPreferences.getInstance();
                                   await prefs.setBool('isLoggedIn', true);
 
-                                  // Use the Firestore keys exactly as stored in your collection
                                   await prefs.setString('email',userMap['USER_EMAIL'] ?? '',);
                                   await prefs.setString('password',userMap['USER_PASSWORD']?? "",);
                                   await prefs.setString('userId',value.docs.first.id,);

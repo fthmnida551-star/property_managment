@@ -5,3 +5,8 @@ final userRoleProvider = FutureProvider<String>((ref) async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getString("role") ?? "";
 });
+
+final userNameProvider = FutureProvider<String>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString("name") ?? "";
+});

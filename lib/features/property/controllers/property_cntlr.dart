@@ -181,10 +181,7 @@ class PropertyImagesNotifier extends StateNotifier<List<File>> {
 
 
 
-final userNameProvider = FutureProvider<String>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString("name") ?? "";
-});
+
 
 
 final searchProvider = StateProvider<String>((ref) => "");

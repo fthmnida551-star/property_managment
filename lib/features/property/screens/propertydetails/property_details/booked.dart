@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
@@ -37,25 +38,25 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
 
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
-  String userRole = "";
+  // String userRole = "";
 
-  void getUserRole() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userRole = prefs.getString("role") ?? '';
-    });
-  }
+  // void getUserRole() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   userRole = prefs.getString("role") ?? '';
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    getUserRole();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserRole();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final repo = ref.read(bookingRepoProvider);
     final loginanme = ref.watch(userNameProvider);
+    final userRole = ref.watch(userRoleProvider);
+    log('user role: 11$userRole/11');
 
     return SafeArea(
       child: Scaffold(
@@ -115,7 +116,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                             color: AppColors.whitecolor,
                           ),
                           itemBuilder: (BuildContext context) => [
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               PopupMenuItem(
                                 child: InkWell(
                                   onTap: () {
@@ -463,14 +464,14 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                 Text(widget.bookedData!.date),
                               ],
                             ),
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    SizedBox(width: 3,),
+                                    SizedBox(width: 3),
                                     Button(
                                       width: 140,
                                       height: 40,
@@ -516,7 +517,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                       },
                                       icon: Icons.edit_outlined,
                                     ),
-                                    SizedBox(width: 3,)
+                                    SizedBox(width: 3),
                                   ],
                                 ),
                               ),
@@ -754,39 +755,39 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                 Text("${widget.bookedData!.date}"),
                               ],
                             ),
+                            if (userRole.value != "Agent")
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  if (userRole != "Staff")
-                                  SizedBox(width: 3,),
-                                    Button(
-                                      width: 140,
-                                      height: 40,
-                                      text: 'Delete',
-                                      onTap: () async {
-                                        repo.deleteBooking(
-                                          widget.property.bookingid,
-                                          widget.property.id,
-                                          loginanme.value!,
-                                        );
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BottomNavigationWidget(
-                                                  currentIndex: 1,
-                                                  propertytype: [],
-                                                  price: null,
-                                                  sqft: null,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete_outline_outlined,
-                                    ),
+                                   SizedBox(width: 3),
+                                  Button(
+                                    width: 140,
+                                    height: 40,
+                                    text: 'Delete',
+                                    onTap: () async {
+                                      repo.deleteBooking(
+                                        widget.property.bookingid,
+                                        widget.property.id,
+                                        loginanme.value!,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BottomNavigationWidget(
+                                                currentIndex: 1,
+                                                propertytype: [],
+                                                price: null,
+                                                sqft: null,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.delete_outline_outlined,
+                                  ),
                                   SizedBox(width: 3),
                                   Button(
                                     width: 140,
@@ -805,7 +806,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                     },
                                     icon: Icons.edit_outlined,
                                   ),
-                                  SizedBox(width: 10,)
+                                  SizedBox(width: 10),
                                 ],
                               ),
                             ),
