@@ -29,7 +29,7 @@ class AddressWidget extends StatelessWidget {
         return Text(
           text,
           style: style ?? TextStyle(fontSize: 15, color: AppColors.black),
-          maxLines: 2,
+          maxLines: 6,
           overflow: TextOverflow.ellipsis,
         );
       },

@@ -24,25 +24,8 @@ class Searchingpage extends ConsumerWidget {
   List<PropertyModel> propertyDetailsList = [];
   List<PropertyModel> filterPropertyDetailsList = [];
   FirebaseFirestore fdb = FirebaseFirestore.instance;
-  // String userRole = "";
-  // getUserRole() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   // final Set<String> keyss = prefs.getKeys();
-  //   userRole = prefs.getString('role') ?? "";
-  //   log("vvvvvvvvv $userRole");
-  // }
 
   TextEditingController srchbrcntlr = TextEditingController();
-  // BookingModel? bookingData;
-
-  // getPropertyBookingData(String bookingId) async {
-  //   await fdb.collection("BOOKING DETAILS").doc(bookingId).get().then((value) {
-  //     if (value.exists) {
-  //       Map<String, dynamic> data = value.data()!;
-  //       bookingData = BookingModel.fromMap(value.id, data);
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,96 +44,136 @@ class Searchingpage extends ConsumerWidget {
               'Properties',
               style: TextStyle(
                 color: AppColors.white,
-                fontSize: 21.sp,
+                fontSize: 21,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // searching section
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 46.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.propertyContainer,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        width: 1,
-                        color: AppColors.opacityGrey,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: srchbrcntlr,
-                      onChanged: (value) {
-                        ref.read(searchProvider.notifier).state = value;
-                      },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: AppColors.opacityGrey,
-                        ),
-                        hintText: 'Search',
-                        hintStyle: TextStyle(
-                          fontSize: 18.sp,
-                          color: AppColors.opacityGrey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 1.w),
-                if (userRole.value != "Agent")
-                  Container(
-                    height: 46.h,
-                    width: 46.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.propertyContainer,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        // pickAndUpload();
-                        ref.read(propertyFormProvider.notifier).clear();
-                        ref.read(propertyImagesProvider.notifier).clear();
-                        ref.read(isOwnPropertyProvider.notifier).state = false;
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                AddProperty(from: 'new', property: null),
-                          ),
-                        );
-                      },
-                      child: Icon(
-                        Icons.add_box_sharp,
-                        color: AppColors.greenColor,
-                        size: 50.sp,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            SizedBox(height: 10),
-
-            //↬ Filtering section
-            SizedBox(
-              height: 40.h,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(searchProvider.notifier).state = "";
+          ref.read(filterProvider.notifier).state = "All";
+          ref.read(typeFilterProvider.notifier).state = null;
+          ref.read(priceFilterProvider.notifier).state = null;
+          ref.read(sqftFilterProvider.notifier).state = null;
+          ref.refresh(propertyListProvider);
+          srchbrcntlr.clear();
+        },
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // searching section
+              Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: GestureDetector(
+                  Expanded(
+                    child: Container(
+                      height: 46.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.propertyContainer,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.opacityGrey,
+                        ),
+                      ),
+                      child: TextField(
+                        controller: srchbrcntlr,
+                        onChanged: (value) {
+                          ref.read(searchProvider.notifier).state = value;
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: AppColors.opacityGrey,
+                          ),
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                            fontSize: 18.sp,
+                            color: AppColors.opacityGrey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 1.w),
+                  if (userRole.value == "Staff" || userRole.value =="Manager")
+                    Container(
+                      height: 46.h,
+                      width: 46.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.propertyContainer,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // pickAndUpload();
+                          ref.read(propertyFormProvider.notifier).clear();
+                          ref.read(propertyImagesProvider.notifier).clear();
+                          ref.read(isOwnPropertyProvider.notifier).state =
+                              false;
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddProperty(from: 'new', property: null),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          Icons.add_box_sharp,
+                          color: AppColors.greenColor,
+                          size: 50.sp,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: 10),
+
+              //↬ Filtering section
+              SizedBox(
+                height: 40.h,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  FilterSortPage(initialIndex: 0),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(AssetResource.filteringImage),
+                            const SizedBox(width: 4),
+                            const Text(
+                              'Filter',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    //(FilteringContainer only takes text,it means constructor is const)
+                    FilteringContainer(
+                      text: 'Property Type',
+                      width: 121,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -160,68 +183,43 @@ class Searchingpage extends ConsumerWidget {
                           ),
                         );
                       },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(AssetResource.filteringImage),
-                          const SizedBox(width: 4),
-                          const Text(
-                            'Filter',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.black,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
-                  //(FilteringContainer only takes text,it means constructor is const)
-                  FilteringContainer(
-                    text: 'Property Type',
-                    width: 121,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 0),
-                        ),
-                      );
-                    },
-                  ),
-                  FilteringContainer(
-                    text: 'Price',
-                    width: 71,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 1),
-                        ),
-                      );
-                    },
-                  ),
-                  FilteringContainer(
-                    text: 'Area sqf',
-                    width: 96,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FilterSortPage(initialIndex: 2),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                    FilteringContainer(
+                      text: 'Price',
+                      width: 71,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FilterSortPage(initialIndex: 1),
+                          ),
+                        );
+                      },
+                    ),
+                    FilteringContainer(
+                      text: 'Area sqf',
+                      width: 96,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FilterSortPage(initialIndex: 2),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // Propert Containers
-            SizedBox(height: 15.h),
+              // Propert Containers
+              SizedBox(height: 15.h),
 
-            _buildList(list, context, ref),
-          ],
+              _buildList(list, context, ref),
+            ],
+          ),
         ),
       ),
     );
@@ -260,21 +258,29 @@ class Searchingpage extends ConsumerWidget {
                   log("item.isBooked ${item.isBooked} bbb ${item.bookingid}");
                   // await getPropertyBookingData(item.bookingid);
                   // ref.watch(bookingProvider.from()).
-                  final bookingData = ref.watch(
-                    bookingProvider(item.bookingid),
-                  );
-                  log("bookingData $bookingData");
-                  Future.delayed(Duration(seconds: 5));
-                  log("bookingData1111 $bookingData");
+                  // final bookingData = await ref.read(
+                  //   bookingProvider(item.bookingid),
+                  // );
+
+                  final bookingData = await ref
+                      .read(bookingRepoProvider)
+                      .getBooking(item.bookingid);
+
+                  log("bookingData ${bookingData}");
+                  Future.delayed(Duration(seconds: 5), () {
+                    
+                  });
+                  log("bookingData1111 ${bookingData}");
+
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BookedPropertyScreen(
-                        property: item,
-                        bookedData: bookingData.value,
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BookedPropertyScreen(
+                          property: item,
+                          bookedData: bookingData,
+                        ),
                       ),
-                    ),
-                  );
+                    );
                 },
                 property: item,
               )

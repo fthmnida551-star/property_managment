@@ -30,4 +30,10 @@ class NotificationRepository {
               .toList(),
         );
   }
+  Future<void> deleteAllNotifications() async {
+  final docs = await service.notifications.get();
+  for (var doc in docs.docs) {
+    await doc.reference.delete();
+  }
+}
 }

@@ -152,6 +152,9 @@ final propertyRepoProvider = Provider(
 final propertyListProvider = StreamProvider(
   (ref) => ref.watch(propertyRepoProvider).getAllPropertyDetailsList(),
 );
+final propertySingleProvider = Provider((ref)=>ref.watch(propertyRepoProvider));
+
+
 
 final isOwnPropertyProvider = StateProvider<bool>((ref) => false);
 // final loadingProvider = StateProvider<bool>((ref) => false);
@@ -178,10 +181,7 @@ class PropertyImagesNotifier extends StateNotifier<List<File>> {
 
 
 
-final userNameProvider = FutureProvider<String>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString("name") ?? "";
-});
+
 
 
 final searchProvider = StateProvider<String>((ref) => "");

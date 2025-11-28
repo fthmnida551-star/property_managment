@@ -13,20 +13,51 @@ class Notificationscreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final repo=ref.watch(notificationDelete);
     final pro = ref.watch(noticationProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
           padding: const EdgeInsets.only(left: 15),
-          child: Text(
-            'Notification',
-            style: TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 21,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Notification',
+                style: TextStyle(
+                  color: const Color.fromRGBO(255, 255, 255, 1),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 21,
+                ),
+              ),
+                      // SizedBox(width: 150,) ,
+                      
+              PopupMenuButton(
+               icon:Icon(Icons.more_vert_outlined,color: AppColors.whiteColor,),
+                color:AppColors.white,
+              onSelected: (value) async{
+                if(value=="deleteAll"){  
+                  await repo.deleteAllNotifications();}
+              },
+                itemBuilder: (context)=>[
+                  PopupMenuItem(
+                    value: "deleteAll",
+                    child: Row(
+                    
+                    children: [
+                      Icon(Icons.delete_forever),
+                      SizedBox(width: 5,),
+                      
+                      Text("DeleteAll"),
+                      
+                    ],
+                  ),)
+                ])
+            ],
           ),
+          
         ),
+        
       ),
       body: pro.when(
         data: (notifications) {
@@ -42,6 +73,8 @@ class Notificationscreen extends ConsumerWidget {
                   title: item["title"],
                   text: item["message"],
                   color: item["type"].toString().toLowerCase() == "added"
+                  ?AppColors.ntfctBlue
+                  :item["type"].toString().toLowerCase() == "booked"
                       ? AppColors.greenColor
                       : AppColors.redcolor,
                 ),

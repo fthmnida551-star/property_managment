@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 
 void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
+  
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -48,9 +50,10 @@ void dltAlert(BuildContext context, PropertyModel property,WidgetRef ref) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: () async{
                     // deleteProperty(property);
-                    ref.read(propertyRepoProvider).deleteProperty(property);
+                    final username = await ref.read(userNameProvider);
+                    ref.read(propertyRepoProvider).deleteProperty(property,username.value??"");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
