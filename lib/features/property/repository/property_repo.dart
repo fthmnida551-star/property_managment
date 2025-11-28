@@ -8,27 +8,38 @@ class PropertyRepo {
   final NotificationRepository notificationRepo;
   PropertyRepo(this.service, this.notificationRepo);
 
-  Future<void> addProperties(
-    Map<String, dynamic> propertyData,
-    String userName,
-  ) async {
-    try {
-      // final docRef = await service.properties.add(propertyData);
+ Future<void> addProperties(
+  Map<String, dynamic> propertyData,
+  String userName,
+) async {
+  try {
+    await service.properties.add(propertyData);
 
-      await service.properties.add(propertyData);
+    String displayName;
+    final propertyName = (propertyData['BUILDING NAME'] as String?)?.trim();
+    final ownerName = (propertyData['OWNER NAME'] as String?)?.trim();
 
-      await notificationRepo.addNotification(
-        title: "New Property Added",
-        message: "${propertyData['BUILDING NAME']} has been added",
-        type: "Added",
-        addedStaff: userName, // you can use user id or role
-      );
-
-      log("Property Added & Notification Sent");
-    } catch (e) {
-      log("Error adding property: $e");
+    if (propertyName != null && propertyName.isNotEmpty) {
+      displayName = "$propertyName has been added"; // CASE 1: Building name exists
+    } else if (ownerName != null && ownerName.isNotEmpty) {
+      displayName = "$ownerName's property has been added"; // CASE 2: Only owner name exists
+    } else {
+      displayName = "PlotX's property has been added"; // CASE 3: Neither exists
     }
+
+    await notificationRepo.addNotification(
+      title: "New Property Added",
+      message: displayName,
+      type: "Added",
+      addedStaff: userName,
+    );
+
+    log("Property Added & Notification Sent");
+  } catch (e) {
+    log("Error adding property: $e");
   }
+}
+
 
   Future<void> updateproperty(
     String id,
@@ -73,19 +84,19 @@ deleteProperty(PropertyModel property, String userName) async {
   if (property.isBooked == true) {
     await service.bookingdetails.doc(property.bookingid).delete();
   }
+String displayName;
 
-  String displayName;
+final propertyName = property.name?.trim();
+final ownerName = property.ownername?.trim();
 
-  if (property.name != null && property.name.trim().isNotEmpty) {
-    // CASE 1: Property has a building name
-    displayName = "${property.name}'s property";
-  } else if (property.ownername != null && property.ownername.trim().isNotEmpty) {
-    // CASE 2: Land with owner name
-    displayName = "${property.ownername}'s property";
-  } else {
-    // CASE 3: No name + No owner → generic fallback
-    displayName = "Property";
-  }
+if (propertyName != null && propertyName.isNotEmpty) {
+  displayName = "$propertyName"; // building name
+} else if (ownerName != null && ownerName.isNotEmpty) {
+  displayName = "$ownerName's property"; // owner name
+} else {
+  displayName = "PlotX's property"; // fallback
+}
+
 
   await notificationRepo.addNotification(
     title: "Property Removed",

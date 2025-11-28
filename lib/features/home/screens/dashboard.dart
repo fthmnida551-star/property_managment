@@ -30,7 +30,8 @@ class DashboardScreen extends ConsumerWidget {
     final bookedcountAsync = ref.watch(bookedListProvider);
     final total = ref.watch(propertyListProvider).value ?? 0;
     final booked = ref.watch(bookedListProvider).value ?? 0;
-    final vacant = total - booked;
+    final vacant = (total - booked) < 0 ? 0 : (total - booked);
+
 
     return Scaffold(
       backgroundColor: Colors.white,
