@@ -760,7 +760,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  if (userRole != "Agent")
+                                  if (userRole != "Staff")
                                   SizedBox(width: 3,),
                                     Button(
                                       width: 140,

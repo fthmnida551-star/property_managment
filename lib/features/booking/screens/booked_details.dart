@@ -263,7 +263,7 @@ class BookedDetails extends ConsumerWidget {
 
                   SizedBox(height: 50),
 
-                  if (userRole.value == "Manager")
+                  if (userRole.value == "Manager" || userRole.value=='Agent')
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
