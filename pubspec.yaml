@@ -114,4 +114,4 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/logo/plot_x.svg"
+  image_path: "assets/logo/plot_x.png"
