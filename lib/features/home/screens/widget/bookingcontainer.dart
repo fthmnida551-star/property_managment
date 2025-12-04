@@ -74,7 +74,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
               color: AppColors.black,
               spreadRadius: 0.7,
               blurRadius: 0.7,
-              offset: Offset(0, 1),
+              // offset: Offset(0, 1),
             ),
           ],
         ),

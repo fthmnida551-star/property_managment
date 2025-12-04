@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/features/auth/screens/splashscreen.dart';
+import 'package:property_managment/features/home/controller/dashboard_controller.dart';
 import 'package:property_managment/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
 
@@ -19,11 +20,12 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final thememode=ref.watch(themeProvider);
     return ScreenUtilInit(
       designSize: const Size(
         390,
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: thememode,
           home: Splashscreen(),
           debugShowCheckedModeBanner: false,
         );

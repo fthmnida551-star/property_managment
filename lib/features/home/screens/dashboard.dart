@@ -7,7 +7,12 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
+import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/home/controller/dashboard_controller.dart';
+import 'package:property_managment/features/home/screens/widget/theme_pop.dart';
+import 'package:property_managment/features/notification/screens/notificationscreen.dart';
+import 'package:property_managment/features/profile/screens/profile.dart';
+import 'package:property_managment/features/users/screens/users_screen.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/home/screens/widget/bookingcontainer.dart';
@@ -20,6 +25,7 @@ class DashboardScreen extends ConsumerWidget {
   final FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   List<BookingModel> bookedDetails = [];
+  List<String> themelist = ["Light", "Dark"];
 
   PropertyModel? property;
 
@@ -32,25 +38,167 @@ class DashboardScreen extends ConsumerWidget {
     final booked = ref.watch(bookedListProvider).value ?? 0;
     final vacant = (total - booked) < 0 ? 0 : (total - booked);
 
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppbarWidget(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, top: 30),
-          child: Column(
-            children: [
-              SvgPicture.asset(AssetResource.appLogo),
-              Text(
-                'Property Mangement',
+
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: AppColors.greenColor),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 180),
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: AssetImage(AssetResource.plotX),
+                    ),
+                  ),
+                  // Image.asset(AssetResource.name),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text(
+                "My profile",
                 style: AppTextstyle.propertyMediumTextstyle(
                   context,
                   fontColor: AppColors.black,
-                  fontSize: 12.sp,
                 ),
               ),
-            ],
-          ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BottomNavigationWidget(
+                      currentIndex: 3,
+                      propertytype: [],
+                      price: null,
+                      sqft: null,
+                    ),
+                  ),
+                );
+              },
+            ),
+            Divider(color: AppColors.black, thickness: 0.6),
+            ListTile(
+              leading: Icon(Icons.supervised_user_circle_sharp),
+              title: Text(
+                "Users",
+                style: AppTextstyle.propertyMediumTextstyle(
+                  context,
+                  fontColor: AppColors.black,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UsersScreen()),
+                );
+              },
+            ),
+            Divider(color: AppColors.black, thickness: 0.6),
+            ListTile(
+              leading: Icon(Icons.bookmark_added_rounded),
+              title: Text(
+                "Booked Properties",
+                style: AppTextstyle.propertyMediumTextstyle(
+                  context,
+                  fontColor: AppColors.black,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.note_add),
+              title: Text(
+                "Non Booked Poperties",
+                style: AppTextstyle.propertyMediumTextstyle(
+                  context,
+                  fontColor: AppColors.black,
+                ),
+              ),
+              onTap: () {},
+            ),
+            Divider(color: AppColors.black, thickness: 0.6),
+            ListTile(
+              leading: Icon(Icons.notifications_active),
+              title: Text(
+                "Notifications",
+                style: AppTextstyle.propertyMediumTextstyle(
+                  context,
+                  fontColor: AppColors.black,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BottomNavigationWidget(
+                      currentIndex: 2,
+                      propertytype: [],
+                      price: null,
+                      sqft: null,
+                    ),
+                  ),
+                );
+              },
+            ),
+            Divider(color: AppColors.black, thickness: 0.6),
+            ListTile(
+              leading: Icon(Icons.dark_mode),
+              title: Text(
+                "Theme",
+                style: AppTextstyle.propertyMediumTextstyle(
+                  context,
+                  fontColor: AppColors.black,
+                ),
+              ),
+              onTap: () {
+                showThemePop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100.h),
+
+        child: Stack(
+          children: [
+            AppbarWidget(
+              height: MediaQuery.of(context).size.height * .12,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, top: 60),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(AssetResource.appLogo),
+                    Text(
+                      'Property Mangement',
+                      style: AppTextstyle.propertyMediumTextstyle(
+                        context,
+                        fontColor: AppColors.black,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              child: Builder(
+                builder: (context) => IconButton(
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: Icon(Icons.menu),
+                  color: AppColors.opacityGreyy,
+                  iconSize: 30,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       body: Padding(
@@ -63,6 +211,7 @@ class DashboardScreen extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: ContainerWidget(
+                    onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Column(
@@ -77,6 +226,7 @@ class DashboardScreen extends ConsumerWidget {
                               fontColor: AppColors.black,
                             ),
                           ),
+
                           SizedBox(height: 5),
 
                           bookedcountAsync.when(
@@ -103,6 +253,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
                 Padding(padding: EdgeInsets.all(8.w)),
                 ContainerWidget(
+                  onTap: () {},
                   child: Padding(
                     padding: const EdgeInsets.all(18),
                     child: Column(
@@ -134,6 +285,19 @@ class DashboardScreen extends ConsumerWidget {
             Padding(
               padding: EdgeInsets.all(12),
               child: ContainerWidget(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavigationWidget(
+                        currentIndex: 1,
+                        propertytype: [],
+                        price: null,
+                        sqft: null,
+                      ),
+                    ),
+                  );
+                },
                 height: 70.h,
                 width: 350.w,
                 child: Row(
