@@ -8,6 +8,7 @@ class BookingModel {
   final DateTime addedDate; // <-- date & time booking was added
   final String id;
   final String propertyId;
+ 
 
   BookingModel({
     required this.name,
@@ -17,6 +18,7 @@ class BookingModel {
     required this.addedDate,
     required this.id,
     required this.propertyId,
+    
   });
 
   // Convert Firestore document → BookingModel
@@ -31,6 +33,7 @@ class BookingModel {
           : DateTime.tryParse(map['ADDED_DATE'] ?? '') ?? DateTime.now(),
       id: id,
       propertyId: map['PROPERTY_ID'] ?? '',
+    
     );
   }
 
@@ -44,6 +47,7 @@ class BookingModel {
       'ADDED_DATE': addedDate, // Firestore stores DateTime directly
      
       'PROPERTY_ID': propertyId,
+      
     };
   }
 }
