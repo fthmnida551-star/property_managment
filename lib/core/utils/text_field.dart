@@ -10,6 +10,8 @@ class TextFieldContainer extends StatelessWidget {
   final TextEditingController controllerName;
   final String? Function(String?)? validator;
   final bool? isMultiline; 
+  final TextInputType? keyboardType;
+
 
   const TextFieldContainer({
     super.key,
@@ -20,6 +22,8 @@ class TextFieldContainer extends StatelessWidget {
     this.validator,
     required this.readOnly,
     this.isMultiline=false,
+    this.keyboardType,
+
   });
 
   @override
@@ -28,15 +32,20 @@ class TextFieldContainer extends StatelessWidget {
       controller: controllerName,
       validator: validator,
       readOnly: readOnly,
-      keyboardType: (isMultiline ??false )?TextInputType.multiline : TextInputType.text,
+      // keyboardType: (isMultiline ??false )?TextInputType.multiline : keyboardType,
+      keyboardType: keyboardType ?? 
+          ((isMultiline ??false) ? TextInputType.multiline : TextInputType.text), 
       maxLines: (isMultiline ?? false) ? null : 1,
+// keyboardAppearance: TextInputType.,
+
 
       decoration: InputDecoration(
+
         border: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.opacitygreyColor, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
-
+          
         hintText: text,
         hintStyle: TextStyle(
           fontSize: 18.sp,

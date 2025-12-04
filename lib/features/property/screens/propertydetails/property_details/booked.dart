@@ -6,7 +6,6 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
-import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
@@ -18,7 +17,6 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BookedPropertyScreen extends ConsumerStatefulWidget {
   PropertyModel property;

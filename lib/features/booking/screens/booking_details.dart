@@ -127,6 +127,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                 divider,
                 TextFieldContainer(
                   text: 'Contact',
+                  keyboardType: TextInputType.phone,
                   controllerName: contactCtlr,
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {

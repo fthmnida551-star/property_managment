@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -138,7 +139,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
     final repo = ref.watch(propertyFormProvider);
     final pickedImages = ref.watch(propertyImagesProvider);
     final isLoading = ref.watch(loadingProvider);
-    final loginName=ref.watch(userNameProvider);
+    final loginName = ref.watch(userNameProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -157,8 +158,9 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
               ),
               Text(
                 _saveButtonMode == SaveButtonMode.save
-                  ? 'Add Property': 'Edit Property',
-                
+                    ? 'Add Property'
+                    : 'Edit Property',
+
                 style: TextStyle(color: AppColors.white, fontSize: 19.sp),
               ),
             ],
@@ -173,174 +175,77 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-                          // image: file1 != null
-                          //     ? DecorationImage(
-                          //         image: FileImage(file1!),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : imageFile.length > 1
-                          //     ? DecorationImage(
-                          //         image: NetworkImage(imageFile[0]),
-                          //         fit: BoxFit.cover,
-                          //       )
-                          //     : null,
-                          image: pickedImages.length > 0
-                              ? DecorationImage(
-                                  image: FileImage(pickedImages[0]),
-                                  fit: BoxFit.cover,
-                                )
-                              : (imageFile.length > 0
-                                    ? DecorationImage(
-                                        image: NetworkImage(imageFile[0]),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null),
+                  padding: const EdgeInsets.only(left: 12.0, top: 12),
+                  child: SizedBox(
+                    height: 151,
+                    width: MediaQuery.of(context).size.width,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: pickedImages.length,
+                            itemBuilder: (context, Index) {
+                              return pickedImages.isNotEmpty
+                                  ? Container(
+                                      height: 150,
+                                      width: 100,
+                                      margin: EdgeInsets.only(right: 5),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.searchbar,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: BoxBorder.all(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
+                                        image: DecorationImage(
+                                          image: FileImage(
+                                            pickedImages[Index],
+                                           
+                                          ),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
 
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
+                                    )
+                                  : SizedBox();
+                            },
                           ),
-                        ),
-                        child: (pickedImages.isEmpty && imageFile.isEmpty)
-                            ? Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
+                          InkWell(
+                            onTap: () {
+                              pickImg(ref);
+                            },
+                            child: Container(
+                              height: 150,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: AppColors.searchbar,
+                                border: Border.all(color: AppColors.greyColor),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, color: AppColors.greyColor),
+                                  Text(
+                                    'Add image',
+                                    style: TextStyle(
+                                      color: AppColors.greyColor,
                                     ),
                                   ),
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-
-                          image: pickedImages.length > 1
-                              ? DecorationImage(
-                                  image: FileImage(pickedImages[1]),
-                                  fit: BoxFit.cover,
-                                )
-                              : (imageFile.length > 1
-                                    ? DecorationImage(
-                                        image: NetworkImage(imageFile[1]),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null),
-
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        child: (pickedImages.isEmpty && imageFile.isEmpty)
-                            ? Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-
-                          image: pickedImages.length > 2
-                              ? DecorationImage(
-                                  image: FileImage(pickedImages[2]),
-                                  fit: BoxFit.cover,
-                                )
-                              : (imageFile.length > 2
-                                    ? DecorationImage(
-                                        image: NetworkImage(imageFile[2]),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : null),
-
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
-                          ),
-                        ),
-                        child: (pickedImages.isEmpty && imageFile.isEmpty)
-                            ? Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 3),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      pickImg(ref);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: AppColors.greenColor,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Upload Images',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 18,
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+                SizedBox(height: 3),
+
                 SizedBox(height: 20),
 
                 DropdownFormField(
@@ -367,6 +272,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                 divider,
                 TextFieldContainer(
                   text: 'Price',
+                  keyboardType: TextInputType.phone,
                   controllerName: priceCtlr,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -442,6 +348,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                         divider,
                         TextFieldContainer(
                           text: "Bathrooms",
+                          keyboardType: TextInputType.phone,
                           controllerName: bathroomctlr,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -460,6 +367,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                         divider,
                         TextFieldContainer(
                           text: "Carpet Area(sqft)",
+                          keyboardType: TextInputType.phone,
                           controllerName: propertySqrftCtlr,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -490,6 +398,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                         TextFieldContainer(
                           text: "maintenance(Monthly)",
                           controllerName: maintenancectlr,
+                          keyboardType: TextInputType.phone,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the amount of maintence';
@@ -553,9 +462,9 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                   ),
                 divider,
                 TextFieldContainer(
-                  text: 'Description/Extra Details',                 
+                  text: 'Description/Extra Details',
                   controllerName: descriptionCtlr,
-                   isMultiline: true,   
+                  isMultiline: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter property description';
@@ -568,10 +477,9 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                   readOnly: false,
                 ),
                 divider,
-                TextFieldContainer(
-                  text: 'Location',
-                  readOnly: true,
-                  controllerName: locationCtlr,
+
+                TextFormField(
+                  controller: locationCtlr,
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the location';
@@ -581,54 +489,45 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                         .updateLocation(value);
                     return null;
                   },
-                ),
-                SizedBox(height: 10),
-
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 100,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: AppColors.greenColor,
-                      borderRadius: BorderRadius.circular(15),
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.opacitygreyColor,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
 
-                    child: InkWell(
-                      onTap: () async {
-                        final pickedLocation = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PickLocationScreen(),
-                          ),
-                        );
-
-                        if (pickedLocation != null) {
-                          latitude = pickedLocation.latitude;
-                          longitude = pickedLocation.longitude;
-                          String address = await convertLatLngToAddress(
-                            latitude!,
-                            longitude!,
-                          );
-                          locationCtlr.text = address;
-                          ref
-                              .read(propertyFormProvider.notifier)
-                              .updateLocation(address);
-                        }
-                      },
-                      child: Center(
-                        child: Text(
-                          "Pick Location",
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    hintText: 'Location',
+                    hintStyle: TextStyle(
+                      fontSize: 18.sp,
+                      color: AppColors.opacitygrayColorText,
                     ),
                   ),
+                  onTap: () async {
+                    final pickedLocation = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PickLocationScreen(),
+                      ),
+                    );
+
+                    if (pickedLocation != null) {
+                      latitude = pickedLocation.latitude;
+                      longitude = pickedLocation.longitude;
+                      String address = await convertLatLngToAddress(
+                        latitude!,
+                        longitude!,
+                      );
+                      locationCtlr.text = address;
+                      ref
+                          .read(propertyFormProvider.notifier)
+                          .updateLocation(address);
+                    }
+                  },
                 ),
+                SizedBox(height: 10),
               ],
             ),
           ),
@@ -645,10 +544,7 @@ class _AddPropertyState extends ConsumerState<AddProperty> {
                 text: 'Next',
                 onTap: () {
                   if (!isLoading) _handleNext(context, ref);
-                 
                 },
-
-                 
               ),
       ),
     );

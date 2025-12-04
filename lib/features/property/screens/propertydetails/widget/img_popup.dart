@@ -16,9 +16,7 @@ void imgpopup(BuildContext context, PropertyModel property, String imgUrl) {
             fit: BoxFit.cover,
             image: NetworkImage(
               imgUrl,
-              // fit: BoxFit.cover,
-              // height: 209,
-              // width: 356,
+              
             ),
           ),
         ),
