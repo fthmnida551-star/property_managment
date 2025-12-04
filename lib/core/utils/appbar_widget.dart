@@ -17,11 +17,13 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
         
       ),
       child: Container(
-        height: 200.h,
+        // height: 200.h,
         // width: 244.w,
         color: AppColors.greenColor,
         alignment: Alignment.centerLeft,
-        child: child ?? const Text('App Bar', style: TextStyle(color: Colors.white,)),
+        child:
+            child ??
+            const Text('App Bar', style: TextStyle(color: Colors.white)),
       ),
     );
   }

@@ -2,16 +2,11 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
-import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/provider/sharepreference.dart';
-import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
-import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
-import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
@@ -19,7 +14,6 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotBookedPropertyScreen extends ConsumerStatefulWidget {
   final String userName;
@@ -51,63 +45,32 @@ class _NotBookedPropertyScreenState
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: PageView(
-                      children: [
-                        
-                        if (widget.property.image.isNotEmpty)
-                          InkWell(
-                            onTap: () {
-                              imgpopup(
-                                context,
-                                widget.property,
-                                widget.property.image[0],
-                              );
-                            },
-                            child: Image.network(
-                              widget.property.image[0],
-                              fit: BoxFit.cover,
-                              height: 209,
-                              width: 356,
-                            ),
-                          ),
-                        if (widget.property.image.length > 1)
-                          InkWell(
-                            onTap: () {
-                              imgpopup(
-                                context,
-                                widget.property,
-                                widget.property.image[1],
-                              );
-                            },
-                            child: Image.network(
-                              widget.property.image[1],
-                              fit: BoxFit.cover,
-                              height: 209,
-                              width: 356,
-                            ),
-                          ),
-                        if (widget.property.image.length > 2)
-                          InkWell(
-                            onTap: () {
-                              imgpopup(
-                                context,
-                                widget.property,
-                                widget.property.image[2],
-                              );
-                            },
-                            child: Image.network(
-                              widget.property.image[2],
-                              fit: BoxFit.cover,
-                              height: 209,
-                              width: 356,
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
+                 SizedBox(
+  width: double.infinity,
+  height: 250,
+  child: PageView.builder(
+    itemCount: widget.property.image.length,
+    itemBuilder: (context, index) {
+      final img = widget.property.image[index];
+      return InkWell(
+        onTap: () {
+          imgpopup(
+            context,
+            widget.property,
+            img,
+          );
+        },
+        child: Image.network(
+          img,
+          fit: BoxFit.cover,
+          height: 209,
+          width: 356,
+        ),
+      );
+    },
+  ),
+),
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(

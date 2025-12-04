@@ -8,31 +8,33 @@ void imgpopup(BuildContext context, PropertyModel property, String imgUrl) {
     builder: (context) => Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
-        height: MediaQuery.of(context).size.height/2,
+        height: MediaQuery.of(context).size.height / 2,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
-            fit:BoxFit.cover ,
-            image:  NetworkImage(
-                          imgUrl,
-                          // fit: BoxFit.cover,
-                          // height: 209,
-                          // width: 356,
-                        ),)
+            fit: BoxFit.cover,
+            image: NetworkImage(
+              imgUrl,
+              
+            ),
+          ),
         ),
-         child:  Align(
+        child: Align(
           alignment: Alignment.topRight,
           child: CircleAvatar(
             radius: 15,
             backgroundColor: AppColors.white,
-            child: Icon(Icons.close,color: AppColors.black,))),
-          // SizedBox(height: 30,),
-         
-         
-         
-        
-      
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.close, color: AppColors.black),
+            ),
+          ),
+        ),
+
+        // SizedBox(height: 30,),
       ),
     ),
   );

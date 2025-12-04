@@ -150,6 +150,7 @@ class _AddLandlordDetailsState extends ConsumerState<AddLandlordDetails> {
                   divider,
                   TextFieldContainer(
                     text: 'Contact',
+                    keyboardType: TextInputType.phone,
                     controllerName: contactCtlr,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
