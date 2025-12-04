@@ -36,9 +36,11 @@ class DashboardScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppbarWidget(
+        height: MediaQuery.of(context).size.height*.12,
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, top: 30),
+          padding: const EdgeInsets.only(left: 20, top: 0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(AssetResource.appLogo),
               Text(

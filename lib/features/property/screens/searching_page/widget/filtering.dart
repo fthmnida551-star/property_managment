@@ -28,7 +28,7 @@ class FilteringContainer extends StatelessWidget {
             border: Border.all(width: 1),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(width: 10),
@@ -36,8 +36,7 @@ class FilteringContainer extends StatelessWidget {
                 text,
                 style: TextStyle(fontSize: 12.sp, color: AppColors.black),
               ),
-              SizedBox(width: 5),
-              Icon(Icons.keyboard_arrow_down_outlined),
+              
             ],
           ),
         ),

@@ -4,8 +4,8 @@ import 'package:property_managment/core/constant/app_colors.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Widget? child;
-  const AppbarWidget({super.key, this.child});
-
+  final double? height;
+  const AppbarWidget({super.key, this.child,this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +15,17 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
         bottomRight: Radius.circular(20),
       ),
       child: Container(
-        height: 200.h,
+        // height: 200.h,
         // width: 244.w,
         color: AppColors.greenColor,
         alignment: Alignment.centerLeft,
-        child: child ?? const Text('App Bar', style: TextStyle(color: Colors.white,)),
+        child:
+            child ??
+            const Text('App Bar', style: TextStyle(color: Colors.white)),
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>  Size.fromHeight(height?? 70);
 }

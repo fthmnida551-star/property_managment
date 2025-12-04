@@ -6,8 +6,8 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
-import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
@@ -17,7 +17,6 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class BookedPropertyScreen extends ConsumerStatefulWidget {
   PropertyModel property;
@@ -72,25 +71,52 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                     child: PageView(
                       children: [
                         if (widget.property.image.isNotEmpty)
-                          Image.network(
-                            widget.property.image[0],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: (){
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[0],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[0],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                         if (widget.property.image.length > 1)
-                          Image.network(
-                            widget.property.image[1],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[1],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[1],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                         if (widget.property.image.length > 2)
-                          Image.network(
-                            widget.property.image[2],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[2],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[2],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                       ],
                     ),

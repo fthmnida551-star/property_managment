@@ -177,13 +177,6 @@ class PropertyImagesNotifier extends StateNotifier<List<File>> {
 }
 
 
-
-
-
-
-
-
-
 final searchProvider = StateProvider<String>((ref) => "");
 final filterProvider = StateProvider<String>((ref) => 'All');
 
