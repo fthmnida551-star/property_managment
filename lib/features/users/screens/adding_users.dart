@@ -22,7 +22,7 @@ class AddUserScreen extends ConsumerStatefulWidget {
 class _AddUserScreenState extends ConsumerState<AddUserScreen> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   final formkey = GlobalKey<FormState>();
-  final List<String> _roles = ['Manager', 'Agent', 'Staff', "Mobile number"];
+  final List<String> _roles = ['Manager', 'Agent', 'Staff', ];
   String? _selectedRole;
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
@@ -131,6 +131,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 6, right: 5),
                   child: TextFieldContainer(
+                    keyboardType:TextInputType.phone,
                     text: "Mobile number",
                     controllerName: mobilenocntrlr,
                     validator:(String?value){

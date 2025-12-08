@@ -3,16 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/home/controller/dashboard_controller.dart';
-import 'package:property_managment/features/home/screens/widget/theme_pop.dart';
-import 'package:property_managment/features/notification/screens/notificationscreen.dart';
-import 'package:property_managment/features/profile/screens/profile.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
@@ -65,7 +61,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final total = ref.watch(propertyListProvider).value ?? 0;
     final booked = ref.watch(bookedListProvider).value ?? 0;
     final vacant = (total - booked) < 0 ? 0 : (total - booked);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+   
 
     return Scaffold(
       // backgroundColor: Colors.white,
@@ -94,7 +90,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     userRole,
                     style: AppTextstyle.propertyMediumTextstyle(context),
                   ),
-                  // Image.asset(AssetResource.name),
+                 
                 ],
               ),
             ),

@@ -80,7 +80,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
                     // child: SvgPicture.asset(AssetResource.notification),
-                    child: Icon(Icons.notifications),
+                    child: Icon(Icons.notifications_outlined),
                   ),
                   label: '',
                 ),
