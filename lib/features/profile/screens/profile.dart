@@ -1,5 +1,947 @@
-// // import 'dart:developer';
+// // // // // import 'dart:developer';
 
+// // // // // import 'package:flutter/material.dart';
+// // // // // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // // // // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // // // // import 'package:property_managment/core/constant/app_colors.dart';
+// // // // // import 'package:property_managment/core/constant/asset_resource.dart';
+// // // // // import 'package:property_managment/core/utils/appbar_widget.dart';
+// // // // // import 'package:property_managment/features/profile/controllers/profileControllers.dart';
+// // // // // import 'package:property_managment/modelClass/user_model.dart';
+// // // // // import 'package:property_managment/features/profile/screens/edit_profile.dart';
+// // // // // import 'package:property_managment/features/users/screens/users_screen.dart';
+// // // // // import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
+// // // // // import 'package:shared_preferences/shared_preferences.dart';
+
+// // // // // class Profilescreen extends ConsumerWidget {
+// // // // //    Profilescreen({super.key});
+
+// // // // //   bool isSwitched = false;
+
+// // // // //   // String userRole = '';
+
+// // // // //   // getUserRole() async {
+// // // // //   String userId="";
+
+// // // // //   String userName ="";
+
+// // // // //   String userEmail="";
+
+// // // // //   //  String userRole="";
+// // // // //   String userPassword="";
+
+// // // // //   // UserModel? loginUser;
+
+// // // // //   // @override
+// // // // //   // Future<void> getUserData() async {
+
+// // // // //   //   final prefs = await SharedPreferences.getInstance();
+    
+// // // // //   //     userId =  prefs.getString('userId')??"";
+// // // // //   //     userName =  prefs.getString('name')??"";
+// // // // //   //     userEmail = prefs.getString('email')??"";
+// // // // //   //     userRole = prefs.getString('role')??"";
+// // // // //   //     userPassword = prefs.getString('password')??"";
+      
+
+// // // // //   //     loginUser = UserModel(
+// // // // //   //         userId,
+// // // // //   //         userName,
+// // // // //   //         userEmail,
+// // // // //   //         userRole,
+// // // // //   //         userPassword,
+          
+// // // // //   //        );
+    
+
+// // // // //   //     }
+
+// // // // //   // ✅ Get notification switch status
+// // // // //   @override
+// // // // //   Widget build(BuildContext context,WidgetRef ref) {
+// // // // //     final userdata =ref.watch(profileListProvider);
+    
+
+// // // // //     // log("username = $userName    ghghgh ${loginUser?.name}");
+// // // // //     // if(loginUser == null){
+// // // // //     //   return const Scaffold(
+// // // // //     //     body: Center(child: CircularProgressIndicator()),
+// // // // //     //   );
+// // // // //     // }
+// // // // //     return Scaffold(
+// // // // //       appBar: AppbarWidget(
+// // // // //         child: Row(
+// // // // //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// // // // //           children: [
+// // // // //             const Padding(
+// // // // //               padding: EdgeInsets.only(left: 15),
+// // // // //               child: Text(
+// // // // //                 'Profile',
+// // // // //                 style: TextStyle(
+// // // // //                   color: AppColors.whiteColor,
+// // // // //                   fontSize: 21,
+// // // // //                   fontWeight: FontWeight.w600,
+// // // // //                 ),
+// // // // //               ),
+// // // // //             ),
+// // // // //             Padding(
+// // // // //               padding: const EdgeInsets.all(8.0),
+// // // // //               child: GestureDetector(
+// // // // //                 onTap: () {
+// // // // //                   logoutAlert(context);
+// // // // //                 },
+// // // // //                 child: const Icon(Icons.logout, color: AppColors.white),
+// // // // //               ),
+// // // // //             ),
+// // // // //           ],
+// // // // //         ),
+// // // // //       ),
+
+// // // // //       // ✅ Body
+// // // // //       body: Padding(
+// // // // //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+// // // // //         child: Column(
+// // // // //           children: [
+// // // // //             // ✅ Profile Card
+// // // // //             Container(
+// // // // //               padding: const EdgeInsets.all(15),
+// // // // //               decoration: BoxDecoration(
+// // // // //                 color: AppColors.white,
+// // // // //                 borderRadius: BorderRadius.circular(12),
+// // // // //                 boxShadow: [
+// // // // //                   BoxShadow(
+// // // // //                     color: AppColors.opacityGrey.withOpacity(0.2),
+// // // // //                     blurRadius: 5,
+// // // // //                     offset: const Offset(0, 2),
+// // // // //                   ),
+// // // // //                 ],
+// // // // //               ),
+// // // // //               child: Row(
+// // // // //                 children: [
+// // // // //                   ClipRRect(
+// // // // //                     borderRadius: BorderRadius.circular(8),
+// // // // //                     child: Image.asset(
+// // // // //                       AssetResource.profilepic,
+// // // // //                       height: 60,
+// // // // //                       width: 60,
+// // // // //                       fit: BoxFit.cover,
+// // // // //                     ),
+// // // // //                   ),
+// // // // //                   const SizedBox(width: 15),
+
+// // // // //                   // ✅ Name & Email
+// // // // //                   Expanded(
+// // // // //                     child: userdata.when(
+// // // // //       data: (user) {
+// // // // //         if (user ==  null){
+// // // // //           return Center(child: Text("No user found"));
+// // // // //         }
+// // // // //         return Column(
+// // // // //                       crossAxisAlignment: CrossAxisAlignment.start,
+// // // // //                       children: [
+// // // // //                         Text(
+// // // // //                           user.name,
+
+// // // // //                           style: TextStyle(
+// // // // //                             fontSize: 23.sp,
+// // // // //                             color: AppColors.blackColor,
+// // // // //                             fontWeight: FontWeight.bold,
+// // // // //                           ),
+// // // // //                           overflow: TextOverflow.ellipsis,
+// // // // //                         ),
+// // // // //                         Text(
+// // // // //                           user.email,
+// // // // //                           style: TextStyle(
+// // // // //                             color: AppColors.black,
+// // // // //                             fontSize: 17.sp,
+// // // // //                           ),
+// // // // //                           overflow: TextOverflow.ellipsis,
+// // // // //                         ),
+// // // // //                       ],
+// // // // //                     );
+// // // // //       },
+// // // // //       loading: () => Center(child: CircularProgressIndicator()), 
+// // // // //       error: (e, st) => Text("Error: $e"),
+// // // // //       ),
+                    
+                    
+                    
+                    
+                    
+// // // // //                   ),
+
+// // // // //                   // ✅ Edit Icon
+// // // // //                   GestureDetector(
+// // // // //                     onTap: () {
+// // // // //                       Navigator.push(
+// // // // //                         context,
+// // // // //                         MaterialPageRoute(
+// // // // //                           builder: (context) =>
+// // // // //                               EditProfileScreen(loginUser: userdata.value!),
+// // // // //                         ),
+// // // // //                       );
+// // // // //                       // Navigator.push(
+// // // // //                       //   context,
+// // // // //                       //   MaterialPageRoute(
+// // // // //                       //     builder: (context) => EditProfileScreen(loginUser: ),
+// // // // //                       //   ),
+// // // // //                       // );
+// // // // //                     },
+// // // // //                     child: SizedBox(
+// // // // //                       height: 20,
+// // // // //                       width: 40,
+// // // // //                       child: Image.asset(
+// // // // //                         AssetResource.editpic,
+// // // // //                         height: 16,
+// // // // //                         width: 16,
+// // // // //                       ),
+// // // // //                     ),
+// // // // //                   ),
+// // // // //                 ],
+// // // // //               ),
+// // // // //             ),
+            
+// // // // //            userdata.when(
+// // // // //             data: (user){
+// // // // //               if (user == null) return SizedBox();
+// // // // //               return Column(
+// // // // //                 children: [
+// // // // //                   const SizedBox(height: 20),
+// // // // //                    if(user.role =="Manager")
+// // // // //                    Padding(
+             
+// // // // //               padding: const EdgeInsets.symmetric(vertical: 10.0),
+// // // // //               child: _buildListTile(
+// // // // //                 title: 'Users',
+// // // // //                 onTap: () {
+// // // // //                   Navigator.push(
+// // // // //                     context,
+// // // // //                     MaterialPageRoute(builder: (context) =>  UsersScreen()),
+// // // // //                   );
+// // // // //                 },
+// // // // //                 image: '',
+// // // // //                 isSwitched: isSwitched,
+// // // // //               ),
+// // // // //             ),
+            
+// // // // //                 ],
+// // // // //               );
+// // // // //             } ,
+// // // // //             loading: () => CircularProgressIndicator(),
+// // // // //             error: (e, st) => Text("Error"),
+// // // // //            ),
+           
+// // // // //             // const SizedBox(height: 20),
+// // // // //           // if(user.role =="Manager")
+
+// // // // //             // ✅ Users List Tile
+// // // // //             // Padding(
+             
+// // // // //             //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+// // // // //             //   child: _buildListTile(
+// // // // //             //     title: 'Users',
+// // // // //             //     onTap: () {
+// // // // //             //       Navigator.push(
+// // // // //             //         context,
+// // // // //             //         MaterialPageRoute(builder: (context) =>  UsersScreen()),
+// // // // //             //       );
+// // // // //             //     },
+// // // // //             //     image: '',
+// // // // //             //     isSwitched: isSwitched,
+// // // // //             //   ),
+// // // // //             // ),
+
+// // // // //             // ✅ Notification List Tile
+// // // // //             _buildListTile(
+// // // // //               image: AssetResource.notificationpic,
+// // // // //               title: "Notification",
+// // // // //               isSwitched: isSwitched,
+// // // // //             ),
+// // // // //           ],
+// // // // //         ),
+// // // // //       ),
+// // // // //     );
+// // // // //   }
+
+// // // // //   // ✅ Reusable ListTile
+// // // // //   Widget _buildListTile({
+// // // // //     required String image,
+// // // // //     required String title,
+// // // // //     VoidCallback? onTap,
+// // // // //     required bool isSwitched,
+// // // // //   }) {
+// // // // //     final bool hasSwitch = title == 'Notification';
+
+// // // // //     return ListTile(
+// // // // //       onTap: () {
+// // // // //         if (!hasSwitch) {
+// // // // //           onTap?.call();
+// // // // //         }
+// // // // //       },
+// // // // //       leading: image.isNotEmpty ? Image.asset(image) : null,
+// // // // //       title: Text(
+// // // // //         title,
+// // // // //         style: const TextStyle(
+// // // // //           color: AppColors.blackColor,
+// // // // //           fontWeight: FontWeight.w500,
+// // // // //         ),
+// // // // //       ),
+// // // // //       trailing: hasSwitch
+// // // // //           ? Switch(
+// // // // //               value: this.isSwitched,
+// // // // //               onChanged: (value) async {
+// // // // //                 // setState(() {
+// // // // //                 //   this.isSwitched = value;
+// // // // //                 // });
+// // // // //                 final prefs = await SharedPreferences.getInstance();
+// // // // //                 await prefs.setBool("notificationStatus", value);
+// // // // //               },
+// // // // //               activeColor: AppColors.blackColor,
+// // // // //             )
+// // // // //           : const Icon(Icons.arrow_forward_ios, size: 16),
+// // // // //       tileColor: AppColors.white,
+// // // // //       shape: RoundedRectangleBorder(
+// // // // //         borderRadius: BorderRadius.circular(10),
+// // // // //         side: BorderSide(
+// // // // //           color: AppColors.opacityGrey,
+// // // // //           width: 1,
+// // // // //           style: BorderStyle.solid,
+// // // // //           strokeAlign: BorderSide.strokeAlignOutside,
+// // // // //         ),
+// // // // //       ),
+// // // // //     );
+// // // // //   }
+// // // // // }
+
+// // // // import 'dart:developer';
+// // // // import 'package:flutter/material.dart';
+// // // // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // // // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // // // import 'package:property_managment/core/constant/app_colors.dart';
+// // // // import 'package:property_managment/core/constant/asset_resource.dart';
+// // // // import 'package:property_managment/core/utils/appbar_widget.dart';
+// // // // import 'package:property_managment/features/profile/controllers/profileControllers.dart';
+// // // // import 'package:property_managment/modelClass/user_model.dart';
+// // // // import 'package:property_managment/features/profile/screens/edit_profile.dart';
+// // // // import 'package:property_managment/features/users/screens/users_screen.dart';
+// // // // import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
+// // // // import 'package:shared_preferences/shared_preferences.dart';
+
+// // // // class Profilescreen extends ConsumerStatefulWidget {
+// // // //   Profilescreen({super.key});
+
+// // // //   @override
+// // // //   ConsumerState<Profilescreen> createState() => _ProfilescreenState();
+// // // // }
+
+// // // // class _ProfilescreenState extends ConsumerState<Profilescreen> {
+// // // //   bool isSwitched = false;
+
+// // // //   @override
+// // // //   void initState() {
+// // // //     super.initState();
+// // // //     loadNotification();
+// // // //   }
+
+// // // //   loadNotification() async {
+// // // //     final prefs = await SharedPreferences.getInstance();
+// // // //     setState(() {
+// // // //       isSwitched = prefs.getBool("notificationStatus") ?? false;
+// // // //     });
+// // // //   }
+
+// // // //   @override
+// // // //   Widget build(BuildContext context) {
+// // // //     final userdata = ref.watch(profileListProvider);
+
+// // // //     return Scaffold(
+// // // //       appBar: AppbarWidget(
+// // // //         child: Row(
+// // // //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// // // //           children: [
+// // // //             const Padding(
+// // // //               padding: EdgeInsets.only(left: 15),
+// // // //               child: Text(
+// // // //                 'Profile',
+// // // //                 style: TextStyle(
+// // // //                   color: AppColors.whiteColor,
+// // // //                   fontSize: 21,
+// // // //                   fontWeight: FontWeight.w600,
+// // // //                 ),
+// // // //               ),
+// // // //             ),
+// // // //             GestureDetector(
+// // // //               onTap: () => logoutAlert(context),
+// // // //               child: const Icon(Icons.logout, color: AppColors.white),
+// // // //             ),
+// // // //           ],
+// // // //         ),
+// // // //       ),
+
+// // // //       body: Padding(
+// // // //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+// // // //         child: userdata.when(
+// // // //           loading: () => const Center(child: CircularProgressIndicator()),
+// // // //           error: (e, st) => Center(child: Text("Error: $e")),
+// // // //           data: (user) {
+// // // //             if (user == null) {
+// // // //               return const Center(child: Text("No user found"));
+// // // //             }
+
+// // // //             return Column(
+// // // //               children: [
+// // // //                 // ---------------- PROFILE CARD ----------------
+// // // //                 Container(
+// // // //                   padding: const EdgeInsets.all(15),
+// // // //                   decoration: BoxDecoration(
+// // // //                     color: AppColors.white,
+// // // //                     borderRadius: BorderRadius.circular(12),
+// // // //                     boxShadow: [
+// // // //                       BoxShadow(
+// // // //                         color: AppColors.opacityGrey.withOpacity(0.2),
+// // // //                         blurRadius: 5,
+// // // //                         offset: const Offset(0, 2),
+// // // //                       ),
+// // // //                     ],
+// // // //                   ),
+// // // //                   child: Row(
+// // // //                     children: [
+// // // //                       ClipRRect(
+// // // //                         borderRadius: BorderRadius.circular(8),
+// // // //                         child: Image.asset(
+// // // //                           AssetResource.profilepic,
+// // // //                           height: 60,
+// // // //                           width: 60,
+// // // //                           fit: BoxFit.cover,
+// // // //                         ),
+// // // //                       ),
+// // // //                       const SizedBox(width: 15),
+
+// // // //                       Expanded(
+// // // //                         child: Column(
+// // // //                           crossAxisAlignment: CrossAxisAlignment.start,
+// // // //                           children: [
+// // // //                             Text(
+// // // //                               user.name,
+// // // //                               style: TextStyle(
+// // // //                                 fontSize: 23.sp,
+// // // //                                 fontWeight: FontWeight.bold,
+// // // //                                 color: AppColors.blackColor,
+// // // //                               ),
+// // // //                             ),
+// // // //                             Text(
+// // // //                               user.email,
+// // // //                               style: TextStyle(
+// // // //                                 fontSize: 17.sp,
+// // // //                                 color: AppColors.black,
+// // // //                               ),
+// // // //                             ),
+// // // //                           ],
+// // // //                         ),
+// // // //                       ),
+
+// // // //                       GestureDetector(
+// // // //                         onTap: () {
+// // // //                           Navigator.push(
+// // // //                             context,
+// // // //                             MaterialPageRoute(
+// // // //                               builder: (_) => EditProfileScreen(loginUser: user),
+// // // //                             ),
+// // // //                           );
+// // // //                         },
+// // // //                         child: Image.asset(
+// // // //                           AssetResource.editpic,
+// // // //                           height: 20,
+// // // //                           width: 20,
+// // // //                         ),
+// // // //                       )
+// // // //                     ],
+// // // //                   ),
+// // // //                 ),
+
+// // // //                 const SizedBox(height: 20),
+
+// // // //                 // ---------------- SHOW USERS ONLY FOR MANAGER ----------------
+// // // //                 if (user.role == "Manager")
+// // // //                   _buildListTile(
+// // // //                     title: "Users",
+// // // //                     image: "",
+// // // //                     isSwitched: false,
+// // // //                     onTap: () {
+// // // //                       Navigator.push(
+// // // //                         context,
+// // // //                         MaterialPageRoute(builder: (_) => UsersScreen()),
+// // // //                       );
+// // // //                     },
+// // // //                   ),
+
+// // // //                 // ---------------- NOTIFICATION ----------------
+// // // //                 _buildListTile(
+// // // //                   title: "Notification",
+// // // //                   image: AssetResource.notificationpic,
+// // // //                   isSwitched: isSwitched,
+// // // //                   onSwitchChange: (value) async {
+// // // //                     final prefs = await SharedPreferences.getInstance();
+// // // //                     prefs.setBool("notificationStatus", value);
+// // // //                     setState(() {
+// // // //                       isSwitched = value;
+// // // //                     });
+// // // //                   },
+// // // //                 ),
+// // // //               ],
+// // // //             );
+// // // //           },
+// // // //         ),
+// // // //       ),
+// // // //     );
+// // // //   }
+
+// // // //   Widget _buildListTile({
+// // // //     required String title,
+// // // //     required String image,
+// // // //     required bool isSwitched,
+// // // //     VoidCallback? onTap,
+// // // //     Function(bool)? onSwitchChange,
+// // // //   }) {
+// // // //     final isNotification = title == "Notification";
+
+// // // //     return ListTile(
+// // // //       onTap: !isNotification ? onTap : null,
+// // // //       leading: image.isNotEmpty ? Image.asset(image) : null,
+// // // //       title: Text(
+// // // //         title,
+// // // //         style: const TextStyle(
+// // // //           color: AppColors.blackColor,
+// // // //           fontWeight: FontWeight.w500,
+// // // //         ),
+// // // //       ),
+// // // //       trailing: isNotification
+// // // //           ? Switch(
+// // // //               value: isSwitched,
+// // // //               onChanged: onSwitchChange,
+// // // //             )
+// // // //           : const Icon(Icons.arrow_forward_ios, size: 16),
+// // // //       shape: RoundedRectangleBorder(
+// // // //         borderRadius: BorderRadius.circular(10),
+// // // //         side: BorderSide(
+// // // //           color: AppColors.opacityGrey,
+// // // //         ),
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // // }
+
+
+
+
+// // // // class Profilescreen extends ConsumerWidget {
+// // // //   Profilescreen({super.key});
+
+// // // //   bool isSwitched = false;
+
+// // // //   String userId = "";
+// // // //   String userName = "";
+// // // //   String userEmail = "";
+// // // //   String userPassword = "";
+
+// // // //   @override
+// // // //   Widget build(BuildContext context, WidgetRef ref) {
+// // // //     final userdata = ref.watch(profileListProvider);
+
+// // // //     return Scaffold(
+// // // //       appBar: AppbarWidget(
+// // // //         child: Row(
+// // // //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// // // //           children: [
+// // // //             const Padding(
+// // // //               padding: EdgeInsets.only(left: 15),
+// // // //               child: Text(
+// // // //                 'Profile',
+// // // //                 style: TextStyle(
+// // // //                   color: AppColors.whiteColor,
+// // // //                   fontSize: 21,
+// // // //                   fontWeight: FontWeight.w600,
+// // // //                 ),
+// // // //               ),
+// // // //             ),
+// // // //             Padding(
+// // // //               padding: const EdgeInsets.all(8.0),
+// // // //               child: GestureDetector(
+// // // //                 onTap: () {
+// // // //                   logoutAlert(context);
+// // // //                 },
+// // // //                 child: const Icon(Icons.logout, color: AppColors.white),
+// // // //               ),
+// // // //             ),
+// // // //           ],
+// // // //         ),
+// // // //       ),
+
+// // // //       body: Padding(
+// // // //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+// // // //         child: Column(
+// // // //           children: [
+// // // //             // ================================
+// // // //             // PROFILE CARD
+// // // //             // ================================
+// // // //             Container(
+// // // //               padding: const EdgeInsets.all(15),
+// // // //               decoration: BoxDecoration(
+// // // //                 color: AppColors.white,
+// // // //                 borderRadius: BorderRadius.circular(12),
+// // // //                 boxShadow: [
+// // // //                   BoxShadow(
+// // // //                     color: AppColors.opacityGrey.withOpacity(0.2),
+// // // //                     blurRadius: 5,
+// // // //                     offset: const Offset(0, 2),
+// // // //                   ),
+// // // //                 ],
+// // // //               ),
+// // // //               child: Row(
+// // // //                 children: [
+// // // //                   ClipRRect(
+// // // //                     borderRadius: BorderRadius.circular(8),
+// // // //                     child: Image.asset(
+// // // //                       AssetResource.profilepic,
+// // // //                       height: 60,
+// // // //                       width: 60,
+// // // //                       fit: BoxFit.cover,
+// // // //                     ),
+// // // //                   ),
+// // // //                   const SizedBox(width: 15),
+
+// // // //                   Expanded(
+// // // //                     child: userdata.when(
+// // // //                       data: (user) {
+// // // //                         if (user == null) {
+// // // //                           return const Text("No user found");
+// // // //                         }
+// // // //                         return Column(
+// // // //                           crossAxisAlignment: CrossAxisAlignment.start,
+// // // //                           children: [
+// // // //                             Text(
+// // // //                               user.name,
+// // // //                               style: TextStyle(
+// // // //                                 fontSize: 23.sp,
+// // // //                                 color: AppColors.blackColor,
+// // // //                                 fontWeight: FontWeight.bold,
+// // // //                               ),
+// // // //                               overflow: TextOverflow.ellipsis,
+// // // //                             ),
+// // // //                             Text(
+// // // //                               user.email,
+// // // //                               style: TextStyle(
+// // // //                                 color: AppColors.black,
+// // // //                                 fontSize: 17.sp,
+// // // //                               ),
+// // // //                               overflow: TextOverflow.ellipsis,
+// // // //                             ),
+// // // //                           ],
+// // // //                         );
+// // // //                       },
+// // // //                       loading: () => const CircularProgressIndicator(),
+// // // //                       error: (e, st) => Text("Error: $e"),
+// // // //                     ),
+// // // //                   ),
+
+// // // //                   // EDIT ICON
+// // // //                   GestureDetector(
+// // // //                     onTap: () {
+// // // //                       if (userdata.value != null) {
+// // // //                         Navigator.push(
+// // // //                           context,
+// // // //                           MaterialPageRoute(
+// // // //                             builder: (context) =>
+// // // //                                 EditProfileScreen(loginUser: userdata.value!),
+// // // //                           ),
+// // // //                         );
+// // // //                       }
+// // // //                     },
+// // // //                     child: SizedBox(
+// // // //                       height: 20,
+// // // //                       width: 40,
+// // // //                       child: Image.asset(
+// // // //                         AssetResource.editpic,
+// // // //                         height: 16,
+// // // //                         width: 16,
+// // // //                       ),
+// // // //                     ),
+// // // //                   ),
+// // // //                 ],
+// // // //               ),
+// // // //             ),
+
+// // // //             const SizedBox(height: 20),
+
+            
+// // // //             userdata.when(
+// // // //               data: (user) {
+// // // //                 if (user == null) return const SizedBox();
+
+// // // //                 return Column(
+// // // //                   children: [
+// // // //                     if (user.role == "Manager")
+// // // //                       Padding(
+// // // //                         padding: const EdgeInsets.symmetric(vertical: 12.0),
+// // // //                         child: _buildListTile(
+// // // //                           title: 'Users',
+// // // //                           onTap: () {
+// // // //                             Navigator.push(
+// // // //                               context,
+// // // //                               MaterialPageRoute(
+// // // //                                   builder: (context) => UsersScreen()),
+// // // //                             );
+// // // //                           },
+// // // //                           image: '',
+// // // //                           isSwitched: isSwitched,
+// // // //                         ),
+// // // //                       ),
+
+// // // //                     // 👇 GAP ADDED HERE
+// // // //                     const SizedBox(height: 10),
+// // // //                   ],
+// // // //                 );
+// // // //               },
+// // // //               loading: () => const CircularProgressIndicator(),
+// // // //               error: (e, st) => Text("Error"),
+// // // //             ),
+
+            
+// // // //             _buildListTile(
+// // // //               image: AssetResource.notificationpic,
+// // // //               title: "Notification",
+// // // //               isSwitched: isSwitched,
+// // // //             ),
+// // // //           ],
+// // // //         ),
+// // // //       ),
+// // // //     );
+// // // //   }
+
+  
+// // // //   Widget _buildListTile({
+// // // //     required String image,
+// // // //     required String title,
+// // // //     VoidCallback? onTap,
+// // // //     required bool isSwitched,
+// // // //   }) {
+// // // //     final bool hasSwitch = title == 'Notification';
+
+// // // //     return ListTile(
+// // // //       onTap: () {
+// // // //         if (!hasSwitch) onTap?.call();
+// // // //       },
+// // // //       leading: image.isNotEmpty ? Image.asset(image) : null,
+// // // //       title: Text(
+// // // //         title,
+// // // //         style: const TextStyle(
+// // // //           color: AppColors.blackColor,
+// // // //           fontWeight: FontWeight.w500,
+// // // //         ),
+// // // //       ),
+// // // //       trailing: hasSwitch
+// // // //           ? Switch(
+// // // //               value: this.isSwitched,
+// // // //               onChanged: (value) async {
+// // // //                 final prefs = await SharedPreferences.getInstance();
+// // // //                 await prefs.setBool("notificationStatus", value);
+// // // //               },
+// // // //               activeColor: AppColors.blackColor,
+// // // //             )
+// // // //           : const Icon(Icons.arrow_forward_ios, size: 16),
+// // // //       tileColor: AppColors.white,
+// // // //       shape: RoundedRectangleBorder(
+// // // //         borderRadius: BorderRadius.circular(10),
+// // // //         side: BorderSide(
+// // // //           color: AppColors.opacityGrey,
+// // // //           width: 1,
+// // // //         ),
+// // // //       ),
+// // // //     );
+// // // //   }
+// // // // }
+
+// // // import 'dart:developer';
+// // // import 'package:flutter/material.dart';
+// // // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// // // import 'package:property_managment/core/constant/app_colors.dart';
+// // // import 'package:property_managment/core/constant/asset_resource.dart';
+// // // import 'package:property_managment/core/utils/appbar_widget.dart';
+// // // import 'package:property_managment/features/profile/controllers/profileControllers.dart';
+// // // import 'package:property_managment/modelClass/user_model.dart';
+// // // import 'package:property_managment/features/profile/screens/edit_profile.dart';
+// // // import 'package:property_managment/features/users/screens/users_screen.dart';
+// // // import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
+// // // import 'package:shared_preferences/shared_preferences.dart';
+
+// // // class Profilescreen extends ConsumerStatefulWidget {
+// // //   const Profilescreen({super.key});
+
+// // //   @override
+// // //   ConsumerState<Profilescreen> createState() => _ProfilescreenState();
+// // // }
+
+// // // class _ProfilescreenState extends ConsumerState<Profilescreen> {
+// // //   bool isSwitched = false;
+
+// // //   @override
+// // //   void initState() {
+// // //     super.initState();
+// // //     _loadNotificationStatus();
+// // //   }
+
+// // //   Future<void> _loadNotificationStatus() async {
+// // //     final prefs = await SharedPreferences.getInstance();
+// // //     setState(() {
+// // //       isSwitched = prefs.getBool("notificationStatus") ?? false;
+// // //     });
+// // //   }
+
+// // //   @override
+// // //   Widget build(BuildContext context) {
+// // //     final userdata = ref.watch(profileListProvider);
+
+// // //     return Scaffold(
+// // //       appBar: AppbarWidget(
+// // //         child: Row(
+// // //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+// // //           children: [
+// // //             Padding(
+// // //               padding:  EdgeInsets.only(left: 15),
+// // //               child:  Text('Profile', style: TextStyle(color: AppColors.whiteColor, fontSize: 21,fontWeight: FontWeight.bold)),
+// // //             ),
+// // //             Padding(
+// // //               padding: const EdgeInsets.only(right: 15),
+// // //               child: GestureDetector(
+// // //                 onTap: () => logoutAlert(context),
+// // //                 child: const Icon(Icons.logout, color: AppColors.white,fontWeight: FontWeight.bold,),
+// // //               ),
+// // //             ),
+// // //           ],
+// // //         ),
+// // //       ),
+// // //       body: Padding(
+// // //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+// // //         child: Column(
+// // //           children: [
+// // //             // ---------- Profile Card ----------
+// // //             userdata.when(
+// // //               data: (user) {
+// // //                 if (user == null) return const Text("No user found");
+
+// // //                 return Container(
+// // //                   padding: const EdgeInsets.all(15),
+// // //                   decoration: BoxDecoration(
+// // //                     color: AppColors.white,
+// // //                     borderRadius: BorderRadius.circular(12),
+// // //                     boxShadow: [BoxShadow(color: AppColors.opacityGrey.withOpacity(0.2), blurRadius: 5, offset: const Offset(0,2))],
+// // //                   ),
+// // //                   child: Row(
+// // //                     children: [
+// // //                       ClipRRect(
+// // //                         borderRadius: BorderRadius.circular(8),
+// // //                         child: Image.asset(AssetResource.profilepic, height: 60, width: 60, fit: BoxFit.cover),
+// // //                       ),
+// // //                       const SizedBox(width: 15),
+// // //                       Expanded(
+// // //                         child: Column(
+// // //                           crossAxisAlignment: CrossAxisAlignment.start,
+// // //                           children: [
+// // //                             Text(user.name, style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.bold, color: AppColors.blackColor)),
+// // //                             Text(user.email, style: TextStyle(fontSize: 17.sp, color: AppColors.black)),
+// // //                           ],
+// // //                         ),
+// // //                       ),
+// // //                       GestureDetector(
+// // //                         onTap: () {
+// // //                           Navigator.push(
+// // //                             context,
+// // //                             MaterialPageRoute(builder: (_) => EditProfileScreen(loginUser: user)),
+// // //                           );
+// // //                         },
+// // //                         child: Image.asset(AssetResource.editpic, height: 20, width: 20),
+// // //                       ),
+// // //                     ],
+// // //                   ),
+// // //                 );
+// // //               },
+// // //               loading: () => const CircularProgressIndicator(),
+// // //               error: (e, st) => Text("Error: $e"),
+// // //             ),
+
+// // //             const SizedBox(height: 20),
+
+// // //             // ---------- Users tile for Manager ----------
+// // //             userdata.when(
+// // //               data: (user) {
+// // //                 if (user == null) return const SizedBox();
+// // //                 if (user.role != "Manager") return const SizedBox();
+
+// // //                 return Padding(
+// // //                   padding: const EdgeInsets.symmetric(vertical: 12.0),
+// // //                   child: _buildListTile(
+// // //                     title: user.name,
+// // //                     image: "",
+// // //                     isSwitched: false,
+                    
+// // //                     // onTap: () {
+// // //                     //   Navigator.push(context, MaterialPageRoute(builder: (_) => UsersScreen()));
+// // //                     // },
+// // //                   ),
+// // //                 );
+// // //               },
+// // //               loading: () => const SizedBox(),
+// // //               error: (e, st) => const SizedBox(),
+// // //             ),
+
+// // //             const SizedBox(height: 10),
+
+// // //             // ---------- Notification Tile ----------
+// // //             _buildListTile(
+// // //               title: "Notification",
+// // //               image: AssetResource.notificationpic,
+// // //               isSwitched: false,
+// // //               // onSwitchChange: (value) async {
+// // //               //   final prefs = await SharedPreferences.getInstance();
+// // //               //   await prefs.setBool("notificationStatus", value);
+// // //               //   setState(() {
+// // //               //     isSwitched = value;
+// // //               //   });
+// // //               // },
+// // //               onTap: () {},
+// // //             ),
+// // //           ],
+// // //         ),
+// // //       ),
+// // //     );
+// // //   }
+
+// // //   Widget _buildListTile({
+// // //     required String title,
+// // //     required String image,
+// // //     required bool isSwitched,
+// // //     VoidCallback? onTap,
+// // //     Function(bool)? onSwitchChange,
+// // //   }) {
+// // //     final isNotification = title == "Notification";
+
+// // //     return ListTile(
+// // //       onTap: !isNotification ? onTap : null,
+// // //       leading: image.isNotEmpty ? Image.asset(image) : null,
+// // //       title: Text(title, style: const TextStyle(color: AppColors.blackColor, fontWeight: FontWeight.w500)),
+// // //       trailing: isNotification
+// // //           ? Switch(value: isSwitched, onChanged: onSwitchChange, activeColor: AppColors.blackColor)
+// // //           : const Icon(Icons.arrow_forward_ios, size: 16),
+// // //       shape: RoundedRectangleBorder(
+// // //         borderRadius: BorderRadius.circular(10),
+// // //         side: BorderSide(color: AppColors.opacityGrey),
+// // //       ),
+// // //     );
+// // //   }
+// // // }
+
+// // import 'dart:developer';
 // // import 'package:flutter/material.dart';
 // // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,63 +953,19 @@
 // // import 'package:property_managment/features/profile/screens/edit_profile.dart';
 // // import 'package:property_managment/features/users/screens/users_screen.dart';
 // // import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
-// // import 'package:shared_preferences/shared_preferences.dart';
 
-// // class Profilescreen extends ConsumerWidget {
-// //    Profilescreen({super.key});
+// // class Profilescreen extends ConsumerStatefulWidget {
+// //   const Profilescreen({super.key});
 
-// //   bool isSwitched = false;
-
-// //   // String userRole = '';
-
-// //   // getUserRole() async {
-// //   String userId="";
-
-// //   String userName ="";
-
-// //   String userEmail="";
-
-// //   //  String userRole="";
-// //   String userPassword="";
-
-// //   // UserModel? loginUser;
-
-// //   // @override
-// //   // Future<void> getUserData() async {
-
-// //   //   final prefs = await SharedPreferences.getInstance();
-    
-// //   //     userId =  prefs.getString('userId')??"";
-// //   //     userName =  prefs.getString('name')??"";
-// //   //     userEmail = prefs.getString('email')??"";
-// //   //     userRole = prefs.getString('role')??"";
-// //   //     userPassword = prefs.getString('password')??"";
-      
-
-// //   //     loginUser = UserModel(
-// //   //         userId,
-// //   //         userName,
-// //   //         userEmail,
-// //   //         userRole,
-// //   //         userPassword,
-          
-// //   //        );
-    
-
-// //   //     }
-
-// //   // ✅ Get notification switch status
 // //   @override
-// //   Widget build(BuildContext context,WidgetRef ref) {
-// //     final userdata =ref.watch(profileListProvider);
-    
+// //   ConsumerState<Profilescreen> createState() => _ProfilescreenState();
+// // }
 
-// //     // log("username = $userName    ghghgh ${loginUser?.name}");
-// //     // if(loginUser == null){
-// //     //   return const Scaffold(
-// //     //     body: Center(child: CircularProgressIndicator()),
-// //     //   );
-// //     // }
+// // class _ProfilescreenState extends ConsumerState<Profilescreen> {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     final userdata = ref.watch(profileListProvider);
+
 // //     return Scaffold(
 // //       appBar: AppbarWidget(
 // //         child: Row(
@@ -80,16 +978,14 @@
 // //                 style: TextStyle(
 // //                   color: AppColors.whiteColor,
 // //                   fontSize: 21,
-// //                   fontWeight: FontWeight.w600,
+// //                   fontWeight: FontWeight.bold,
 // //                 ),
 // //               ),
 // //             ),
 // //             Padding(
-// //               padding: const EdgeInsets.all(8.0),
+// //               padding: const EdgeInsets.only(right: 15),
 // //               child: GestureDetector(
-// //                 onTap: () {
-// //                   logoutAlert(context);
-// //                 },
+// //                 onTap: () => logoutAlert(context),
 // //                 child: const Icon(Icons.logout, color: AppColors.white),
 // //               ),
 // //             ),
@@ -97,165 +993,139 @@
 // //         ),
 // //       ),
 
-// //       // ✅ Body
 // //       body: Padding(
 // //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
 // //         child: Column(
 // //           children: [
-// //             // ✅ Profile Card
-// //             Container(
-// //               padding: const EdgeInsets.all(15),
-// //               decoration: BoxDecoration(
-// //                 color: AppColors.white,
-// //                 borderRadius: BorderRadius.circular(12),
-// //                 boxShadow: [
-// //                   BoxShadow(
-// //                     color: AppColors.opacityGrey.withOpacity(0.2),
-// //                     blurRadius: 5,
-// //                     offset: const Offset(0, 2),
-// //                   ),
-// //                 ],
-// //               ),
-// //               child: Row(
-// //                 children: [
-// //                   ClipRRect(
-// //                     borderRadius: BorderRadius.circular(8),
-// //                     child: Image.asset(
-// //                       AssetResource.profilepic,
-// //                       height: 60,
-// //                       width: 60,
-// //                       fit: BoxFit.cover,
-// //                     ),
-// //                   ),
-// //                   const SizedBox(width: 15),
+// //             /// ---------- Profile Card ----------
+// //             userdata.when(
+// //               data: (user) {
+// //                 if (user == null) return const Text("No user found");
 
-// //                   // ✅ Name & Email
-// //                   Expanded(
-// //                     child: userdata.when(
-// //       data: (user) {
-// //         if (user ==  null){
-// //           return Center(child: Text("No user found"));
-// //         }
-// //         return Column(
-// //                       crossAxisAlignment: CrossAxisAlignment.start,
-// //                       children: [
-// //                         Text(
-// //                           user.name,
-
-// //                           style: TextStyle(
-// //                             fontSize: 23.sp,
-// //                             color: AppColors.blackColor,
-// //                             fontWeight: FontWeight.bold,
-// //                           ),
-// //                           overflow: TextOverflow.ellipsis,
-// //                         ),
-// //                         Text(
-// //                           user.email,
-// //                           style: TextStyle(
-// //                             color: AppColors.black,
-// //                             fontSize: 17.sp,
-// //                           ),
-// //                           overflow: TextOverflow.ellipsis,
-// //                         ),
-// //                       ],
-// //                     );
-// //       },
-// //       loading: () => Center(child: CircularProgressIndicator()), 
-// //       error: (e, st) => Text("Error: $e"),
-// //       ),
-                    
-                    
-                    
-                    
-                    
+// //                 return Container(
+// //                   padding: const EdgeInsets.all(15),
+// //                   decoration: BoxDecoration(
+// //                     color: AppColors.white,
+// //                     borderRadius: BorderRadius.circular(12),
+// //                     boxShadow: [
+// //                       BoxShadow(
+// //                         color: AppColors.opacityGrey.withOpacity(0.2),
+// //                         blurRadius: 5,
+// //                         offset: const Offset(0, 2),
+// //                       )
+// //                     ],
 // //                   ),
-
-// //                   // ✅ Edit Icon
-// //                   GestureDetector(
-// //                     onTap: () {
-// //                       Navigator.push(
-// //                         context,
-// //                         MaterialPageRoute(
-// //                           builder: (context) =>
-// //                               EditProfileScreen(loginUser: userdata.value!),
+// //                   child: Row(
+// //                     children: [
+// //                       ClipRRect(
+// //                         borderRadius: BorderRadius.circular(8),
+// //                         child: Image.asset(
+// //                           AssetResource.profilepic,
+// //                           height: 60,
+// //                           width: 60,
+// //                           fit: BoxFit.cover,
 // //                         ),
-// //                       );
-// //                       // Navigator.push(
-// //                       //   context,
-// //                       //   MaterialPageRoute(
-// //                       //     builder: (context) => EditProfileScreen(loginUser: ),
-// //                       //   ),
-// //                       // );
-// //                     },
-// //                     child: SizedBox(
-// //                       height: 20,
-// //                       width: 40,
-// //                       child: Image.asset(
-// //                         AssetResource.editpic,
-// //                         height: 16,
-// //                         width: 16,
 // //                       ),
-// //                     ),
+// //                       const SizedBox(width: 15),
+// //                       Expanded(
+// //                         child: Column(
+// //                           crossAxisAlignment: CrossAxisAlignment.start,
+// //                           children: [
+// //                             Text(
+// //                               user.name,
+// //                               style: TextStyle(
+// //                                 fontSize: 23.sp,
+// //                                 fontWeight: FontWeight.bold,
+// //                                 color: AppColors.blackColor,
+// //                               ),
+// //                             ),
+// //                             Text(
+// //                               user.email,
+// //                               style: TextStyle(
+// //                                 fontSize: 17.sp,
+// //                                 color: AppColors.black,
+// //                               ),
+// //                             ),
+// //                           ],
+// //                         ),
+// //                       ),
+// //                       GestureDetector(
+// //                         onTap: () {
+// //                           Navigator.push(
+// //                             context,
+// //                             MaterialPageRoute(
+// //                               builder: (_) => EditProfileScreen(loginUser: user),
+// //                             ),
+// //                           );
+// //                         },
+// //                         child: Image.asset(
+// //                           AssetResource.editpic,
+// //                           height: 20,
+// //                           width: 20,
+// //                         ),
+// //                       ),
+// //                     ],
 // //                   ),
-// //                 ],
-// //               ),
+// //                 );
+// //               },
+// //               loading: () => const CircularProgressIndicator(),
+// //               error: (e, st) => Text("Error : $e"),
 // //             ),
-            
-// //            userdata.when(
-// //             data: (user){
-// //               if (user == null) return SizedBox();
-// //               return Column(
-// //                 children: [
-// //                   const SizedBox(height: 20),
-// //                    if(user.role =="Manager")
-// //                    Padding(
-             
-// //               padding: const EdgeInsets.symmetric(vertical: 10.0),
-// //               child: _buildListTile(
-// //                 title: 'Users',
-// //                 onTap: () {
-// //                   Navigator.push(
-// //                     context,
-// //                     MaterialPageRoute(builder: (context) =>  UsersScreen()),
-// //                   );
-// //                 },
-// //                 image: '',
-// //                 isSwitched: isSwitched,
-// //               ),
+
+// //             const SizedBox(height: 20),
+
+// //             /// ---------- Email Tile ----------
+// //             userdata.when(
+// //               data: (user) {
+// //                 if (user == null) return const SizedBox();
+// //                 return _buildListTile(
+// //                   title: user.name,
+// //                   subtitle: "Manager",
+// //                   icon: Icons.person,
+// //                 );
+// //               },
+// //               loading: () => const SizedBox(),
+// //               error: (e, st) => const SizedBox(),
 // //             ),
-            
-// //                 ],
-// //               );
-// //             } ,
-// //             loading: () => CircularProgressIndicator(),
-// //             error: (e, st) => Text("Error"),
-// //            ),
-           
-// //             // const SizedBox(height: 20),
-// //           // if(user.role =="Manager")
 
-// //             // ✅ Users List Tile
-// //             // Padding(
-             
-// //             //   padding: const EdgeInsets.symmetric(vertical: 10.0),
-// //             //   child: _buildListTile(
-// //             //     title: 'Users',
-// //             //     onTap: () {
-// //             //       Navigator.push(
-// //             //         context,
-// //             //         MaterialPageRoute(builder: (context) =>  UsersScreen()),
-// //             //       );
-// //             //     },
-// //             //     image: '',
-// //             //     isSwitched: isSwitched,
-// //             //   ),
-// //             // ),
+// //             const SizedBox(height: 10),
 
-// //             // ✅ Notification List Tile
-// //             _buildListTile(
-// //               image: AssetResource.notificationpic,
-// //               title: "Notification",
-// //               isSwitched: isSwitched,
+// //             /// ---------- Phone Tile ----------
+// //             userdata.when(
+// //               data: (user) {
+// //                 if (user == null) return const SizedBox();
+// //                 return _buildListTile(
+// //                   title: "Email",
+// //                   subtitle: user.email,
+// //                   icon: Icons.email_outlined,
+// //                 );
+// //               },
+// //               loading: () => const SizedBox(),
+// //               error: (e, st) => const SizedBox(),
+// //             ),
+
+// //             const SizedBox(height: 20),
+
+// //             /// ---------- Users tile for Manager ----------
+// //             userdata.when(
+// //               data: (user) {
+// //                 if (user == null) return const SizedBox();
+// //                 if (user.role != "Manager") return const SizedBox();
+
+// //                 return _buildListTile(
+// //                   title: "Phone Number",
+// //                   subtitle: user.phoneNumber ?? "Not Added",
+// //                   icon: Icons.phone_android,
+// //                   onTap: () {
+// //                     Navigator.push(
+// //                       context,
+// //                       MaterialPageRoute(builder: (_) => UsersScreen()),
+// //                     );
+// //                   },
+// //                 );
+// //               },
+// //               loading: () => const SizedBox(),
+// //               error: (e, st) => const SizedBox(),
 // //             ),
 // //           ],
 // //         ),
@@ -263,51 +1133,31 @@
 // //     );
 // //   }
 
-// //   // ✅ Reusable ListTile
+// //   /// ---------- Tile Widget ----------
 // //   Widget _buildListTile({
-// //     required String image,
 // //     required String title,
+// //     required String subtitle,
+// //     required IconData icon,
 // //     VoidCallback? onTap,
-// //     required bool isSwitched,
 // //   }) {
-// //     final bool hasSwitch = title == 'Notification';
-
 // //     return ListTile(
-// //       onTap: () {
-// //         if (!hasSwitch) {
-// //           onTap?.call();
-// //         }
-// //       },
-// //       leading: image.isNotEmpty ? Image.asset(image) : null,
+// //       onTap: onTap,
+// //       leading: Icon(icon, color: AppColors.blackColor),
 // //       title: Text(
 // //         title,
 // //         style: const TextStyle(
+// //           fontWeight: FontWeight.w600,
 // //           color: AppColors.blackColor,
-// //           fontWeight: FontWeight.w500,
 // //         ),
 // //       ),
-// //       trailing: hasSwitch
-// //           ? Switch(
-// //               value: this.isSwitched,
-// //               onChanged: (value) async {
-// //                 // setState(() {
-// //                 //   this.isSwitched = value;
-// //                 // });
-// //                 final prefs = await SharedPreferences.getInstance();
-// //                 await prefs.setBool("notificationStatus", value);
-// //               },
-// //               activeColor: AppColors.blackColor,
-// //             )
-// //           : const Icon(Icons.arrow_forward_ios, size: 16),
-// //       tileColor: AppColors.white,
+// //       subtitle: Text(
+// //         subtitle,
+// //         style: const TextStyle(color: AppColors.greyColor),
+// //       ),
+// //       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
 // //       shape: RoundedRectangleBorder(
 // //         borderRadius: BorderRadius.circular(10),
-// //         side: BorderSide(
-// //           color: AppColors.opacityGrey,
-// //           width: 1,
-// //           style: BorderStyle.solid,
-// //           strokeAlign: BorderSide.strokeAlignOutside,
-// //         ),
+// //         side: BorderSide(color: AppColors.opacityGrey),
 // //       ),
 // //     );
 // //   }
@@ -325,31 +1175,15 @@
 // import 'package:property_managment/features/profile/screens/edit_profile.dart';
 // import 'package:property_managment/features/users/screens/users_screen.dart';
 // import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 // class Profilescreen extends ConsumerStatefulWidget {
-//   Profilescreen({super.key});
+//   const Profilescreen({super.key});
 
 //   @override
 //   ConsumerState<Profilescreen> createState() => _ProfilescreenState();
 // }
 
 // class _ProfilescreenState extends ConsumerState<Profilescreen> {
-//   bool isSwitched = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadNotification();
-//   }
-
-//   loadNotification() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     setState(() {
-//       isSwitched = prefs.getBool("notificationStatus") ?? false;
-//     });
-//   }
-
 //   @override
 //   Widget build(BuildContext context) {
 //     final userdata = ref.watch(profileListProvider);
@@ -366,210 +1200,14 @@
 //                 style: TextStyle(
 //                   color: AppColors.whiteColor,
 //                   fontSize: 21,
-//                   fontWeight: FontWeight.w600,
-//                 ),
-//               ),
-//             ),
-//             GestureDetector(
-//               onTap: () => logoutAlert(context),
-//               child: const Icon(Icons.logout, color: AppColors.white),
-//             ),
-//           ],
-//         ),
-//       ),
-
-//       body: Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
-//         child: userdata.when(
-//           loading: () => const Center(child: CircularProgressIndicator()),
-//           error: (e, st) => Center(child: Text("Error: $e")),
-//           data: (user) {
-//             if (user == null) {
-//               return const Center(child: Text("No user found"));
-//             }
-
-//             return Column(
-//               children: [
-//                 // ---------------- PROFILE CARD ----------------
-//                 Container(
-//                   padding: const EdgeInsets.all(15),
-//                   decoration: BoxDecoration(
-//                     color: AppColors.white,
-//                     borderRadius: BorderRadius.circular(12),
-//                     boxShadow: [
-//                       BoxShadow(
-//                         color: AppColors.opacityGrey.withOpacity(0.2),
-//                         blurRadius: 5,
-//                         offset: const Offset(0, 2),
-//                       ),
-//                     ],
-//                   ),
-//                   child: Row(
-//                     children: [
-//                       ClipRRect(
-//                         borderRadius: BorderRadius.circular(8),
-//                         child: Image.asset(
-//                           AssetResource.profilepic,
-//                           height: 60,
-//                           width: 60,
-//                           fit: BoxFit.cover,
-//                         ),
-//                       ),
-//                       const SizedBox(width: 15),
-
-//                       Expanded(
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               user.name,
-//                               style: TextStyle(
-//                                 fontSize: 23.sp,
-//                                 fontWeight: FontWeight.bold,
-//                                 color: AppColors.blackColor,
-//                               ),
-//                             ),
-//                             Text(
-//                               user.email,
-//                               style: TextStyle(
-//                                 fontSize: 17.sp,
-//                                 color: AppColors.black,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-
-//                       GestureDetector(
-//                         onTap: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (_) => EditProfileScreen(loginUser: user),
-//                             ),
-//                           );
-//                         },
-//                         child: Image.asset(
-//                           AssetResource.editpic,
-//                           height: 20,
-//                           width: 20,
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 20),
-
-//                 // ---------------- SHOW USERS ONLY FOR MANAGER ----------------
-//                 if (user.role == "Manager")
-//                   _buildListTile(
-//                     title: "Users",
-//                     image: "",
-//                     isSwitched: false,
-//                     onTap: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(builder: (_) => UsersScreen()),
-//                       );
-//                     },
-//                   ),
-
-//                 // ---------------- NOTIFICATION ----------------
-//                 _buildListTile(
-//                   title: "Notification",
-//                   image: AssetResource.notificationpic,
-//                   isSwitched: isSwitched,
-//                   onSwitchChange: (value) async {
-//                     final prefs = await SharedPreferences.getInstance();
-//                     prefs.setBool("notificationStatus", value);
-//                     setState(() {
-//                       isSwitched = value;
-//                     });
-//                   },
-//                 ),
-//               ],
-//             );
-//           },
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildListTile({
-//     required String title,
-//     required String image,
-//     required bool isSwitched,
-//     VoidCallback? onTap,
-//     Function(bool)? onSwitchChange,
-//   }) {
-//     final isNotification = title == "Notification";
-
-//     return ListTile(
-//       onTap: !isNotification ? onTap : null,
-//       leading: image.isNotEmpty ? Image.asset(image) : null,
-//       title: Text(
-//         title,
-//         style: const TextStyle(
-//           color: AppColors.blackColor,
-//           fontWeight: FontWeight.w500,
-//         ),
-//       ),
-//       trailing: isNotification
-//           ? Switch(
-//               value: isSwitched,
-//               onChanged: onSwitchChange,
-//             )
-//           : const Icon(Icons.arrow_forward_ios, size: 16),
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(10),
-//         side: BorderSide(
-//           color: AppColors.opacityGrey,
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-// class Profilescreen extends ConsumerWidget {
-//   Profilescreen({super.key});
-
-//   bool isSwitched = false;
-
-//   String userId = "";
-//   String userName = "";
-//   String userEmail = "";
-//   String userPassword = "";
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     final userdata = ref.watch(profileListProvider);
-
-//     return Scaffold(
-//       appBar: AppbarWidget(
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             const Padding(
-//               padding: EdgeInsets.only(left: 15),
-//               child: Text(
-//                 'Profile',
-//                 style: TextStyle(
-//                   color: AppColors.whiteColor,
-//                   fontSize: 21,
-//                   fontWeight: FontWeight.w600,
+//                   fontWeight: FontWeight.bold,
 //                 ),
 //               ),
 //             ),
 //             Padding(
-//               padding: const EdgeInsets.all(8.0),
+//               padding: const EdgeInsets.only(right: 15),
 //               child: GestureDetector(
-//                 onTap: () {
-//                   logoutAlert(context);
-//                 },
+//                 onTap: () => logoutAlert(context),
 //                 child: const Icon(Icons.logout, color: AppColors.white),
 //               ),
 //             ),
@@ -581,136 +1219,128 @@
 //         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
 //         child: Column(
 //           children: [
-//             // ================================
-//             // PROFILE CARD
-//             // ================================
-//             Container(
-//               padding: const EdgeInsets.all(15),
-//               decoration: BoxDecoration(
-//                 color: AppColors.white,
-//                 borderRadius: BorderRadius.circular(12),
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: AppColors.opacityGrey.withOpacity(0.2),
-//                     blurRadius: 5,
-//                     offset: const Offset(0, 2),
-//                   ),
-//                 ],
-//               ),
-//               child: Row(
-//                 children: [
-//                   ClipRRect(
-//                     borderRadius: BorderRadius.circular(8),
-//                     child: Image.asset(
-//                       AssetResource.profilepic,
-//                       height: 60,
-//                       width: 60,
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                   const SizedBox(width: 15),
-
-//                   Expanded(
-//                     child: userdata.when(
-//                       data: (user) {
-//                         if (user == null) {
-//                           return const Text("No user found");
-//                         }
-//                         return Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               user.name,
-//                               style: TextStyle(
-//                                 fontSize: 23.sp,
-//                                 color: AppColors.blackColor,
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                               overflow: TextOverflow.ellipsis,
-//                             ),
-//                             Text(
-//                               user.email,
-//                               style: TextStyle(
-//                                 color: AppColors.black,
-//                                 fontSize: 17.sp,
-//                               ),
-//                               overflow: TextOverflow.ellipsis,
-//                             ),
-//                           ],
-//                         );
-//                       },
-//                       loading: () => const CircularProgressIndicator(),
-//                       error: (e, st) => Text("Error: $e"),
-//                     ),
-//                   ),
-
-//                   // EDIT ICON
-//                   GestureDetector(
-//                     onTap: () {
-//                       if (userdata.value != null) {
-//                         Navigator.push(
-//                           context,
-//                           MaterialPageRoute(
-//                             builder: (context) =>
-//                                 EditProfileScreen(loginUser: userdata.value!),
-//                           ),
-//                         );
-//                       }
-//                     },
-//                     child: SizedBox(
-//                       height: 20,
-//                       width: 40,
-//                       child: Image.asset(
-//                         AssetResource.editpic,
-//                         height: 16,
-//                         width: 16,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-
-//             const SizedBox(height: 20),
-
-            
 //             userdata.when(
 //               data: (user) {
-//                 if (user == null) return const SizedBox();
+//                 if (user == null) return const Text("No user found");
 
 //                 return Column(
 //                   children: [
-//                     if (user.role == "Manager")
-//                       Padding(
-//                         padding: const EdgeInsets.symmetric(vertical: 12.0),
-//                         child: _buildListTile(
-//                           title: 'Users',
-//                           onTap: () {
-//                             Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                   builder: (context) => UsersScreen()),
-//                             );
-//                           },
-//                           image: '',
-//                           isSwitched: isSwitched,
-//                         ),
-//                       ),
+//                     /// ---------- CENTER PROFILE PIC (WhatsApp Style) ----------
+//                     Center(
+//                       child: Stack(
+//                         children: [
+//                           CircleAvatar(
+//                             radius: 55,
+//                             backgroundColor: AppColors.opacityGrey,
+//                             child: CircleAvatar(
+//                               radius: 52,
+//                               backgroundImage: AssetImage(AssetResource.profilepic),
+//                             ),
+//                           ),
 
-//                     // 👇 GAP ADDED HERE
-//                     const SizedBox(height: 10),
+//                           /// Edit Button Bottom Right
+//                           Positioned(
+//                             bottom: 0,
+//                             right: 0,
+//                             child: GestureDetector(
+//                               onTap: () {
+//                                 Navigator.push(
+//                                   context,
+//                                   MaterialPageRoute(
+//                                     builder: (_) => EditProfileScreen(loginUser: user),
+//                                   ),
+//                                 );
+//                               },
+//                               child: CircleAvatar(
+//                                 radius: 18,
+//                                 backgroundColor: AppColors.blackColor,
+//                                 child: const Icon(
+//                                   Icons.edit,
+//                                   size: 17,
+//                                   color: Colors.white,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 15),
+
+//                     /// User Name
+//                     // Text(
+//                     //   user.name,
+//                     //   style: TextStyle(
+//                     //     fontSize: 22.sp,
+//                     //     fontWeight: FontWeight.bold,
+//                     //     color: AppColors.blackColor,
+//                     //   ),
+//                     // ),
+
+//                     const SizedBox(height: 5),
+
+//                     /// Email
+//                     // Text(
+//                     //   user.email,
+//                     //   style: TextStyle(
+//                     //     fontSize: 16.sp,
+//                     //     color: AppColors.greyColor,
+//                     //   ),
+//                     // ),
+
+//                     const SizedBox(height: 30),
 //                   ],
 //                 );
 //               },
 //               loading: () => const CircularProgressIndicator(),
-//               error: (e, st) => Text("Error"),
+//               error: (e, st) => Text("Error : $e"),
 //             ),
 
-            
-//             _buildListTile(
-//               image: AssetResource.notificationpic,
-//               title: "Notification",
-//               isSwitched: isSwitched,
+//             /// ---------- NAME Tile ----------
+//             userdata.when(
+//               data: (user) {
+//                 if (user == null) return const SizedBox();
+//                 return _buildListTile(
+//                   title: "Name",
+//                   subtitle: user.name,
+//                   icon: Icons.person,
+//                 );
+//               },
+//               loading: () => const SizedBox(),
+//               error: (e, st) => const SizedBox(),
+//             ),
+
+//             const SizedBox(height: 10),
+
+//             /// ---------- EMAIL Tile ----------
+//             userdata.when(
+//               data: (user) {
+//                 if (user == null) return const SizedBox();
+//                 return _buildListTile(
+//                   title: "Email",
+//                   subtitle: user.email,
+//                   icon: Icons.email_outlined,
+//                 );
+//               },
+//               loading: () => const SizedBox(),
+//               error: (e, st) => const SizedBox(),
+//             ),
+
+//             const SizedBox(height: 10),
+
+//             /// ---------- PHONE Tile ----------
+//             userdata.when(
+//               data: (user) {
+//                 if (user == null) return const SizedBox();
+//                 return _buildListTile(
+//                   title: "Phone Number",
+//                   subtitle: user.phoneNumber ?? "Not Added",
+//                   icon: Icons.phone_android,
+//                 );
+//               },
+//               loading: () => const SizedBox(),
+//               error: (e, st) => const SizedBox(),
 //             ),
 //           ],
 //         ),
@@ -718,49 +1348,35 @@
 //     );
 //   }
 
-  
+//   /// ---------- TILE WIDGET ----------
 //   Widget _buildListTile({
-//     required String image,
 //     required String title,
+//     required String subtitle,
+//     required IconData icon,
 //     VoidCallback? onTap,
-//     required bool isSwitched,
 //   }) {
-//     final bool hasSwitch = title == 'Notification';
-
 //     return ListTile(
-//       onTap: () {
-//         if (!hasSwitch) onTap?.call();
-//       },
-//       leading: image.isNotEmpty ? Image.asset(image) : null,
+//       onTap: onTap,
+//       leading: Icon(icon, color: AppColors.blackColor),
 //       title: Text(
 //         title,
 //         style: const TextStyle(
+//           fontWeight: FontWeight.w600,
 //           color: AppColors.blackColor,
-//           fontWeight: FontWeight.w500,
 //         ),
 //       ),
-//       trailing: hasSwitch
-//           ? Switch(
-//               value: this.isSwitched,
-//               onChanged: (value) async {
-//                 final prefs = await SharedPreferences.getInstance();
-//                 await prefs.setBool("notificationStatus", value);
-//               },
-//               activeColor: AppColors.blackColor,
-//             )
-//           : const Icon(Icons.arrow_forward_ios, size: 16),
-//       tileColor: AppColors.white,
+//       subtitle: Text(
+//         subtitle,
+//         style: const TextStyle(color: AppColors.greyColor),
+//       ),
+//       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
 //       shape: RoundedRectangleBorder(
 //         borderRadius: BorderRadius.circular(10),
-//         side: BorderSide(
-//           color: AppColors.opacityGrey,
-//           width: 1,
-//         ),
+//         side: BorderSide(color: AppColors.opacityGrey),
 //       ),
 //     );
 //   }
 // }
-
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -771,9 +1387,7 @@ import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/features/profile/controllers/profileControllers.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/features/profile/screens/edit_profile.dart';
-import 'package:property_managment/features/users/screens/users_screen.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Profilescreen extends ConsumerStatefulWidget {
   const Profilescreen({super.key});
@@ -783,21 +1397,6 @@ class Profilescreen extends ConsumerStatefulWidget {
 }
 
 class _ProfilescreenState extends ConsumerState<Profilescreen> {
-  bool isSwitched = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadNotificationStatus();
-  }
-
-  Future<void> _loadNotificationStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isSwitched = prefs.getBool("notificationStatus") ?? false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final userdata = ref.watch(profileListProvider);
@@ -807,107 +1406,132 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding:  EdgeInsets.only(left: 15),
-              child:  Text('Profile', style: TextStyle(color: AppColors.whiteColor, fontSize: 21,fontWeight: FontWeight.bold)),
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Text(
+                'Profile',
+                style: TextStyle(
+                  color: AppColors.whiteColor,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 15),
               child: GestureDetector(
                 onTap: () => logoutAlert(context),
-                child: const Icon(Icons.logout, color: AppColors.white,fontWeight: FontWeight.bold,),
+                child: const Icon(Icons.logout, color: AppColors.white),
               ),
             ),
           ],
         ),
       ),
+
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
         child: Column(
           children: [
-            // ---------- Profile Card ----------
             userdata.when(
               data: (user) {
                 if (user == null) return const Text("No user found");
 
-                return Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [BoxShadow(color: AppColors.opacityGrey.withOpacity(0.2), blurRadius: 5, offset: const Offset(0,2))],
-                  ),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(AssetResource.profilepic, height: 60, width: 60, fit: BoxFit.cover),
+                return Column(
+                  children: [
+                    /// ---------- CENTER PROFILE PIC ----------
+                    Center(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 60,
+                            backgroundColor: AppColors.opacityGrey,
+                            child: CircleAvatar(
+                              radius: 57,
+                              backgroundImage: AssetImage(AssetResource.profilepic),
+                            ),
+                          ),
+
+                          /// Edit button bottom right
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        EditProfileScreen(loginUser: user),
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: AppColors.greenColor,
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(user.name, style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.bold, color: AppColors.blackColor)),
-                            Text(user.email, style: TextStyle(fontSize: 17.sp, color: AppColors.black)),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => EditProfileScreen(loginUser: user)),
-                          );
-                        },
-                        child: Image.asset(AssetResource.editpic, height: 20, width: 20),
-                      ),
-                    ],
-                  ),
+                    ),
+
+                    const SizedBox(height: 25),
+                  ],
                 );
               },
               loading: () => const CircularProgressIndicator(),
-              error: (e, st) => Text("Error: $e"),
+              error: (e, st) => Text("Error : $e"),
             ),
 
-            const SizedBox(height: 20),
-
-            // ---------- Users tile for Manager ----------
+            
             userdata.when(
               data: (user) {
                 if (user == null) return const SizedBox();
-                if (user.role != "Manager") return const SizedBox();
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: _buildListTile(
-                    title: "Users",
-                    image: "",
-                    isSwitched: false,
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => UsersScreen()));
-                    },
-                  ),
+                return _profileBox(
+                  icon: Icons.person,
+                  title: "Name",
+                  value: user.name,
                 );
               },
               loading: () => const SizedBox(),
               error: (e, st) => const SizedBox(),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
 
-            // ---------- Notification Tile ----------
-            _buildListTile(
-              title: "Notification",
-              image: AssetResource.notificationpic,
-              isSwitched: isSwitched,
-              onSwitchChange: (value) async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool("notificationStatus", value);
-                setState(() {
-                  isSwitched = value;
-                });
+            /// ----------- BEAUTIFUL BOX: EMAIL -----------
+            userdata.when(
+              data: (user) {
+                if (user == null) return const SizedBox();
+                return _profileBox(
+                  icon: Icons.email_outlined,
+                  title: "Email",
+                  value: user.email,
+                );
               },
+              loading: () => const SizedBox(),
+              error: (e, st) => const SizedBox(),
+            ),
+
+            const SizedBox(height: 15),
+
+            
+            userdata.when(
+              data: (user) {
+                if (user == null) return const SizedBox();
+                return _profileBox(
+                  icon: Icons.phone,
+                  title: "Phone Number",
+                  value: user.phone ?? "Not Added",
+                );
+              },
+              loading: () => const SizedBox(),
+              error: (e, st) => const SizedBox(),
             ),
           ],
         ),
@@ -915,25 +1539,51 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
     );
   }
 
-  Widget _buildListTile({
+  
+  Widget _profileBox({
+    required IconData icon,
     required String title,
-    required String image,
-    required bool isSwitched,
-    VoidCallback? onTap,
-    Function(bool)? onSwitchChange,
+    required String value,
   }) {
-    final isNotification = title == "Notification";
-
-    return ListTile(
-      onTap: !isNotification ? onTap : null,
-      leading: image.isNotEmpty ? Image.asset(image) : null,
-      title: Text(title, style: const TextStyle(color: AppColors.blackColor, fontWeight: FontWeight.w500)),
-      trailing: isNotification
-          ? Switch(value: isSwitched, onChanged: onSwitchChange, activeColor: AppColors.blackColor)
-          : const Icon(Icons.arrow_forward_ios, size: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: AppColors.opacityGrey),
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.opacityGrey),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: AppColors.opacityGrey.withOpacity(0.15),
+        //     blurRadius: 6,
+        //     offset: const Offset(0, 3),
+        //   )
+        // ],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.blackColor, size: 28),
+          const SizedBox(width: 15),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.greyColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(
+                    fontSize: 17,
+                    color: AppColors.blackColor,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

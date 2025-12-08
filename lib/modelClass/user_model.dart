@@ -5,20 +5,24 @@ class UserModel {
   final dynamic email;
   final String role;
   final dynamic password;
+  final String? phone;
 
-  UserModel(this.id, this.name, this.email, this.role,this.password);
+  UserModel({required this.id, required this.name, required this.email, required this.role,this.password, this.phone});
 
   
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
     return UserModel(
-      id,
-      map['USER_NAME']?? "",
-      map['USER_EMAIL']??"",
-      map["USER_ROLE"]??"",
-      map['USER_PASSWORD']??"",
+      id: id,
+      name:  map['USER_NAME']?? "",
+      email:  map['USER_EMAIL']??"",
+      role:  map["USER_ROLE"]??"",
+      password:  map['USER_PASSWORD']??"",
+      phone:  map['USER_PHONE']??"",
       
     );
   }
+
+  get phoneNumber => null;
 
   
   Map<String, dynamic> toMap() {
@@ -28,6 +32,7 @@ class UserModel {
       'USER_EMAIL': email,
       'USER_ROLE':role,
       'USER_PASSWORD': password,
+      'USER_PHONE': phone,
     };
   }
 }

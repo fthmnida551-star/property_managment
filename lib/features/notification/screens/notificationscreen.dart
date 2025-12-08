@@ -13,7 +13,7 @@ class Notificationscreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pro = ref.watch(noticationProvider);
+    final pro = ref.watch(notificationProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -30,6 +30,8 @@ class Notificationscreen extends ConsumerWidget {
       ),
       body: pro.when(
         data: (notifications) {
+          print("NOTIFICATION COUNT: ${notifications.length}");
+          print(notifications);
           return ListView.builder(
             padding: EdgeInsets.all(16),
             itemCount: notifications.length,

@@ -1,18 +1,69 @@
+// // // // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // // // import 'package:property_managment/core/provider/firebse_provider.dart';
+// // // // import 'package:property_managment/features/profile/repository/profile_repo.dart';
+// // // // import 'package:property_managment/features/users/repository.dart';
+
+// // // // final ProfileRepositoryprovider = Provider(
+// // // //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),);
+
+
+// // // // final profileListProvider = StreamProvider(
+// // // //   (ref) => ref.watch(ProfileRepositoryprovider).getUserData(),
+// // // // );
+
+
+// // // import 'dart:developer';
+
 // // // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// // // import 'package:flutter_riverpod/legacy.dart';
 // // // import 'package:property_managment/core/provider/firebse_provider.dart';
 // // // import 'package:property_managment/features/profile/repository/profile_repo.dart';
-// // // import 'package:property_managment/features/users/repository.dart';
+// // // import 'package:property_managment/modelClass/user_model.dart';
+// // // import 'package:shared_preferences/shared_preferences.dart';
 
-// // // final ProfileRepositoryprovider = Provider(
-// // //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),);
-
-
-// // // final profileListProvider = StreamProvider(
-// // //   (ref) => ref.watch(ProfileRepositoryprovider).getUserData(),
+// // // // Repository Provider
+// // // final profileRepositoryProvider = Provider(
+// // //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
 // // // );
 
+// // // // Profile Stream Provider (needs userId)
+// // // // final profileListProvider = StreamProvider(
+// // // //   (ref) async{
+// // // //       final prefs = await SharedPreferences.getInstance();
+    
+// // // //      final  userId =  prefs.getString('userId')??"";
+// // // //     return ref.watch(profileRepositoryProvider).getUserData(userId);
+// // // //   },
+// // // // );
 
-// // import 'dart:developer';
+// // // final profileListProvider = StreamProvider.autoDispose<UserModel?>((ref) async* {
+// // //   final prefs = await SharedPreferences.getInstance();
+// // //   final userId = prefs.getString('userId') ?? "";
+
+// // // log("fgsdfgsdfg   userId=$userId");
+// // //   // get stream from repository
+// // //   final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
+
+// // //   // yield the stream
+// // //   yield* stream;
+// // // });
+
+// // // class UpdateProfileController extends StateNotifier<AsyncValue<void>>{
+// // //   final ProfileRepository repository;
+
+// // //   UpdateProfileController(this.repository): super(const AsyncData(null));
+
+// // //   Future<void> updateUser(UserModel user) async{
+// // //     try{
+// // //       state = const AsyncLoading();
+// // //       await repository.saveUserData(user);
+// // //       state = const AsyncData(null);
+// // //     }catch (e, st){
+// // //       state = AsyncError(e, st);
+// // //     }
+// // //   }
+// // // }
+
 
 // // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // // import 'package:flutter_riverpod/legacy.dart';
@@ -21,50 +72,41 @@
 // // import 'package:property_managment/modelClass/user_model.dart';
 // // import 'package:shared_preferences/shared_preferences.dart';
 
-// // // Repository Provider
+// // // ---------------- Repository Provider ----------------
+
 // // final profileRepositoryProvider = Provider(
 // //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
 // // );
 
-// // // Profile Stream Provider (needs userId)
-// // // final profileListProvider = StreamProvider(
-// // //   (ref) async{
-// // //       final prefs = await SharedPreferences.getInstance();
-    
-// // //      final  userId =  prefs.getString('userId')??"";
-// // //     return ref.watch(profileRepositoryProvider).getUserData(userId);
-// // //   },
-// // // );
+// // // ---------------- User Stream Provider ----------------
 
-// // final profileListProvider = StreamProvider.autoDispose<UserModel?>((ref) async* {
+// // final profileListProvider =
+// //     StreamProvider.autoDispose<UserModel?>((ref) async* {
 // //   final prefs = await SharedPreferences.getInstance();
 // //   final userId = prefs.getString('userId') ?? "";
 
-// // log("fgsdfgsdfg   userId=$userId");
-// //   // get stream from repository
 // //   final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
 
-// //   // yield the stream
 // //   yield* stream;
 // // });
 
-// // class UpdateProfileController extends StateNotifier<AsyncValue<void>>{
+// // // ---------------- Update Controller ----------------
+
+// // class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
 // //   final ProfileRepository repository;
 
-// //   UpdateProfileController(this.repository): super(const AsyncData(null));
+// //   UpdateProfileController(this.repository) : super(const AsyncData(null));
 
-// //   Future<void> updateUser(UserModel user) async{
-// //     try{
-// //       state = const AsyncLoading();
-// //       await repository.saveUserData(user);
-// //       state = const AsyncData(null);
-// //     }catch (e, st){
-// //       state = AsyncError(e, st);
-// //     }
-// //   }
+  
+
+// // // ---------------- Provider for Controller ----------------
+
+// // final updateProfileControllerProvider =
+// //     StateNotifierProvider<UpdateProfileController, AsyncValue<void>>((ref) {
+// //   return UpdateProfileController(ref.watch(profileRepositoryProvider));
+// // });
 // // }
-
-
+// import 'dart:developer';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_riverpod/legacy.dart';
 // import 'package:property_managment/core/provider/firebse_provider.dart';
@@ -72,23 +114,29 @@
 // import 'package:property_managment/modelClass/user_model.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
+
 // // ---------------- Repository Provider ----------------
 
 // final profileRepositoryProvider = Provider(
 //   (ref) => ProfileRepository(ref.watch(firebaseServiceProvider)),
 // );
 
+
 // // ---------------- User Stream Provider ----------------
+// // Reads the userId from SharedPreferences and listens to Firestore updates.
 
 // final profileListProvider =
 //     StreamProvider.autoDispose<UserModel?>((ref) async* {
 //   final prefs = await SharedPreferences.getInstance();
 //   final userId = prefs.getString('userId') ?? "";
 
+//   log("PROFILE STREAM userId = $userId");
+
 //   final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
 
 //   yield* stream;
 // });
+
 
 // // ---------------- Update Controller ----------------
 
@@ -97,7 +145,19 @@
 
 //   UpdateProfileController(this.repository) : super(const AsyncData(null));
 
-  
+//   Future<void> updateUser(UserModel user) async {
+//     try {
+//       state = const AsyncLoading(); // start loading
+
+//       await repository.saveUserData(user); // update Firestore
+
+//       state = const AsyncData(null); // success
+//     } catch (e, st) {
+//       state = AsyncError(e, st); // error
+//     }
+//   }
+// }
+
 
 // // ---------------- Provider for Controller ----------------
 
@@ -105,7 +165,6 @@
 //     StateNotifierProvider<UpdateProfileController, AsyncValue<void>>((ref) {
 //   return UpdateProfileController(ref.watch(profileRepositoryProvider));
 // });
-// }
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -123,18 +182,20 @@ final profileRepositoryProvider = Provider(
 
 
 // ---------------- User Stream Provider ----------------
-// Reads the userId from SharedPreferences and listens to Firestore updates.
+// Loads userId from SharedPreferences → fetches user stream from Firestore
 
-final profileListProvider =
-    StreamProvider.autoDispose<UserModel?>((ref) async* {
+final profileListProvider = StreamProvider.autoDispose<UserModel?>((ref) async* {
   final prefs = await SharedPreferences.getInstance();
   final userId = prefs.getString('userId') ?? "";
 
   log("PROFILE STREAM userId = $userId");
 
-  final stream = ref.watch(profileRepositoryProvider).getUserData(userId);
+  if (userId.isEmpty) {
+    yield null;
+    return;
+  }
 
-  yield* stream;
+  yield* ref.watch(profileRepositoryProvider).getUserData(userId);
 });
 
 
@@ -147,19 +208,19 @@ class UpdateProfileController extends StateNotifier<AsyncValue<void>> {
 
   Future<void> updateUser(UserModel user) async {
     try {
-      state = const AsyncLoading(); // start loading
+      state = const AsyncLoading();
 
-      await repository.saveUserData(user); // update Firestore
+      await repository.saveUserData(user);
 
-      state = const AsyncData(null); // success
+      state = const AsyncData(null);
     } catch (e, st) {
-      state = AsyncError(e, st); // error
+      state = AsyncError(e, st);
     }
   }
 }
 
 
-// ---------------- Provider for Controller ----------------
+// ---------------- Provider for Update Controller ----------------
 
 final updateProfileControllerProvider =
     StateNotifierProvider<UpdateProfileController, AsyncValue<void>>((ref) {
