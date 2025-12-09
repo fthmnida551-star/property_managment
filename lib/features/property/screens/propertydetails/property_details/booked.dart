@@ -7,6 +7,7 @@ import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/core/utils/location/convert_class.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/editdeletebutton.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -439,117 +440,7 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                       //   ),
                       // ),
                       SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          border: Border.all(color: AppColors.black, width: 1),
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
-                              child: Center(
-                                child: Text(
-                                  'Booked Details',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Icon(Icons.person, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text(widget.bookedData!.name),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.phone, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text(widget.bookedData!.contact),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.mail, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text(widget.bookedData!.email),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.mail, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text(widget.bookedData!.date),
-                              ],
-                            ),
-                            if (userRole.value != "Agent")
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(width: 3),
-                                    Button(
-                                      width: 140,
-                                      height: 40,
-                                      text: 'Delete',
-                                      onTap: () async {
-                                        repo.deleteBooking(
-                                          widget.property.bookingid,
-                                          widget.property.id,
-                                          loginanme.value!,
-                                        );
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BottomNavigationWidget(
-                                                  currentIndex: 1,
-                                                  propertytype: [],
-                                                  price: null,
-                                                  sqft: null,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete_outline_outlined,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Button(
-                                      width: 140,
-                                      height: 40,
-                                      text: 'Edit',
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BookingDetails(
-                                                  propertyId:
-                                                      widget.property.id,
-                                                  bookedData: widget.bookedData,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.edit_outlined,
-                                    ),
-                                    SizedBox(width: 3),
-                                  ],
-                                ),
-                              ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
+                     BookedDetailsCard(bookedData: widget.bookedData!, property:widget.property)
                     ],
                   ),
                 ),
@@ -718,127 +609,13 @@ class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
                       ),
                       SizedBox(height: 10),
 
-                      // Padding(
-                      //   padding: EdgeInsets.only(bottom: 8.0),
-                      //   child: Image.asset(
-                      //     AssetResource.location,
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
                       SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          border: Border.all(color: AppColors.black, width: 1),
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
-                              child: Center(
-                                child: Text(
-                                  'Booked Details',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Icon(Icons.person, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text("${widget.bookedData!.name}"),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.phone, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text("${widget.bookedData!.contact}"),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.mail, color: Colors.green),
-                                SizedBox(width: 8),
-                                Text(widget.bookedData!.email),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_month_rounded,
-                                  color: Colors.green,
-                                ),
-
-                                SizedBox(width: 8),
-                                Text("${widget.bookedData!.date}"),
-                              ],
-                            ),
-                            if (userRole.value != "Agent")
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                   SizedBox(width: 3),
-                                  Button(
-                                    width: 140,
-                                    height: 40,
-                                    text: 'Delete',
-                                    onTap: () async {
-                                      repo.deleteBooking(
-                                        widget.property.bookingid,
-                                        widget.property.id,
-                                        loginanme.value!,
-                                      );
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              BottomNavigationWidget(
-                                                currentIndex: 1,
-                                                propertytype: [],
-                                                price: null,
-                                                sqft: null,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icons.delete_outline_outlined,
-                                  ),
-                                  SizedBox(width: 3),
-                                  Button(
-                                    width: 140,
-                                    height: 40,
-                                    text: 'Edit',
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BookingDetails(
-                                            propertyId: widget.property.id,
-                                            bookedData: widget.bookedData,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icons.edit_outlined,
-                                  ),
-                                  SizedBox(width: 10),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
+                     
+                       BookedDetailsCard(
+                    bookedData: widget.bookedData!,
+                    property:widget. property,
+                    
+                  ),
                     ],
                   ),
                 ),
