@@ -7,6 +7,7 @@ class ContainerWidget extends StatefulWidget {
   final Color? color;
   final double? height;
   final double? width;
+  final VoidCallback? onTap;
   final BorderRadius? borderRadius;
   const ContainerWidget({
     super.key,
@@ -15,6 +16,7 @@ class ContainerWidget extends StatefulWidget {
     this.height,
     this.width,
     this.borderRadius,
+    this.onTap
   });
 
   @override
@@ -24,21 +26,24 @@ class ContainerWidget extends StatefulWidget {
 class _ContainerWidgetState extends State<ContainerWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: widget.height ?? 130.h,
-      width: widget.width ?? 169.w,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.opacitygreyColor1,
-            blurRadius: 0.5.r,
-            spreadRadius: 0.5.r,
-          ),
-        ],
-        color: widget.color ?? AppColors.white,
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
+    return InkWell(
+      onTap:widget.onTap ,
+      child: Container(
+        height: widget.height ?? 130.h,
+        width: widget.width ?? 169.w,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.opacitygreyColor1,
+              blurRadius: 0.5.r,
+              spreadRadius: 0.5.r,
+            ),
+          ],
+          color: widget.color ?? AppColors.white,
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
+        ),
+        child: widget.child,
       ),
-      child: widget.child,
     );
   }
 }

@@ -7,12 +7,14 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   final double? height;
   const AppbarWidget({super.key, this.child,this.height});
 
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         bottomLeft: Radius.circular(20),
         bottomRight: Radius.circular(20),
+        
       ),
       child: Container(
         // height: 200.h,
@@ -27,5 +29,5 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>  Size.fromHeight(height?? 70);
+  Size get preferredSize =>  Size.fromHeight(height?? 70,);
 }

@@ -15,6 +15,7 @@ import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/features/profile/controllers/profileControllers.dart';
 import 'package:property_managment/modelClass/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   final UserModel loginUser;
@@ -270,6 +271,9 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
               } else {
                 finalImageUrl = existingImageUrl ?? '';
               }
+
+              final  prefs= await SharedPreferences.getInstance();
+              await prefs.setString("profilepic", finalImageUrl);
 
               Map<String, dynamic> userDetails = {
                 'ID': widget.loginUser.id,

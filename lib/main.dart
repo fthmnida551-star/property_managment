@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ScreenUtilInit(
       designSize: const Size(
         390,
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
+          
           home: Splashscreen(),
           debugShowCheckedModeBanner: false,
         );

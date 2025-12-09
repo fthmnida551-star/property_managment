@@ -92,6 +92,14 @@ class UsersScreen extends ConsumerWidget {
                             ),
                           ),
                           Text(
+                            item.Mobilenumber,
+                            style: AppTextstyle.propertyMediumTextstyle(
+                              context,
+                              fontColor: AppColors.black,
+                            ),
+                          ),
+
+                          Text(
                             item.role,
                             style: AppTextstyle.propertysmallTextstyle(
                               context,

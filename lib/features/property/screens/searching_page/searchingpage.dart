@@ -320,7 +320,7 @@ class Searchingpage extends ConsumerWidget {
     final properties = ref.watch(propertyListProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.propertyContainer,
+      //backgroundColor: AppColors.propertyContainer,
       appBar: AppbarWidget(
         child: Row(
           children: [
