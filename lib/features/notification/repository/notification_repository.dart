@@ -31,22 +31,19 @@ class NotificationRepository {
   //       );
   // }
   Stream<List<Map<String, dynamic>>> getNotifications() {
-  return service.notifications.snapshots().map((snapshot) {
-    final list = snapshot.docs.map((doc) {
-      final data = doc.data() as Map<String, dynamic>;
-
-      // Fix missing timestamp
-      if (!data.containsKey("timestamp") || data["timestamp"] == null) {
-        data["timestamp"] = 0;
-      }
-
-      return data;
-    }).toList();
-
-    // Sort manually
-    list.sort((a, b) => b["timestamp"].compareTo(a["timestamp"]));
-    return list;
-  });
+    return service.notifications
+        .orderBy("timestamp", descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => doc.data() as Map<String, dynamic>)
+              .toList(),
+        );
+  }
+  Future<void> deleteAllNotifications() async {
+  final docs = await service.notifications.get();
+  for (var doc in docs.docs) {
+    await doc.reference.delete();
+  }
 }
-
 }

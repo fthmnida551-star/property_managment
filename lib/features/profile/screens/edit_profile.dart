@@ -554,12 +554,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/is_loading.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/core/utils/cloudinary_img/dio.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/features/profile/controllers/profileControllers.dart';
 import 'package:property_managment/modelClass/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   final UserModel loginUser;
@@ -583,20 +586,19 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
   TextEditingController passwordCtrl = TextEditingController();
   TextEditingController phoneCtrl = TextEditingController(); // ⭐ ADDED
 
-  File? _selectedImage;
-  final ImagePicker _picker = ImagePicker();
+  String? existingImageUrl;
 
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
+  // Future<void> _pickImage() async {
+  //   final pickedFile = await _picker.pickImage(
+  //     source: ImageSource.gallery,
+  //   );
 
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
-  }
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _selectedImage = File(pickedFile.path);
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
@@ -606,13 +608,30 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
     nameCtlr.text = widget.loginUser.name;
     emailCtrl.text = widget.loginUser.email;
     passwordCtrl.text = widget.loginUser.password;
-    phoneCtrl.text = widget.loginUser.phone ?? ""; // ⭐ ADDED
+    phoneCtrl.text = widget.loginUser.Mobilenumber ?? ""; // ⭐ ADDED
+     existingImageUrl =
+        (widget.loginUser.profileImage != null &&
+            widget.loginUser.profileImage!.isNotEmpty)
+        ? widget.loginUser.profileImage
+        : null;
+  
   }
+  pickImg(WidgetRef ref) async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+    );
+    if (picked == null) return;
+
+    ref.read(profileImageProvider.notifier).setImage(File(picked.path));
+  } 
+ 
 
   @override
   Widget build(BuildContext context) {
     final repo = ref.read(profileRepositoryProvider);
-
+    final pickedImage = ref.watch(profileImageProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -651,23 +670,30 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.OpacitygreyColor),
-                        image: _selectedImage != null
+                       image: pickedImage != null
                             ? DecorationImage(
-                                image: FileImage(_selectedImage!),
+                                image: FileImage(pickedImage),
                                 fit: BoxFit.cover,
                               )
-                            : null,
+                            : (existingImageUrl != null
+                                  ? DecorationImage(
+                                      image: NetworkImage(existingImageUrl!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null),
                       ),
-                      child: _selectedImage == null
-                          ? Icon(Icons.person,
-                              color: AppColors.OpacitygreyColor, size: 55)
-                          : null,
+                      child: pickedImage == null
+                          ? null
+                          : Icon(
+                              Icons.person,
+                              color: AppColors.OpacitygreyColor,
+                            ),
                     ),
                     Positioned(
                       bottom: 0,
                       right: 5,
                       child: InkWell(
-                        onTap: _pickImage,
+                        onTap: () => pickImg(ref),
                         child: Container(
                           height: 30,
                           width: 30,
@@ -731,7 +757,7 @@ class _EditprofileScreenState extends ConsumerState<EditProfileScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextFieldContainer(
-                    text: 'Phone Number',
+                    text: 'Contact',
                     controllerName: phoneCtrl,
                     readOnly: false,
                     validator: (String? value) {

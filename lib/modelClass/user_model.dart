@@ -1,39 +1,44 @@
-
 class UserModel {
   final String id;
   final String name;
-  final dynamic email;
+  final String email;
   final String role;
-  final dynamic password;
-  final String? phone;
+  final String password;
+  final String Mobilenumber;
+  final String profileImage;
 
-  UserModel({required this.id, required this.name, required this.email, required this.role,this.password, this.phone});
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.password,
+    required this.Mobilenumber,
+    required this.profileImage,
+  });
 
-  
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
     return UserModel(
       id: id,
-      name:  map['USER_NAME']?? "",
-      email:  map['USER_EMAIL']??"",
-      role:  map["USER_ROLE"]??"",
-      password:  map['USER_PASSWORD']??"",
-      phone:  map['USER_PHONE']??"",
-      
+      name: map['USER_NAME'] ?? "",
+      email: map['USER_EMAIL'] ?? "",
+      role: map['USER_ROLE'] ?? "",
+      password: map['USER_PASSWORD'] ?? "",
+      Mobilenumber: map["USER_PHONE"]??"",
+      profileImage: map['PROFILE_IMAGE'] ?? "",  
+       // <-- FIXED
     );
   }
 
-  get phoneNumber => null;
-
-  
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'ID':id,
       'USER_NAME': name,
       'USER_EMAIL': email,
-      'USER_ROLE':role,
+      'USER_ROLE': role,
       'USER_PASSWORD': password,
-      'USER_PHONE': phone,
+      "USER_PHONE":Mobilenumber,
+      'PROFILE_IMAGE': profileImage,  // <-- FIXED
     };
   }
 }
-

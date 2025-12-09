@@ -47,7 +47,7 @@ class AppColors {
 
   // notification Screen
   static const Color ntfctBlue = Color(0xFF1163B4);
-  static const Color ntfctnYellow = Color(0xFFABBC0E);
+  static const Color ntfctnYellow = Color.fromARGB(255, 160, 220, 152);
   
       // const Color(0Xff0000001c).withOpacity(0.11);
   // static Color get opacitygreyColor2 =>

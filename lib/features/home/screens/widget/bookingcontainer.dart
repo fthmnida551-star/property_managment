@@ -66,15 +66,15 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
         height: 75.h,
         padding: widget.padding ?? const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.opacitygreyColor),
+          border: Border.all(color: AppColors.bookingNow),
           color: widget.color ?? AppColors.white,
           borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
           boxShadow: const [
             BoxShadow(
               color: AppColors.black,
-              spreadRadius: 0.7,
-              blurRadius: 0.7,
-              offset: Offset(0, 1),
+              spreadRadius: 0.1,
+              blurRadius: 0.1,
+            
             ),
           ],
         ),

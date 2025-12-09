@@ -22,13 +22,14 @@ class AddUserScreen extends ConsumerStatefulWidget {
 class _AddUserScreenState extends ConsumerState<AddUserScreen> {
   FirebaseFirestore fdb = FirebaseFirestore.instance;
   final formkey = GlobalKey<FormState>();
-  final List<String> _roles = ['Manager', 'Agent', 'Staff'];
+  final List<String> _roles = ['Manager', 'Agent', 'Staff', ];
   String? _selectedRole;
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   final TextEditingController namectrlr = TextEditingController();
   final TextEditingController emailctrlr = TextEditingController();
   final TextEditingController passWordctrlr = TextEditingController();
+  final TextEditingController mobilenocntrlr = TextEditingController();
 
   bool obscurePassword = true; // <-- ✅ You forgot to declare this variable
 
@@ -36,6 +37,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     namectrlr.clear();
     emailctrlr.clear();
     passWordctrlr.clear();
+    mobilenocntrlr.clear();
   }
 
   @override
@@ -46,6 +48,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
       namectrlr.text = widget.users!.name;
       emailctrlr.text = widget.users!.email;
       passWordctrlr.text = widget.users!.password;
+      mobilenocntrlr.text=widget.users!.Mobilenumber;
       _selectedRole = widget.users!.role;
       _saveButtonMode = SaveButtonMode.edit;
     }
@@ -69,9 +72,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
               ),
             ),
             Text(
-              _saveButtonMode == SaveButtonMode.save
-                  ? 'Add User'
-                  : 'Edit User',
+              _saveButtonMode == SaveButtonMode.save ? 'Add User' : 'Edit User',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
@@ -102,7 +103,8 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return "First letter must be capital";
                       }
                       return null;
-                    }, readOnly: false,
+                    },
+                    readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -121,7 +123,26 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return 'Please enter a valid email address';
                       }
                       return null;
-                    }, readOnly: false,
+                    },
+                    readOnly: false,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6, right: 5),
+                  child: TextFieldContainer(
+                    keyboardType:TextInputType.phone,
+                    text: "Mobile number",
+                    controllerName: mobilenocntrlr,
+                    validator:(String?value){
+                      if(value==null || value.isEmpty){
+                         return "Please enter your Mobile number";
+                      }
+                      if(value.length!=10){
+                       return "Mobile number must be 10 digits";
+                      }
+                    },
+                    readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -248,12 +269,13 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 "USER_EMAIL": emailctrlr.text.trim(),
                 "USER_ROLE": _selectedRole,
                 "USER_PASSWORD": passWordctrlr.text.trim(),
+                "USER_PHONE":mobilenocntrlr.text.trim(),
               };
+
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addUsers(userDetails);
               } else {
                 await repo.updateUser(widget.users!.id, userDetails);
-                //await repo.updateUser(widget.users!.id, userDetails);
               }
               _clearControllers();
               Navigator.pushReplacement(

@@ -8,24 +8,38 @@ class PropertyRepo {
   final NotificationRepository notificationRepo;
   PropertyRepo(this.service, this.notificationRepo);
 
-  Future<void> addProperties(Map<String, dynamic> propertyData, String userName) async {
-    try {
-      final docRef = await service.properties.add(propertyData);
+ Future<void> addProperties(
+  Map<String, dynamic> propertyData,
+  String userName,
+) async {
+  try {
+    await service.properties.add(propertyData);
 
-      await service.properties.add(propertyData);
+    String displayName;
+    final propertyName = (propertyData['BUILDING NAME'] as String?)?.trim();
+    final ownerName = (propertyData['OWNER NAME'] as String?)?.trim();
 
-      await notificationRepo.addNotification(
-        title: "New Property Added",
-        message: "${propertyData['propertyTitle']} has been added",
-        type: "Added",
-        addedStaff: userName, // you can use user id or role
-      );
-
-      log("Property Added & Notification Sent");
-    } catch (e) {
-      log("Error adding property: $e");
+    if (propertyName != null && propertyName.isNotEmpty) {
+      displayName = "$propertyName has been added"; // CASE 1: Building name exists
+    } else if (ownerName != null && ownerName.isNotEmpty) {
+      displayName = "$ownerName's property has been added"; // CASE 2: Only owner name exists
+    } else {
+      displayName = "PlotX's property has been added"; // CASE 3: Neither exists
     }
+
+    await notificationRepo.addNotification(
+      title: "New Property Added",
+      message: displayName,
+      type: "Added",
+      addedStaff: userName,
+    );
+
+    log("Property Added & Notification Sent");
+  } catch (e) {
+    log("Error adding property: $e");
   }
+}
+
 
   Future<void> updateproperty(
     String id,
@@ -40,62 +54,57 @@ class PropertyRepo {
   }
 
   Stream<List<PropertyModel>> getAllPropertyDetailsList() {
-    return service.properties.snapshots().map(
-      (snapshot) => snapshot.docs
-          .map(
-            (doc) => PropertyModel.fromMap(
-              doc.data() as Map<String, dynamic>,
-              doc.id,
-            ),
-          )
-          .toList(),
-    );
+    return service.properties
+        .orderBy('ADDED_DATE', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (doc) => PropertyModel.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                  doc.id,
+                ),
+              )
+              .toList(),
+        );
   }
-  
- 
-deleteProperty(PropertyModel property) async {
-  await service.properties
-      .doc(property.id)
-      .delete();
+
+Future<PropertyModel> getSingleProperty(String propertyId) async {
+  final doc = await service.properties.doc(propertyId).get();
+
+  if (doc.exists) {
+    return PropertyModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+  } else {
+    throw Exception("Property not found");
+  }
+}
+deleteProperty(PropertyModel property, String userName) async {
+  await service.properties.doc(property.id).delete();
+
   if (property.isBooked == true) {
-    await service.bookingdetails
-        .doc(property.bookingid)
-        .delete();
+    await service.bookingdetails.doc(property.bookingid).delete();
   }
-  // getAllPropertyDetails();
+String displayName;
+
+final propertyName = property.name?.trim();
+final ownerName = property.ownername?.trim();
+
+if (propertyName != null && propertyName.isNotEmpty) {
+  displayName = "$propertyName"; // building name
+} else if (ownerName != null && ownerName.isNotEmpty) {
+  displayName = "$ownerName's property"; // owner name
+} else {
+  displayName = "PlotX's property"; // fallback
 }
 
 
-
-  // void getAllPropertyDetailsList() async {
-  //     propertyDetailsList.clear();
-
-  //     try {
-  //       final QuerySnapshot<Map<String, dynamic>> querySnapshot = await fdb
-  //           .collection('PROPERTIES')
-  //           .orderBy('ADDED_DATE', descending: true)
-  //           .get();
-
-  //       for (var element in querySnapshot.docs) {
-  //         // final String id = element.id;
-  //         final Map<String, dynamic> data = element.data();
-  //         data.keys.forEach((element) => log(element));
-  //         log("Document keys: ${data.keys}");
-  //         log("jjjjjjjjjj ${data['PROPERTY PRICE']}");
-  //         log("jghjfhfgjh ${(data[' BHK'] is int) ? 1111 : 666}");
-
-  //         // Make sure PropertyModel.fromJson can handle the ID
-  //         propertyDetailsList.add(PropertyModel.fromMap(data, element.id));
-  //       }
-  // // Refresh the UI
-  //     } catch (e) {
-  //       debugPrint("Error fetching property details: $e");
-  //     }
-  //   }
-
-  
-
-  
+  await notificationRepo.addNotification(
+    title: "Property Removed",
+    message: "$displayName has been removed",
+    type: "Removed",
+    addedStaff: userName,
+  );
+}
 
 
 }

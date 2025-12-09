@@ -9,6 +9,6 @@ final bookingRepoProvider = Provider(
 );
 
 // ✔ StreamProvider.family because you need a booking ID
-final bookingProvider = StreamProvider.family<BookingModel?, String>((ref, bookingId) {
-  return ref.watch(bookingRepoProvider).getBooking(bookingId);
+final bookingProvider = FutureProvider.family<BookingModel?, String>((ref, bookingId) async{
+  return await ref.watch(bookingRepoProvider).getBooking(bookingId);
 });

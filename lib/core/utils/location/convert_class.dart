@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
-import 'package:property_managment/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
 
 class AddressWidget extends StatelessWidget {
   final double lat;
@@ -29,26 +29,11 @@ class AddressWidget extends StatelessWidget {
         return Text(
           text,
           style: style ?? TextStyle(fontSize: 15, color: AppColors.black),
-          maxLines: 2,
+          maxLines: 6,
           overflow: TextOverflow.ellipsis,
         );
       },
     );
   }
-  
-// Future<String> convertLatLngToAddress(double lat, double lng) async {
-//   try {
-//     List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
-
-//     if (placemarks.isNotEmpty) {
-//       final place = placemarks.first;
-
-//       return "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-//     } else {
-//       return "Unknown location";
-//     }
-//   } catch (e) {
-//     return "Error fetching address";
-//   }
-// }
+ 
 }

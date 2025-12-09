@@ -40,6 +40,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       resizeToAvoidBottomInset: false,
       body: _pages[widget.currentIndex],
       bottomNavigationBar: SafeArea(
@@ -56,34 +57,38 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               },
               backgroundColor: AppColors.greenColor,
               selectedItemColor: Colors.white,
-              unselectedItemColor: Colors.blueGrey,
+              unselectedItemColor: const Color.fromARGB(130, 0, 0, 0),
               type: BottomNavigationBarType.fixed,
               items: [
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.home),
+                    // child: SvgPicture.asset(AssetResource.home),
+                    child: Icon(Icons.home_outlined),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.search),
+                    // child: SvgPicture.asset(AssetResource.search),
+                    child: Icon(Icons.search),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.notification),
+                    // child: SvgPicture.asset(AssetResource.notification),
+                    child: Icon(Icons.notifications_outlined),
                   ),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: SvgPicture.asset(AssetResource.profile),
+                    // child: SvgPicture.asset(AssetResource.profile),
+                    child: Icon(Icons.person_outline),
                   ),
                   label: '',
                 ),

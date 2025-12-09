@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/features/auth/screens/splashscreen.dart';
-import 'package:property_managment/features/auth/screens/splashscreen.dart';
-import 'package:property_managment/features/auth/screens/splashscreen.dart';
-import 'package:property_managment/features/auth/screens/splashscreen.dart';
 import 'package:property_managment/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
 
@@ -27,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ScreenUtilInit(
       designSize: const Size(
         390,
@@ -36,6 +34,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
+          
           home: Splashscreen(),
           debugShowCheckedModeBanner: false,
         );

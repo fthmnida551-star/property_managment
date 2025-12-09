@@ -2,14 +2,11 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
-import 'package:property_managment/core/constant/asset_resource.dart';
-import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
-import 'package:property_managment/location/concert_section.dart';
-import 'package:property_managment/location/convert_class.dart';
-import 'package:property_managment/features/booking/controller/booking_controllers.dart';
-import 'package:property_managment/modelClass/bookingmodel.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/convert_class.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/detailstable.dart';
@@ -17,7 +14,6 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotBookedPropertyScreen extends ConsumerStatefulWidget {
   final String userName;
@@ -35,26 +31,12 @@ class NotBookedPropertyScreen extends ConsumerStatefulWidget {
 
 class _NotBookedPropertyScreenState
     extends ConsumerState<NotBookedPropertyScreen> {
-  String userRole = "";
-  void getUserRole() async {
-    final prefs = await SharedPreferences.getInstance();
-    userRole = prefs.getString("role") ?? "";
-    setState(() {});
-    log("yuio$userRole");
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserRole();
-  }
-
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     // final repoBook= ref.watch(bookingRepoProvider);
+    final userRole = ref.watch(userRoleProvider);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -63,37 +45,32 @@ class _NotBookedPropertyScreenState
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  SizedBox(
-                    width: double.infinity,
-                    height: 250,
-                    child: PageView(
-                      children: [
-                        // Image.asset(AssetResource.building1, fit: BoxFit.cover),
-                        // Image.asset(AssetResource.property, fit: BoxFit.cover),
-                        if (widget.property.image.isNotEmpty)
-                          Image.network(
-                            widget.property.image[0],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
-                          ),
-                        if (widget.property.image.length > 1)
-                          Image.network(
-                            widget.property.image[1],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
-                          ),
-                        if (widget.property.image.length > 2)
-                          Image.network(
-                            widget.property.image[2],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
-                          ),
-                      ],
-                    ),
-                  ),
+                 SizedBox(
+  width: double.infinity,
+  height: 250,
+  child: PageView.builder(
+    itemCount: widget.property.image.length,
+    itemBuilder: (context, index) {
+      final img = widget.property.image[index];
+      return InkWell(
+        onTap: () {
+          imgpopup(
+            context,
+            widget.property,
+            img,
+          );
+        },
+        child: Image.network(
+          img,
+          fit: BoxFit.cover,
+          height: 209,
+          width: 356,
+        ),
+      );
+    },
+  ),
+),
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                     child: Row(
@@ -115,7 +92,7 @@ class _NotBookedPropertyScreenState
                           ),
 
                           itemBuilder: (BuildContext context) => [
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               PopupMenuItem(
                                 onTap: () {
                                   Navigator.of(
@@ -263,7 +240,7 @@ class _NotBookedPropertyScreenState
                                       fontSize: 15,
                                       color: AppColors.black,
                                     ),
-                                    maxLines: 2,
+                                    maxLines: 6,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -339,10 +316,6 @@ class _NotBookedPropertyScreenState
                                         icons: Icons.check_circle_outline,
                                       ),
                                       Divider(thickness: 1),
-                                      // RowWidget(
-                                      //   text: 'Owner',
-                                      //   icons: Icons.account_circle,
-                                      // ),
                                     ],
                                   ),
                                 ),
@@ -356,7 +329,7 @@ class _NotBookedPropertyScreenState
                                   ),
                                 ),
                                 SizedBox(height: 8),
-                                // Property Details Box
+                                // ------------Property Details Box-----------
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.black),
@@ -414,6 +387,9 @@ class _NotBookedPropertyScreenState
                                   color: Colors.black,
                                 ),
                               ),
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
@@ -428,13 +404,13 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -531,11 +507,6 @@ class _NotBookedPropertyScreenState
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      // DetailsTable(
-                                      //   text: 'Location',
-                                      //   details: "${widget.property.location}",
-                                      //   icons: Icons.location_on,
-                                      // ),
                                       DetailsTable(
                                         text: 'Location',
                                         detailsWidget: AddressWidget(
@@ -559,7 +530,7 @@ class _NotBookedPropertyScreenState
                                         text: 'Sqft',
                                         details: "${widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
-                                      ), // Divider(thickness: 1),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -586,6 +557,9 @@ class _NotBookedPropertyScreenState
                                   color: Colors.black,
                                 ),
                               ),
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
@@ -600,56 +574,54 @@ class _NotBookedPropertyScreenState
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(height: 8),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
+                      // SizedBox(height: 8),
                     ],
                   ),
                 ),
             ],
           ),
         ),
-        bottomNavigationBar: userRole == "Agent"
-            ? null
-            : Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      log("property id is  ${widget.property.id}");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingDetails(
-                            propertyId: widget.property.id,
-                            bookedData: null,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.greenColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Booking Now',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppColors.whitecolor,
-                        fontWeight: FontWeight.bold,
-                      ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                log("property id is  ${widget.property.id}");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingDetails(
+                      propertyId: widget.property.id,
+                      bookedData: null,
                     ),
                   ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.greenColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
               ),
+              child: Text(
+                'Booking Now',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: AppColors.whitecolor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

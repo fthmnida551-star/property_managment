@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
-import 'package:property_managment/core/constant/asset_resource.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
-import 'package:property_managment/features/property/controllers/property_cntlr.dart';
-import 'package:property_managment/location/convert_class.dart';
+import 'package:property_managment/core/utils/location/convert_class.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/img_popup.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
@@ -17,9 +17,8 @@ import 'package:property_managment/features/property/screens/propertydetails/wid
 import 'package:property_managment/features/property/screens/propertydetails/widget/row.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/popup_mssg_cntnr.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_property.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class BookedPropertyScreen extends ConsumerWidget {
+class BookedPropertyScreen extends ConsumerStatefulWidget {
   PropertyModel property;
   BookingModel? bookedData;
   BookedPropertyScreen({
@@ -27,24 +26,37 @@ class BookedPropertyScreen extends ConsumerWidget {
     required this.property,
     required this.bookedData,
   });
+
+  @override
+  ConsumerState<BookedPropertyScreen> createState() =>
+      _BookedPropertyScreenState();
+}
+
+class _BookedPropertyScreenState extends ConsumerState<BookedPropertyScreen> {
   List<PropertyModel> propertyDetails = [];
 
   FirebaseFirestore fdb = FirebaseFirestore.instance;
 
-  String userRole ="";
+  // String userRole = "";
 
-  void getUserRole()async{
-    final prefs =await SharedPreferences.getInstance();
-    userRole =prefs.getString("role")??'';
-    
-  } 
+  // void getUserRole() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   userRole = prefs.getString("role") ?? '';
+  // }
 
   // @override
+  // void initState() {
+  //   super.initState();
+  //   getUserRole();
+  // }
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final repo=ref.read(bookingRepoProvider);
-    final loginanme=ref.watch(userNameProvider);
+  Widget build(BuildContext context) {
+    final repo = ref.read(bookingRepoProvider);
+    final loginanme = ref.watch(userNameProvider);
+    final userRole = ref.watch(userRoleProvider);
+    log('user role: 11$userRole/11');
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -58,26 +70,53 @@ class BookedPropertyScreen extends ConsumerWidget {
                     height: 250,
                     child: PageView(
                       children: [
-                        if (property.image.isNotEmpty)
-                          Image.network(
-                            property.image[0],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                        if (widget.property.image.isNotEmpty)
+                          InkWell(
+                            onTap: (){
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[0],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[0],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
-                        if (property.image.length > 1)
-                          Image.network(
-                            property.image[1],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                        if (widget.property.image.length > 1)
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[1],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[1],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
-                        if (property.image.length > 2)
-                          Image.network(
-                            property.image[2],
-                            fit: BoxFit.cover,
-                            height: 209,
-                            width: 356,
+                        if (widget.property.image.length > 2)
+                          InkWell(
+                            onTap: () {
+                              imgpopup(
+                                context,
+                                widget.property,
+                                widget.property.image[2],
+                              );
+                            },
+                            child: Image.network(
+                              widget.property.image[2],
+                              fit: BoxFit.cover,
+                              height: 209,
+                              width: 356,
+                            ),
                           ),
                       ],
                     ),
@@ -103,7 +142,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                             color: AppColors.whitecolor,
                           ),
                           itemBuilder: (BuildContext context) => [
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               PopupMenuItem(
                                 child: InkWell(
                                   onTap: () {
@@ -115,7 +154,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                       MaterialPageRoute(
                                         builder: (context) => AddProperty(
                                           from: 'Edit',
-                                          property: property,
+                                          property: widget.property,
                                         ),
                                       ),
                                     );
@@ -136,7 +175,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                   WidgetsBinding.instance.addPostFrameCallback((
                                     _,
                                   ) {
-                                    dltAlert(context,property, ref);
+                                    dltAlert(context, widget.property, ref);
                                   });
                                   Navigator.pop(context);
                                 },
@@ -153,7 +192,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
-                                  showLandlordPopup(context, property);
+                                  showLandlordPopup(context, widget.property);
                                 },
                                 child: Row(
                                   children: [
@@ -191,15 +230,15 @@ class BookedPropertyScreen extends ConsumerWidget {
               ),
 
               // --- Property Content Section ---
-              if (property.propertyType == 'APARTMENT' ||
-                  property.propertyType == "VILLA")
+              if (widget.property.propertyType == 'APARTMENT' ||
+                  widget.property.propertyType == "VILLA")
                 Padding(
                   padding: EdgeInsets.all(26.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${property.price}',
+                        '${widget.property.price}',
                         style: TextStyle(
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -208,48 +247,34 @@ class BookedPropertyScreen extends ConsumerWidget {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        property.name.toUpperCase(),
+                        widget.property.name.toUpperCase(),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'BHK :${property.bathrooms}\n SQFT :${property.sqft}',
+                        'BHK :${widget.property.bathrooms}\n SQFT :${widget.property.sqft}',
                         style: TextStyle(fontSize: 14, color: AppColors.black),
                       ),
                       SizedBox(height: 15),
-                      // --- Location ---
-                      // Row(
-                      //   children: [
-                      //     Icon(Icons.location_on, color: AppColors.black),
-                      //     SizedBox(width: 5),
-                      //     Text(
-                      //       widget.property.location,
-                      //       // 'KARAVATTOM, MALAPPURAM',
-                      //       style: TextStyle(
-                      //         fontSize: 15,
-                      //         color: AppColors.black,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      if (property.latitude != null &&
-                          property.longitude != null)
+                      // ------- Location ------
+                      if (widget.property.latitude != null &&
+                          widget.property.longitude != null)
                         Row(
                           children: [
                             Icon(Icons.location_on, color: AppColors.black),
-                            
+
                             SizedBox(width: 5),
                             Expanded(
                               child: AddressWidget(
-                                lat: property.latitude!,
-                                lng: property.longitude!,
+                                lat: widget.property.latitude!,
+                                lng: widget.property.longitude!,
                               ),
                             ),
                           ],
                         ),
-                        
+
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
                       ExpansionTileTheme(
@@ -293,7 +318,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Property Overview\n${property.name},\n${property.location}',
+                                      'Property Overview\n${widget.property.name},\n${widget.property.location}',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ),
@@ -309,12 +334,12 @@ class BookedPropertyScreen extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       RowWidget(
-                                        text: property.propertyType,
+                                        text: widget.property.propertyType,
                                         icons: Icons.apartment,
                                       ),
                                       Divider(thickness: 1),
                                       RowWidget(
-                                        text: '${property.readyToMove}',
+                                        text: '${widget.property.readyToMove}',
                                         icons: Icons.check_circle_outline,
                                       ),
                                     ],
@@ -344,19 +369,19 @@ class BookedPropertyScreen extends ConsumerWidget {
                                     children: [
                                       DetailsTable(
                                         text: 'Bedrooms',
-                                        details: "${property.bathrooms}",
+                                        details: "${widget.property.bathrooms}",
                                         icons: Icons.bed,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Carpet Area',
-                                        details: "${property.sqft}",
+                                        details: "${widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
                                       ),
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Bathrooms',
-                                        details: "${property.bathrooms}",
+                                        details: "${widget.property.bathrooms}",
                                         icons: Icons.bathtub,
                                       ),
                                     ],
@@ -369,12 +394,12 @@ class BookedPropertyScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: "${property.carParking}",
+                                  text: "${widget.property.carParking}",
                                   icons: Icons.directions_car,
                                 ),
                                 RowWidget(
                                   text:
-                                      "Maintenance (Monthly) ${property.price}",
+                                      "Maintenance (Monthly) ${widget.property.price}",
                                   icons: Icons.currency_bitcoin,
                                 ),
                               ],
@@ -390,11 +415,14 @@ class BookedPropertyScreen extends ConsumerWidget {
                                   color: Colors.black,
                                 ),
                               ),
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    property.description,
+                                    widget.property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -404,13 +432,13 @@ class BookedPropertyScreen extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                       SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -438,47 +466,48 @@ class BookedPropertyScreen extends ConsumerWidget {
                               children: [
                                 Icon(Icons.person, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(bookedData!.name),
+                                Text(widget.bookedData!.name),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.phone, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(bookedData!.contact),
+                                Text(widget.bookedData!.contact),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(bookedData!.email),
+                                Text(widget.bookedData!.email),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${bookedData!.date}"),
+                                Text(widget.bookedData!.date),
                               ],
                             ),
-                            if (userRole != "Agent")
+                            if (userRole.value != "Agent")
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
+                                    SizedBox(width: 3),
                                     Button(
-                                      width: 150,
+                                      width: 140,
                                       height: 40,
                                       text: 'Delete',
                                       onTap: () async {
-                                        // await deleteUser(
-                                        //   property.bookingid,
-                                        //   property.id,
-                                        // );
-                                        repo.deleteBooking(property.bookingid,property.id,loginanme.value!);
+                                        repo.deleteBooking(
+                                          widget.property.bookingid,
+                                          widget.property.id,
+                                          loginanme.value!,
+                                        );
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -496,7 +525,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                     ),
                                     SizedBox(width: 10),
                                     Button(
-                                      width: 150,
+                                      width: 140,
                                       height: 40,
                                       text: 'Edit',
                                       onTap: () {
@@ -506,14 +535,15 @@ class BookedPropertyScreen extends ConsumerWidget {
                                             builder: (context) =>
                                                 BookingDetails(
                                                   propertyId:
-                                                      property.id,
-                                                  bookedData: bookedData,
+                                                      widget.property.id,
+                                                  bookedData: widget.bookedData,
                                                 ),
                                           ),
                                         );
                                       },
                                       icon: Icons.edit_outlined,
                                     ),
+                                    SizedBox(width: 3),
                                   ],
                                 ),
                               ),
@@ -525,14 +555,14 @@ class BookedPropertyScreen extends ConsumerWidget {
                   ),
                 ),
 
-              if (property.propertyType == 'LAND')
+              if (widget.property.propertyType == 'LAND')
                 Padding(
                   padding: EdgeInsets.all(26.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${property.price}',
+                        '${widget.property.price}',
                         style: TextStyle(
                           fontSize: 29,
                           fontWeight: FontWeight.bold,
@@ -542,19 +572,20 @@ class BookedPropertyScreen extends ConsumerWidget {
                       SizedBox(height: 10),
 
                       // --- Location ---
-                      Row(
-                        children: [
-                          Icon(Icons.location_on, color: AppColors.black),
-                          SizedBox(width: 5),
-                          Text(
-                            property.location,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColors.black,
+                      if (widget.property.latitude != null &&
+                          widget.property.longitude != null)
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: AppColors.black),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: AddressWidget(
+                                lat: widget.property.latitude!,
+                                lng: widget.property.longitude!,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
                       SizedBox(height: 16),
                       // --- Styled ExpansionTiles Section ---
@@ -610,7 +641,7 @@ class BookedPropertyScreen extends ConsumerWidget {
 
                                 SizedBox(height: 8),
 
-                                // Property Details Box
+                                // --------------Property Details Box----------
                                 Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColors.black),
@@ -623,8 +654,8 @@ class BookedPropertyScreen extends ConsumerWidget {
                                       DetailsTable(
                                         text: 'Location',
                                         detailsWidget: AddressWidget(
-                                          lat: property.latitude!,
-                                          lng: property.longitude!,
+                                          lat: widget.property.latitude!,
+                                          lng: widget.property.longitude!,
                                           style: TextStyle(
                                             color: AppColors.black,
                                           ),
@@ -634,14 +665,14 @@ class BookedPropertyScreen extends ConsumerWidget {
                                       Divider(thickness: 1),
                                       DetailsTable(
                                         text: 'Property Type',
-                                        details: property.propertyType,
+                                        details: widget.property.propertyType,
                                         icons: Icons.landslide_outlined,
                                       ),
                                       Divider(thickness: 1),
 
                                       DetailsTable(
                                         text: 'Sqft',
-                                        details: "${property.sqft}",
+                                        details: "${widget.property.sqft}",
                                         icons: Icons.check_box_outline_blank,
                                       ),
                                     ],
@@ -654,7 +685,7 @@ class BookedPropertyScreen extends ConsumerWidget {
                                 ),
                                 SizedBox(height: 8),
                                 RowWidget(
-                                  text: property.aminities,
+                                  text: widget.property.aminities,
                                   icons: Icons.business_outlined,
                                 ),
                               ],
@@ -670,11 +701,14 @@ class BookedPropertyScreen extends ConsumerWidget {
                                   color: Colors.black,
                                 ),
                               ),
+                              expandedCrossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              expandedAlignment: Alignment.centerLeft,
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    property.description,
+                                    widget.property.description,
                                     style: TextStyle(fontSize: 15),
                                   ),
                                 ),
@@ -684,25 +718,14 @@ class BookedPropertyScreen extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Image.asset(
-                          AssetResource.location,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      
-//                      Padding(
-//   padding: EdgeInsets.only(bottom: 8.0),
-//   child: Image.network(
-//     "https://maps.googleapis.com/maps/api/staticmap?"
-//     "center=${widget.property.latitude},${widget.property.longitude}"
-//     "&zoom=16&size=600x300&markers=color:red%7C${widget.property.latitude},${widget.property.longitude}"
-//     "&key=YOUR_GOOGLE_MAPS_API_KEY",
-//     fit: BoxFit.cover,
-//   ),
-// ),
 
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 8.0),
+                      //   child: Image.asset(
+                      //     AssetResource.location,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                       SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -714,9 +737,6 @@ class BookedPropertyScreen extends ConsumerWidget {
                           children: [
                             SizedBox(
                               height: 30,
-                              // decoration: BoxDecoration(
-                              //   border: Border.all(width: 1, color: Colors.black),
-                              // ),
                               child: Center(
                                 child: Text(
                                   'Booked Details',
@@ -733,21 +753,21 @@ class BookedPropertyScreen extends ConsumerWidget {
                               children: [
                                 Icon(Icons.person, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${bookedData!.name}"),
+                                Text("${widget.bookedData!.name}"),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.phone, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text("${bookedData!.contact}"),
+                                Text("${widget.bookedData!.contact}"),
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.mail, color: Colors.green),
                                 SizedBox(width: 8),
-                                Text(bookedData!.email),
+                                Text(widget.bookedData!.email),
                               ],
                             ),
                             Row(
@@ -758,45 +778,45 @@ class BookedPropertyScreen extends ConsumerWidget {
                                 ),
 
                                 SizedBox(width: 8),
-                                Text("${bookedData!.date}"),
-                                // Text('Date\n2-3-2025'),
+                                Text("${widget.bookedData!.date}"),
                               ],
                             ),
+                            if (userRole.value != "Agent")
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  if (userRole != "Agent")
-                                    Button(
-                                      width: 150,
-                                      height: 40,
-                                      text: 'Delete',
-                                      onTap: () async {
-                                        // await deleteB(
-                                        //   widget.property.bookingid,
-                                        //   widget.property.id,
-                                        // );
-                                       repo.deleteBooking(property.bookingid,property.id,loginanme.value!);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BottomNavigationWidget(
-                                                  currentIndex: 1,
-                                                  propertytype: [],
-                                                  price: null,
-                                                  sqft: null,
-                                                ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete_outline_outlined,
-                                    ),
-                                  SizedBox(width: 10),
+                                   SizedBox(width: 3),
                                   Button(
-                                    width: 150,
+                                    width: 140,
+                                    height: 40,
+                                    text: 'Delete',
+                                    onTap: () async {
+                                      repo.deleteBooking(
+                                        widget.property.bookingid,
+                                        widget.property.id,
+                                        loginanme.value!,
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              BottomNavigationWidget(
+                                                currentIndex: 1,
+                                                propertytype: [],
+                                                price: null,
+                                                sqft: null,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.delete_outline_outlined,
+                                  ),
+                                  SizedBox(width: 3),
+                                  Button(
+                                    width: 140,
                                     height: 40,
                                     text: 'Edit',
                                     onTap: () {
@@ -804,14 +824,15 @@ class BookedPropertyScreen extends ConsumerWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => BookingDetails(
-                                            propertyId: property.id,
-                                            bookedData: bookedData,
+                                            propertyId: widget.property.id,
+                                            bookedData: widget.bookedData,
                                           ),
                                         ),
                                       );
                                     },
                                     icon: Icons.edit_outlined,
                                   ),
+                                  SizedBox(width: 10),
                                 ],
                               ),
                             ),

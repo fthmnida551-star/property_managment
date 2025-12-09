@@ -1385,7 +1385,6 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/features/profile/controllers/profileControllers.dart';
-import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/features/profile/screens/edit_profile.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
 
@@ -1493,7 +1492,8 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
               data: (user) {
                 if (user == null) return const SizedBox();
                 return _profileBox(
-                  icon: Icons.person,
+                  icon: Icons.person_2_outlined,
+                  
                   title: "Name",
                   value: user.name,
                 );
@@ -1525,9 +1525,9 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
               data: (user) {
                 if (user == null) return const SizedBox();
                 return _profileBox(
-                  icon: Icons.phone,
+                  icon: Icons.phone_android_outlined,
                   title: "Phone Number",
-                  value: user.phone ?? "Not Added",
+                  value: user.Mobilenumber ?? "Not Added",
                 );
               },
               loading: () => const SizedBox(),
@@ -1561,7 +1561,7 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.blackColor, size: 28),
+          Icon(icon, color: AppColors.booked, size: 28),
           const SizedBox(width: 15),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:property_managment/core/provider/firebse_provider.dart';
 import 'package:property_managment/features/home/repository/dashboard_repository.dart';
 import 'package:property_managment/modelClass/property_model.dart';
@@ -14,3 +16,4 @@ final bookedpropertyListProvider=StreamProvider(
 final propertyByIdProvider = StreamProvider.family<PropertyModel?, String>((ref, propertyId) {
   return ref.watch(dashboardRepositoryProvider).getPropertyById(propertyId);
 }); 
+final themeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);

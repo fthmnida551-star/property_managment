@@ -44,4 +44,5 @@ class AssetResource {
   // static const profile ='assets/svg/profilesign.svg';
   static const appLogo = 'assets/svg/logo_for_dashboard.svg';
   static const logo = 'assets/svg/applogo.svg';
+  static const plotX="assets/logo/plotX.png";
 }

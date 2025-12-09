@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/is_loading.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/core/utils/checkbox.dart';
@@ -148,6 +150,7 @@ class _AddLandlordDetailsState extends ConsumerState<AddLandlordDetails> {
                   divider,
                   TextFieldContainer(
                     text: 'Contact',
+                    keyboardType: TextInputType.phone,
                     controllerName: contactCtlr,
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
@@ -194,7 +197,11 @@ class _AddLandlordDetailsState extends ConsumerState<AddLandlordDetails> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: GreenButton(
+        child:isLoading? CircularProgressIndicator(
+                color: AppColors.greenColor,
+                padding: EdgeInsets.symmetric(horizontal: 140),
+              )
+        : GreenButton(
           text: 'Submit',
           onTap: () async {
             if (frmKey.currentState!.validate()) {

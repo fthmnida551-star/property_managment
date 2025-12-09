@@ -7,4 +7,7 @@ final notificationRepositoryProvider = Provider(
 );
 final notificationProvider = StreamProvider(
   (ref) => ref.watch(notificationRepositoryProvider).getNotifications(),
+ 
 );
+final notificationDelete=Provider(
+  (ref)=>ref.watch(notificationRepositoryProvider));
