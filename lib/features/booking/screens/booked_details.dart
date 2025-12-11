@@ -1,21 +1,24 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/booking/controller/booking_controllers.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
-import 'package:property_managment/features/property/screens/propertydetails/booking_details.dart';
+import 'package:property_managment/features/booking/screens/booking_details.dart';
 import 'package:property_managment/features/property/screens/propertydetails/property_details/booked.dart';
 import 'package:property_managment/features/property/screens/searching_page/widget/property_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BookedDetails extends StatefulWidget {
+class BookedDetails extends ConsumerWidget {
   final String userName;
   final BookingModel bookedProperty;
   final PropertyModel property;
@@ -27,32 +30,15 @@ class BookedDetails extends StatefulWidget {
     required this.property,
   });
 
+  
+
+  // String userRole = "";
   @override
-  State<BookedDetails> createState() => _BookedDetailsState();
-}
-
-class _BookedDetailsState extends State<BookedDetails> {
-  FirebaseFirestore fdb = FirebaseFirestore.instance;
-
-  String userRole = "";
-
-  Future<void>getUserRole() async {
-    final prefs = await SharedPreferences.getInstance();
-    
-    userRole = prefs.getString("role") ?? "";
-    log("saveuserrole$userRole");
-    setState(() {
-      
-    });
-  }
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUserRole();
-  }
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userRole = ref.watch(userRoleProvider);
+    final loginName=ref.watch(userNameProvider);
+    final bookingData = ref.watch(bookingProvider(bookedProperty.id));
+    log('user role $userRole');
     return Scaffold(
       appBar: AppbarWidget(
         child: GestureDetector(
@@ -70,195 +56,136 @@ class _BookedDetailsState extends State<BookedDetails> {
         ),
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+      body: bookingData.when(
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(child: Text("Error: $e")),
+        data: (booking) {
+          if (booking == null) {
+            return Center(child: Text("No booking found"));
+          }
 
-            children: [
-              // PropertyContainer(text: 'abc', isShow: false, property:property,),
-              PropertyContainer(
-                text: 'Booked',
-                textColor: AppColors.white,
-                color: AppColors.booked,
-                onTap: () async{
-                  
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          BookedPropertyScreen(property: widget.property, bookedData: widget.bookedProperty,),
+          // Use updated booking data instead of bookedProperty
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  PropertyContainer(
+                    text: 'Booked',
+                    textColor: AppColors.white,
+                    color: AppColors.booked,
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookedPropertyScreen(
+                            property: property,
+                            bookedData: booking, // updated data
+                          ),
+                        ),
+                      );
+                    },
+                    property: property,
+                  ),
+
+                  SizedBox(height: 16),
+
+                  Row(
+                    children: [
+                      Icon(Icons.person_rounded, color: Colors.green),
+                      SizedBox(width: 8),
+                      Text(booking.name),
+                    ],
+                  ),
+
+                  SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Icon(Icons.phone_rounded, color: Colors.green),
+                      SizedBox(width: 8),
+                      Text(booking.contact),
+                    ],
+                  ),
+
+                  SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Icon(Icons.mail_rounded, color: Colors.green),
+                      SizedBox(width: 8),
+                      Text(booking.email),
+                    ],
+                  ),
+
+                  SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_month_rounded, color: Colors.green),
+                      SizedBox(width: 8),
+                      Text("${booking.date}"),
+                    ],
+                  ),
+
+                  SizedBox(height: 50),
+
+                  if ( userRole.value!="Agent")
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Button(
+                          text: 'Delete',
+                          onTap: () async {
+                            ref
+                                .read(bookingRepoProvider)
+                                .deleteBooking(property.bookingid, property.id,loginName.value!);
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BottomNavigationWidget(
+                                  currentIndex: 1,
+                                  propertytype: [],
+                                  price: null,
+                                  sqft: null,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: Icons.delete_outline_outlined,
+                        ),
+
+                        Button(
+                          text: 'Edit',
+                          onTap: () async {
+                            final updatedBooking = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookingDetails(
+                                  propertyId: property.id,
+                                  bookedData: booking, // updated booking
+                                ),
+                              ),
+                            );
+
+                            if (updatedBooking != null) {
+                              ref
+                                  .read(bookingRepoProvider)
+                                  .updateBooking(booking.id, booking.toMap());
+                            }
+                          },
+                          icon: Icons.edit_outlined,
+                        ),
+                      ],
                     ),
-                  );
-                },
-                property: widget.property,
-              ),
-
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Icon(Icons.person_rounded, color: Colors.green),
-
-                  SizedBox(width: 8),
-                  Text(widget.bookedProperty.name),
-                  // Text('Name\nHrishilal'),
                 ],
               ),
-
-              SizedBox(height: 12),
-
-              Row(
-                children: [
-                  Icon(Icons.phone_rounded, color: Colors.green),
-
-                  SizedBox(width: 8),
-                  Text(widget.bookedProperty.contact),
-                  // Text('Mobile No\n+91 960592260'),
-                ],
-              ),
-
-              SizedBox(height: 12),
-
-              Row(
-                children: [
-                  Icon(Icons.mail_rounded, color: Colors.green),
-
-                  SizedBox(width: 8),
-                  Text("${widget.bookedProperty.email}"),
-                  // Text('Email\nHrishilal@gmail.com'),
-                ],
-              ),
-
-              SizedBox(height: 12),
-
-              Row(
-                children: [
-                  Icon(Icons.calendar_month_rounded, color: Colors.green),
-
-                  SizedBox(width: 8),
-                  Text("${widget.bookedProperty.date}"),
-                  // Text('Date\n2-3-2025'),
-                ],
-              ),
-
-              SizedBox(height: 50),
-              if (userRole =="Manager")
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Button(
-                    text: 'Delete',
-                    onTap: () async {
-                      deleteBookingProperty(
-                        widget.property.bookingid,
-                        widget.property.id,
-                      ); // pass the booking document ID
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigationWidget(
-                            currentIndex: 1,
-                           
-                            propertytype: [],
-                           
-                            price: null,
-                           
-                            sqft: null,
-                          
-                          ),
-                        ),
-                      );
-                    },
-                    icon: Icons.delete_outline_outlined,
-                  ),
-
-                  // Button(
-                  //   text: 'Delete',
-                  //   onTap: () {
-                  //     deleteBookingProperty()
-
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             BottomNavigationWidget(currentIndex: 1),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icons.delete_outline_outlined,
-                  // ),
-                  // Button(
-                  //   text: 'Edit',
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => BookingDetails(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   icon: Icons.edit_outlined,
-                  // ),
-                  Button(
-                    text: 'Edit',
-                    onTap: () async {
-                      final updatedBooking = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingDetails(
-                            
-                            propertyId: widget.property.id, bookedData: widget.bookedProperty,
-                            
-                          ),
-                        ),
-                      );
-                      if (updatedBooking != null) {
-                        // updateBookingProperty(updatedBooking);
-                      }
-                    },
-                    icon: Icons.edit_outlined,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
-  }
-
-  Future<BookingModel?> getBooking(String bookingId) async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> doc = await fdb
-          .collection('BOOKING')
-          .doc(bookingId)
-          .get();
-
-      if (doc.exists && doc.data() != null) {
-        // Merge Firestore ID with document data
-        final data = doc.data()!;
-        data['id'] = doc.id;
-        return BookingModel.fromMap(bookingId,data);
-      } else {
-        print("No property found for ID: $bookingId");
-        return null;
-      }
-    } catch (e) {
-      print("Error fetching property: $e");
-      return null;
-    }
-  }
-
-
-  void deleteBookingProperty(String bookingId, String propertyId) async {
-    await fdb.collection("BOOKING DETAILS").doc(bookingId).delete();
-    await fdb.collection('PROPERTIES').doc(propertyId).update({
-      'IS_BOOKED': 'NO',
-    });
-    await fdb.collection('PROPERTIES').doc(propertyId).set({
-      "BOOKING_ID": FieldValue.delete(),
-    }, SetOptions(merge: true));
   }
 }

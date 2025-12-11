@@ -5,7 +5,7 @@ class BookingModel {
   final String email;
   final String contact;
   final String date;
-  final DateTime addedDate; // <-- date & time booking was added
+  final DateTime addedDate; 
   final String id;
   final String propertyId;
  
@@ -44,8 +44,8 @@ class BookingModel {
       'EMAIL': email,
       'CONTACT': contact,
       'DATE': date,
-      'ADDED_DATE': addedDate, // Firestore stores DateTime directly
-     
+      'ADDED_DATE': addedDate, 
+     'BOOKING_ID' : id,
       'PROPERTY_ID': propertyId,
       
     };

@@ -1,34 +1,39 @@
-
 class UserModel {
   final String id;
   final String name;
-  final dynamic email;
+  final String email;
   final String role;
-  final dynamic password;
+  final String password;
+  final String profileImage;
 
-  UserModel(this.id, this.name, this.email, this.role,this.password);
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.password,
+    required this.profileImage,
+  });
 
-  
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
     return UserModel(
-      id,
-      map['USER_NAME']?? "",
-      map['USER_EMAIL']??"",
-      map["USER_ROLE"]??"",
-      map['USER_PASSWORD']??"",
-      
+      id: id,
+      name: map['USER_NAME'] ?? "",
+      email: map['USER_EMAIL'] ?? "",
+      role: map['USER_ROLE'] ?? "",
+      password: map['USER_PASSWORD'] ?? "",
+      profileImage: map['PROFILE_IMAGE'] ?? "",   // <-- FIXED
     );
   }
 
-  
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'ID':id,
       'USER_NAME': name,
       'USER_EMAIL': email,
-      'USER_ROLE':role,
+      'USER_ROLE': role,
       'USER_PASSWORD': password,
+      'PROFILE_IMAGE': profileImage,  // <-- FIXED
     };
   }
 }
-

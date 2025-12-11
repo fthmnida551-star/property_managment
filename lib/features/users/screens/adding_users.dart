@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,7 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
-import 'package:property_managment/features/users/controllers.dart';
+import 'package:property_managment/features/users/controller/user_controllers.dart';
 import 'package:property_managment/core/enum/save_button.dart';
 import 'package:property_managment/modelClass/user_model.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
@@ -39,22 +38,22 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
     passWordctrlr.clear();
   }
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   if (widget.users != null) {
-  //     namectrlr.text = widget.users!.name;
-  //     emailctrlr.text = widget.users!.email;
-  //     passWordctrlr.text = widget.users!.password;
-  //     _selectedRole = widget.users!.role;
-  //     _saveButtonMode = SaveButtonMode.edit;
-  //   }
-  // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.users != null) {
+      namectrlr.text = widget.users!.name;
+      emailctrlr.text = widget.users!.email;
+      passWordctrlr.text = widget.users!.password;
+      _selectedRole = widget.users!.role;
+      _saveButtonMode = SaveButtonMode.edit;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final repo=ref.read(UserRepositoryProvider);
+    final repo = ref.read(userRepositoryProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(
@@ -72,7 +71,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
             Text(
               _saveButtonMode == SaveButtonMode.save
                   ? 'Add User'
-                  : 'Edit User', // 🟩 CHANGED: dynamic title
+                  : 'Edit User',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.white,
@@ -103,7 +102,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return "First letter must be capital";
                       }
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -122,7 +121,7 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                         return 'Please enter a valid email address';
                       }
                       return null;
-                    },
+                    }, readOnly: false,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -243,7 +242,6 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
         child: GreenButton(
           text: _saveButtonMode == SaveButtonMode.save ? 'Submit' : 'Update',
           onTap: () async {
-            
             if (formkey.currentState!.validate()) {
               Map<String, dynamic> userDetails = {
                 "USER_NAME": namectrlr.text.trim(),
@@ -254,7 +252,8 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
               if (_saveButtonMode == SaveButtonMode.save) {
                 await repo.addUsers(userDetails);
               } else {
-                //await updateUser(widget.users!.id, userDetails);
+                await repo.updateUser(widget.users!.id, userDetails);
+                
               }
               _clearControllers();
               Navigator.pushReplacement(
@@ -262,27 +261,9 @@ class _AddUserScreenState extends ConsumerState<AddUserScreen> {
                 MaterialPageRoute(builder: (context) => UsersScreen()),
               );
             }
-           },
+          },
         ),
       ),
     );
-  }
-
-  addUsers(Map<String, dynamic> userDetails) {
-    fdb.collection("STAFF").add(userDetails).then((
-      DocumentReference<Map<String, dynamic>> docRef,
-    ) {
-      final String id = docRef.id;
-      log("adding users");
-    });
-  }
-
-  updateUser(String id, Map<String, dynamic> updatedData) async {
-    try {
-      await fdb.collection("STAFF").doc(id).update(updatedData);
-      log("User updated successfully");
-    } catch (e) {
-      log("Error updating user: $e");
-    }
   }
 }

@@ -6,9 +6,11 @@ import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/green_button.dart';
-import 'package:property_managment/features/users/controllers.dart';
+import 'package:property_managment/features/users/controller/user_controllers.dart';
 import 'package:property_managment/features/users/screens/adding_users.dart';
 import 'package:property_managment/features/users/screens/widget/delete_alert.dart';
+
+// ignore: must_be_immutable
 class UsersScreen extends ConsumerWidget {
   UsersScreen({super.key});
 
@@ -120,7 +122,9 @@ class UsersScreen extends ConsumerWidget {
                               deleteAlert(
                                 context,
                                 onConfirm: () {
-                                  deleteUser(item.id);
+                                  ref
+                                      .read(userRepositoryProvider)
+                                      .deleteUser(item.id);
                                 },
                               );
                             },
@@ -152,10 +156,5 @@ class UsersScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  void deleteUser(String id) async {
-    await fdb.collection("STAFF").doc(id).delete();
-  
   }
 }

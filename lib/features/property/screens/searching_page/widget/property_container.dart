@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
+import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/propertydetails/property_details/not_booked.dart';
 
@@ -46,6 +48,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
       child: Container(
         height: 400.h,
         color: AppColors.propertyContainer,
+        margin: EdgeInsets.only(bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,14 +111,52 @@ class _PropertyContainerState extends State<PropertyContainer> {
               "${widget.property.price}",
               style: TextStyle(fontSize: 44.sp, color: AppColors.black),
             ),
+
+            // Row(
+            //   children: [
+            //     Icon(Icons.location_on_outlined, size: 20),
+            //     Text(
+            //       // 'Azizi Aliyah,al jaddaf, Dubai',
+            //       widget.property.location,
+            //       style: TextStyle(fontSize: 19.sp, color: AppColors.black),
+            //     ),
+            //   ],
+            // ),
             Row(
               children: [
                 Icon(Icons.location_on_outlined, size: 20),
-                Text(
-                  // 'Azizi Aliyah,al jaddaf, Dubai',
-                  widget.property.location,
-                  style: TextStyle(fontSize: 19.sp, color: AppColors.black),
-                ),
+                SizedBox(width: 2,),
+                if (widget.property.latitude != null &&
+                    widget.property.longitude != null)
+                   Expanded(
+        child: FutureBuilder(
+          future: convertLatLngToAddress(
+            widget.property.latitude!,
+            widget.property.longitude!,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text(
+                "Fetching location...",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Text("Error loading address");
+            }
+
+            return Text(
+              (snapshot.data as String?) ?? "Location not available",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,  // ⬅ force to one line
+              style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+            );
+          },
+        ),
+      ),
               ],
             ),
             Row(

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 
 class NotificationContainer extends StatefulWidget {
+  final String title;
   final String text;
   final Color color;
   const NotificationContainer({
     super.key,
+    required this.title,
     required this.text,
     required this.color,
   });
@@ -19,13 +21,14 @@ class _NotificationContainerState extends State<NotificationContainer> {
   Widget build(BuildContext context) {
     return Container(
       width: 350,
-      height: 71,
+      height: 100,
       decoration: BoxDecoration(
-        color: AppColors.searchbar,
+        color: const Color.fromARGB(255, 199, 243, 217),
         borderRadius: BorderRadius.circular(20),
       ),
+      alignment: Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
           children: [
             Container(
@@ -37,7 +40,7 @@ class _NotificationContainerState extends State<NotificationContainer> {
               ),
               child: Center(
                 child: Text(
-                  "P",
+                  widget.title[0].toUpperCase(), // first letter icon
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -46,13 +49,13 @@ class _NotificationContainerState extends State<NotificationContainer> {
                 ),
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(width: 10),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Propert Booked',
+                  widget.title, // 🔥 DYNAMIC TITLE
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,

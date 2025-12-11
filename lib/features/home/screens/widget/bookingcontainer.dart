@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,27 +34,12 @@ class BookingConatainerWidget extends StatefulWidget {
 }
 
 class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
-  // getPropertyImage() async{
-  //   print("22222222222222222  ${widget.bookedProperty.propertyId}");
-  //   property = await getPropertyById(widget.bookedProperty.propertyId);
-  //   log("propertyyyyyy $property");
-  //   if(property != null)
-  //   {log("wwwwwwwww ${property!.image}");}
-
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // if(property != null)log(property!.image[0]);
-
     return InkWell(
       onTap: () async {
         print(" Booking tapped!");
         print("Property ID from booking: ${widget.bookedProperty.propertyId}");
-
-        //  property = await getPropertyById(widget.bookedProperty.propertyId);
-
-        // print("Fetched property: ${widget.property.name ?? 'NULL'}");
 
         try {
           if (widget.property != null) {
@@ -92,7 +74,7 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
               color: AppColors.black,
               spreadRadius: 0.7,
               blurRadius: 0.7,
-              offset: Offset(0, 1),
+              // offset: Offset(0, 1),
             ),
           ],
         ),
@@ -108,32 +90,40 @@ class _BookingConatainerWidgetState extends State<BookingConatainerWidget> {
                       width: 50,
                     )
                   : Container(
-                    height: 50,
+                      height: 50,
                       width: 50,
                       decoration: BoxDecoration(
-                        border: Border.all(width: 1,color: Colors.grey.shade400),),
-                    child: Icon(Icons.image,color: Colors.grey,))
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                      child: Icon(Icons.image, color: Colors.grey),
+                    ),
             ),
             SizedBox(width: 15.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.bookedProperty.name,
-                  style: AppTextstyle.propertyMediumTextstyle(
-                    context,
-                    fontColor: AppColors.black,
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.bookedProperty.name,
+                    style: AppTextstyle.propertyMediumTextstyle(
+                      context,
+                      fontColor: AppColors.black,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(AssetResource.contact),
-                    const SizedBox(width: 5),
-                    Text(widget.bookedProperty.contact),
-                  ],
-                ),
-              ],
+                  Row(
+                    children: [
+                      SvgPicture.asset(AssetResource.contact),
+                      const SizedBox(width: 5),
+                      Text(widget.bookedProperty.contact),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),

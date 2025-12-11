@@ -1,14 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:property_managment/core/provider/is_loading.dart';
+import 'package:property_managment/core/provider/sharepreference.dart';
 import 'package:property_managment/core/utils/cloudinary_img/dio.dart';
-import 'package:property_managment/core/utils/cloudinary_img/picking_img.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
@@ -16,57 +16,65 @@ import 'package:property_managment/core/utils/checkbox.dart';
 import 'package:property_managment/core/utils/green_button.dart';
 import 'package:property_managment/core/utils/text_field.dart';
 import 'package:property_managment/core/enum/save_button.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
+import 'package:property_managment/core/utils/location/concert_section.dart';
+import 'package:property_managment/core/utils/location/pick_location.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/property/screens/searching_page/add_landlord_details.dart';
 import 'package:property_managment/features/property/screens/searching_page/widget/dropdown._form_field.dart';
 
-
-class AddProperty extends StatefulWidget {
+class AddProperty extends ConsumerStatefulWidget {
   final String from;
   final PropertyModel? property;
-  const AddProperty({super.key, required this.from, required this.property});
+  AddProperty({super.key, required this.from, required this.property});
 
   @override
-  State<AddProperty> createState() => _AddPropertyState();
+  ConsumerState<AddProperty> createState() => _AddPropertyState();
 }
 
-class _AddPropertyState extends State<AddProperty> {
+class _AddPropertyState extends ConsumerState<AddProperty> {
+  double? latitude;
+
+  double? longitude;
+
   String? _selectedValue;
+
   final List<String> _items = ['APARTMENT', 'VILLA', 'LAND'];
+
   final formKey = GlobalKey<FormState>();
+
   Widget divider = SizedBox(height: 10);
+
   bool readytoMove = false;
+
   bool carparking = false;
+
   TextEditingController propertyTypeCtlr = TextEditingController();
+
   TextEditingController priceCtlr = TextEditingController();
+
   TextEditingController buildingNamectlr = TextEditingController();
+
   TextEditingController bhkctlr = TextEditingController();
+
   TextEditingController bathroomctlr = TextEditingController();
+
   TextEditingController carpetAreactlr = TextEditingController();
+
   TextEditingController maintenancectlr = TextEditingController();
+
   TextEditingController building = TextEditingController();
+
   TextEditingController propertySqrftCtlr = TextEditingController();
+
   TextEditingController aminitiesctlr = TextEditingController();
+
   TextEditingController descriptionCtlr = TextEditingController();
+
   TextEditingController locationCtlr = TextEditingController();
-  File? file1;
-  File? file2;
-  File? file3;
+
+  // File? file1;
   List<String> imageFile = [];
-  // final ImagePicker _picker = ImagePicker();
-  // Future<void> _pickImage() async {
-  //   final pickedFile = await _picker.pickImage(
-  //     source: ImageSource.gallery,
-  //     // imageQuality: 80,
-  //   );
-
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _selectedImage = File(pickedFile.path);
-  //     });
-  //   }
-  // }
-
   SaveButtonMode _saveButtonMode = SaveButtonMode.save;
 
   clearController() {
@@ -102,37 +110,21 @@ class _AddPropertyState extends State<AddProperty> {
       imageFile = widget.property!.image;
       _saveButtonMode = SaveButtonMode.edit;
     }
-    setState(() {});
   }
 
-  List<File> files = [];
+  // List<File> files = [];
 
-  pickImg() async {
-    // Pick one image from the gallery
+  // pickImg() async {
+
+  pickImg(WidgetRef ref) async {
+    final picker = ImagePicker();
     final picked = await picker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 1600,
     );
-
-    // If user cancels, just return
     if (picked == null) return;
 
-    // Convert XFile → File and add to list
-    files.add(File(picked.path));
-
-    // If still empty (just in case), stop
-    if (files.isEmpty) return;
-
-    // Assign each element in list to file1, file2, file3
-    if (files.isNotEmpty) file1 = files[0];
-    if (files.length > 1) file2 = files[1];
-    if (files.length > 2) file3 = files[2];
-
-    print("File1: ${file1?.path}");
-    print("File2: ${file2?.path}");
-    print("File3: ${file3?.path}");
-
-    setState(() {});
+    ref.read(propertyImagesProvider.notifier).addImage(File(picked.path));
   }
 
   @override
@@ -144,6 +136,10 @@ class _AddPropertyState extends State<AddProperty> {
 
   @override
   Widget build(BuildContext context) {
+    final repo = ref.watch(propertyFormProvider);
+    final pickedImages = ref.watch(propertyImagesProvider);
+    final isLoading = ref.watch(loadingProvider);
+    final loginName = ref.watch(userNameProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Padding(
@@ -161,7 +157,10 @@ class _AddPropertyState extends State<AddProperty> {
                 ),
               ),
               Text(
-                'Add Property',
+                _saveButtonMode == SaveButtonMode.save
+                    ? 'Add Property'
+                    : 'Edit Property',
+
                 style: TextStyle(color: AppColors.white, fontSize: 19.sp),
               ),
             ],
@@ -175,214 +174,78 @@ class _AddPropertyState extends State<AddProperty> {
             key: formKey,
             child: Column(
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: GestureDetector(
-                // onTap: pickImg,
-                //     child: Container(
-                //       width: 368,
-                //       height: 200,
-                //       decoration: BoxDecoration(
-                //         color: AppColors.searchbar,
-                //         borderRadius: BorderRadius.circular(8),
-                //         border: BoxBorder.all(
-                //           width: 1,
-                //           color: AppColors.opacitygreyColor,
-                //         ),
-                //         image: _selectedImage != null
-                //             ? DecorationImage(
-                //                 image: FileImage(_selectedImage!),
-                //                 fit: BoxFit.cover,
-                //               )
-                //             : null,
-                //       ),
-                //       child: _selectedImage == null
-                //           ? Center(
-                //               child: Container(
-                //                 height: 50,
-                //                 width: 50,
-                //                 decoration: BoxDecoration(
-                //                   color: AppColors.greenColor,
-                //                   borderRadius: BorderRadius.circular(40),
-                //                 ),
-                //                 child: Center(
-                //                   child: SvgPicture.asset(AssetResource.camera),
-                //                 ),
-                //               ),
-                //             )
-                //           : Align(
-                //               alignment: Alignment.topRight,
-                //               child: Padding(
-                //                 padding: const EdgeInsets.all(8.0),
-                //                 child: GestureDetector(
-                //                   onTap: () {
-                //                     setState(() {
-                //                       _selectedImage = null; // remove image
-                //                     });
-                //                   },
-                //                   child: const CircleAvatar(
-                //                     radius: 16,
-                //                     backgroundColor: Colors.black54,
-                //                     child: Icon(
-                //                       Icons.close,
-                //                       color: Colors.white,
-                //                       size: 18,
-                //                     ),
-                //                   ),
-                //                 ),
-                //               ),
-                //             ),
-                //     ),
-                //   ),
-                // ),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-                          image: file1 != null
-                              ? DecorationImage(
-                                  image: FileImage(file1!),
-                                  fit: BoxFit.cover,
-                                )
-                              : imageFile.length>1?  DecorationImage(
-                                  image: NetworkImage(imageFile[0]),
-                                  fit: BoxFit.cover,
-                                ): null,
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
+                  padding: const EdgeInsets.only(left: 12.0, top: 12),
+                  child: SizedBox(
+                    height: 151,
+                    width: MediaQuery.of(context).size.width,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: pickedImages.length,
+                            itemBuilder: (context, Index) {
+                              return pickedImages.isNotEmpty
+                                  ? Container(
+                                      height: 150,
+                                      width: 100,
+                                      margin: EdgeInsets.only(right: 5),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.searchbar,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: BoxBorder.all(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
+                                        image: DecorationImage(
+                                          image: FileImage(
+                                            pickedImages[Index],
+                                           
+                                          ),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+
+                                    )
+                                  : SizedBox();
+                            },
                           ),
-                        ),
-                        child: file1 == null && imageFile.isEmpty
-                            ? 
-                             Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
+                          InkWell(
+                            onTap: () {
+                              pickImg(ref);
+                            },
+                            child: Container(
+                              height: 150,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: AppColors.searchbar,
+                                border: Border.all(color: AppColors.greyColor),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, color: AppColors.greyColor),
+                                  Text(
+                                    'Add image',
+                                    style: TextStyle(
+                                      color: AppColors.greyColor,
                                     ),
                                   ),
-                                ),
-                              )
-                           :SizedBox() 
-                      ),
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-                           image: file2 != null
-                              ? DecorationImage(
-                                  image: FileImage(file2!),
-                                  fit: BoxFit.cover,
-                                )
-                              : imageFile.length>1?  DecorationImage(
-                                  image: NetworkImage(imageFile[1]),
-                                  fit: BoxFit.cover,
-                                ): null,
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        child: file2 == null && imageFile.length==1
-                            ? Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                      Container(
-                        height: 150,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppColors.searchbar,
-                           image: file3 != null
-                              ? DecorationImage(
-                                  image: FileImage(file3!),
-                                  fit: BoxFit.cover,
-                                )
-                              : imageFile.length>2?  DecorationImage(
-                                  image: NetworkImage(imageFile[2]),
-                                  fit: BoxFit.cover,
-                                ): null,
-                          borderRadius: BorderRadius.circular(8),
-                          border: BoxBorder.all(
-                            width: 1,
-                            color: AppColors.opacitygreyColor,
-                          ),
-                        ),
-                        child: file3 == null && imageFile.length<2
-                            ? Center(
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.greenColor,
-                                    borderRadius: BorderRadius.circular(40),
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      AssetResource.camera,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 3),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      pickImg();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: AppColors.greenColor,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Upload Images',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 18,
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                 ),
+                SizedBox(height: 3),
+
                 SizedBox(height: 20),
 
                 DropdownFormField(
@@ -396,10 +259,11 @@ class _AddPropertyState extends State<AddProperty> {
                     return null;
                   },
                   onChanged: (newValue) {
-                    setState(() {
-                      _selectedValue = newValue;
-                      propertyTypeCtlr.text = newValue!;
-                    });
+                    _selectedValue = newValue;
+                    propertyTypeCtlr.text = newValue!;
+                    ref
+                        .read(propertyFormProvider.notifier)
+                        .updatePropertyType(newValue);
                   },
                 ),
 
@@ -408,16 +272,21 @@ class _AddPropertyState extends State<AddProperty> {
                 divider,
                 TextFieldContainer(
                   text: 'Price',
+                  keyboardType: TextInputType.phone,
                   controllerName: priceCtlr,
-                  validator: (String? value) {
+                  validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter  property price';
                     }
                     if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                       return 'Only numbers allowed';
                     }
+                    ref
+                        .read(propertyFormProvider.notifier)
+                        .updatePrice(double.parse(value));
                     return null;
                   },
+                  readOnly: false,
                 ),
                 divider,
                 if (propertyTypeCtlr.text == _items[0] ||
@@ -434,12 +303,16 @@ class _AddPropertyState extends State<AddProperty> {
                         TextFieldContainer(
                           text: "Building name",
                           controllerName: buildingNamectlr,
-                          validator: (String? value) {
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your building name';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateLocation(value);
                             return null;
                           },
+                          readOnly: false,
                         ),
 
                         divider,
@@ -448,52 +321,67 @@ class _AddPropertyState extends State<AddProperty> {
                           text: 'Ready to move',
                           value: readytoMove,
                           onChanged: (newValue) {
-                            setState(() {
-                              readytoMove = newValue ?? false;
-                            });
+                            readytoMove = newValue ?? false;
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateReadyToMove(readytoMove);
                           },
                         ),
                         divider,
                         TextFieldContainer(
                           text: "BHK",
                           controllerName: bhkctlr,
-                          validator: (String? value) {
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter about property';
                             }
                             if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                               return 'Only numbers allowed';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateBhk(int.parse(value));
                             return null;
                           },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
                           text: "Bathrooms",
+                          keyboardType: TextInputType.phone,
                           controllerName: bathroomctlr,
-                          validator: (String? value) {
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the quantity';
                             }
                             if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                               return 'Only numbers allowed';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateBathrooms(int.parse(value));
                             return null;
                           },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
                           text: "Carpet Area(sqft)",
+                          keyboardType: TextInputType.phone,
                           controllerName: propertySqrftCtlr,
-                          validator: (String? value) {
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter sqft';
                             }
                             if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                               return 'Only numbers allowed';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateSqft(double.parse(value));
                             return null;
                           },
+                          readOnly: false,
                         ),
 
                         divider,
@@ -501,23 +389,29 @@ class _AddPropertyState extends State<AddProperty> {
                           text: 'Car parking',
                           value: carparking,
                           onChanged: (newValue) {
-                            setState(() {
-                              carparking = newValue ?? false;
-                            });
+                            carparking = newValue ?? false;
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateCarParking(carparking);
                           },
                         ),
                         TextFieldContainer(
                           text: "maintenance(Monthly)",
                           controllerName: maintenancectlr,
-                          validator: (String? value) {
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the amount of maintence';
                             }
                             if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                               return 'Only numbers allowed';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateMaintenance(double.parse(value));
                             return null;
                           },
+                          readOnly: false,
                         ),
                       ],
                     ),
@@ -535,26 +429,33 @@ class _AddPropertyState extends State<AddProperty> {
                         TextFieldContainer(
                           text: 'Property sqft',
                           controllerName: propertySqrftCtlr,
-                          validator: (String? value) {
+                          validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter property sqft';
                             }
                             if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
                               return 'Only numbers allowed';
                             }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateSqft(double.parse(value));
                             return null;
                           },
+                          readOnly: false,
                         ),
                         divider,
                         TextFieldContainer(
                           text: "Aminities",
                           controllerName: aminitiesctlr,
-                          // validator: (String? value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return 'Please enter Aminities ';
-                          //   }
-                          //   return null;
-                          // },
+                          validator: (value) {
+                            // if (value == null || value.isEmpty) {
+                            //   return 'Please enter Aminities ';
+                            // }
+                            ref
+                                .read(propertyFormProvider.notifier)
+                                .updateAminities(value!);
+                          },
+                          readOnly: false,
                         ),
                       ],
                     ),
@@ -563,24 +464,70 @@ class _AddPropertyState extends State<AddProperty> {
                 TextFieldContainer(
                   text: 'Description/Extra Details',
                   controllerName: descriptionCtlr,
-                  validator: (String? value) {
+                  isMultiline: true,
+                  validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter property description';
                     }
+                    ref
+                        .read(propertyFormProvider.notifier)
+                        .updateDescription(value);
                     return null;
                   },
+                  readOnly: false,
                 ),
                 divider,
-                TextFieldContainer(
-                  text: 'Location',
-                  controllerName: locationCtlr,
+
+                TextFormField(
+                  controller: locationCtlr,
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the location';
                     }
+                    ref
+                        .read(propertyFormProvider.notifier)
+                        .updateLocation(value);
                     return null;
                   },
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.opacitygreyColor,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+
+                    hintText: 'Location',
+                    hintStyle: TextStyle(
+                      fontSize: 18.sp,
+                      color: AppColors.opacitygrayColorText,
+                    ),
+                  ),
+                  onTap: () async {
+                    final pickedLocation = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PickLocationScreen(),
+                      ),
+                    );
+
+                    if (pickedLocation != null) {
+                      latitude = pickedLocation.latitude;
+                      longitude = pickedLocation.longitude;
+                      String address = await convertLatLngToAddress(
+                        latitude!,
+                        longitude!,
+                      );
+                      locationCtlr.text = address;
+                      ref
+                          .read(propertyFormProvider.notifier)
+                          .updateLocation(address);
+                    }
+                  },
                 ),
+                SizedBox(height: 10),
               ],
             ),
           ),
@@ -588,56 +535,81 @@ class _AddPropertyState extends State<AddProperty> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: GreenButton(
-          text: 'Next',
-          onTap: () async {
-            if (formKey.currentState!.validate()) {
-              Map<String, dynamic> propertyDetailsAll = {};
-              if (files.isNotEmpty) {
-                final imageUrls = await uploadMultipleUnsigned(
-                  files,
-                  cloudName: 'dcijrvaw3',
-                  uploadPreset: 'property_images',
-                );
-                propertyDetailsAll = {
-                  "PROPERTY TYPE": _selectedValue,
-                  "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
-                  "BUILDING NAME": buildingNamectlr.text.trim(),
-                  "READY_TO_MOVE": readytoMove ? "YES" : "NO",
-                  "BHK": int.tryParse(bhkctlr.text.trim()),
-                  "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
-                  "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
-                  'CARPARKING': carparking ? "yes" : "no",
-                  "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
-
-                  "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
-                  "AMINITIES": aminitiesctlr.text.trim(),
-                  "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
-                  "PROPERTY LOCATION": locationCtlr.text.trim(),
-                  "ADDED_DATE": DateTime.now(),
-                  "IMAGE": imageUrls,
-                };
-
-                // clearController();
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddLandlordDetails(
-                      propertyMap: propertyDetailsAll,
-                      from: widget.from,
-                      property: widget.property,
-                    ),
-                  ),
-                );
-              } else {
-                alertForImgAdd(context);
-              }
-            }
-          },
-        ),
+        child: isLoading
+            ? CircularProgressIndicator(
+                color: AppColors.greenColor,
+                padding: EdgeInsets.symmetric(horizontal: 140),
+              )
+            : GreenButton(
+                text: 'Next',
+                onTap: () {
+                  if (!isLoading) _handleNext(context, ref);
+                },
+              ),
       ),
     );
+  }
+
+  Future<void> _handleNext(BuildContext context, WidgetRef ref) async {
+    if (!formKey.currentState!.validate()) return;
+
+    ref.read(loadingProvider.notifier).state = true; // show loader
+
+    try {
+      final pickedFiles = ref.read(propertyImagesProvider);
+      List<String> finalImageUrls = [];
+
+      if (pickedFiles.isNotEmpty) {
+        final urls = await uploadMultipleUnsigned(
+          pickedFiles,
+          cloudName: 'dcijrvaw3',
+          uploadPreset: 'property_images',
+        );
+        finalImageUrls = urls;
+      } else {
+        finalImageUrls = imageFile;
+      }
+
+      if (finalImageUrls.isEmpty) {
+        alertForImgAdd(context);
+        return;
+      }
+
+      final propertyDetailsAll = {
+        "PROPERTY TYPE": _selectedValue,
+        "PROPERTY PRICE": int.tryParse(priceCtlr.text.trim()),
+        "BUILDING NAME": buildingNamectlr.text.trim(),
+        "READY_TO_MOVE": readytoMove ? "YES" : "NO",
+        "BHK": int.tryParse(bhkctlr.text.trim()),
+        "BATHROOMS": int.tryParse(bathroomctlr.text.trim()),
+        "CARPET AREA": int.tryParse(propertySqrftCtlr.text.trim()),
+        'CARPARKING': carparking ? "yes" : "no",
+        "MAINTENANCE": int.tryParse(maintenancectlr.text.trim()),
+        "PROPERTY SQFT": int.tryParse(propertySqrftCtlr.text.trim()),
+        "AMINITIES": aminitiesctlr.text.trim(),
+        "PROPERTY DESCRIPTION": descriptionCtlr.text.trim(),
+        "PROPERTY LOCATION": locationCtlr.text.trim(),
+        "LATITUDE": latitude,
+        "LONGITUDE": longitude,
+        "ADDED_DATE": DateTime.now(),
+        "IMAGE": finalImageUrls,
+      };
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddLandlordDetails(
+            propertyMap: propertyDetailsAll,
+            from: widget.from,
+            property: widget.property,
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint("Error uploading property: $e");
+    } finally {
+      ref.read(loadingProvider.notifier).state = false;
+    }
   }
 }
 

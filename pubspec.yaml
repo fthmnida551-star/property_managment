@@ -45,15 +45,17 @@ dependencies:
   cloudinary_public: ^0.23.1
   image_picker: ^1.0.7
   interactive_bottom_sheet: ^1.1.0
-  google_maps_flutter: ^2.6.0
-  geocoding: ^3.0.0
-  location: ^6.0.2
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
+  geocoding: ^4.0.0
   shared_preferences: ^2.2.2
   flutter_riverpod: ^3.0.3
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+ 
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -80,6 +82,8 @@ flutter:
     - assets/propertydetails/
     - assets/auth/
     - assets/profile/
+    - assets/logo/
+    
  
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -107,3 +111,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"

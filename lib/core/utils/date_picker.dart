@@ -51,7 +51,7 @@ class CalendarPickerContainer extends FormField<DateTime> {
                      priffixIcon: const Icon(Icons.calendar_today),
                      suffixIcon: const Icon(Icons.arrow_drop_down),
                      controllerName: controller,
-                     validator: (_) => null, // handled by FormField below
+                     validator: (_) => null, readOnly: false, // handled by FormField below
                    ),
                    if (state.hasError)
                      Padding(

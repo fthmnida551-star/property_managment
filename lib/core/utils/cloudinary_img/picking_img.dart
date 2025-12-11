@@ -1,43 +1,29 @@
 import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:property_managment/core/utils/cloudinary_img/dio.dart';
+import 'package:property_managment/features/property/controllers/property_cntlr.dart';
 
-final picker = ImagePicker();
-List<File> files = [];
 
-pickAndUpload() async {
-  final picked = await picker.pickImage(
-    source: ImageSource.gallery,
-    maxWidth: 1600,
-  );
-  if (picked == null) return;
-  final pickedList = await picker.pickMultiImage(maxWidth: 1600);
-  if (pickedList.isEmpty) return;
+// final picker = ImagePicker();
+// List<File> files = [];
 
-   files = pickedList.map((x) => File(x.path)).toList();
-// 
-  // final imageUrls = await uploadMultipleUnsigned(
-  //   files,
-  //   cloudName: 'dcijrvaw3',
-  //   uploadPreset: 'property_images',
-  // );
+// pickAndUpload() async {
+//   final picked = await picker.pickImage(
+//     source: ImageSource.gallery,
+//     maxWidth: 1600,
+//   );
+//   if (picked == null) return;
+//   final pickedList = await picker.pickMultiImage(maxWidth: 1600);
+//   if (pickedList.isEmpty) return;
 
-  // choose uploadSigned(file) or uploadUnsigned(file)
-  // final imageUrl = await uploadUnsigned(file, cloudName: 'dcijrvaw3', uploadPreset: 'property_images');
-  // final imageUrl= await uploadMultipleUnsigned(
-  // [file1, file2, file3],
-  // cloudName: 'your_cloud_name',
-  // uploadPreset: 'your_upload_preset',
-  // );
-  // print(imageUrl);
+//    files = pickedList.map((x) => File(x.path)).toList();
 
-  // // save metadata to Firestore
-  // await FirebaseFirestore.instance.collection('uploads').add({
-  //   'url': imageUrl,
-  //   'uploadedBy': 'uid-or-name',
-  //   'timestamp': FieldValue.serverTimestamp(),
-  // });
+// }
 
-  // print('Uploaded URL: $imageUrls');
-}
+
+
+
+
+
