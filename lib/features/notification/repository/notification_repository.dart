@@ -20,6 +20,16 @@ class NotificationRepository {
     });
   }
 
+  // Stream<List<Map<String, dynamic>>> getNotifications() {
+  //   return service.notifications
+  //       .orderBy("timestamp", descending: true)
+  //       .snapshots()
+  //       .map(
+  //         (snapshot) => snapshot.docs
+  //             .map((doc) => doc.data() as Map<String, dynamic>)
+  //             .toList(),
+  //       );
+  // }
   Stream<List<Map<String, dynamic>>> getNotifications() {
     return service.notifications
         .orderBy("timestamp", descending: true)

@@ -10,6 +10,7 @@ import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
 import 'package:property_managment/features/booking/controller/booking_controllers.dart';
 import 'package:property_managment/features/property/controllers/property_cntlr.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/editdeletebutton.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/booking/screens/button.dart';
@@ -30,13 +31,11 @@ class BookedDetails extends ConsumerWidget {
     required this.property,
   });
 
-  
-
   // String userRole = "";
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRole = ref.watch(userRoleProvider);
-    final loginName=ref.watch(userNameProvider);
+    final loginName = ref.watch(userNameProvider);
     final bookingData = ref.watch(bookingProvider(bookedProperty.id));
     log('user role $userRole');
     return Scaffold(
@@ -91,95 +90,103 @@ class BookedDetails extends ConsumerWidget {
 
                   SizedBox(height: 16),
 
-                  Row(
-                    children: [
-                      Icon(Icons.person_rounded, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text(booking.name),
-                    ],
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.person_rounded, color: Colors.green),
+                  //     SizedBox(width: 8),
+                  //     Text(booking.name),
+                  //   ],
+                  // ),
+
+                  // SizedBox(height: 12),
+
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.phone_rounded, color: Colors.green),
+                  //     SizedBox(width: 8),
+                  //     Text(booking.contact),
+                  //   ],
+                  // ),
+
+                  // SizedBox(height: 12),
+
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.mail_rounded, color: Colors.green),
+                  //     SizedBox(width: 8),
+                  //     Text(booking.email),
+                  //   ],
+                  // ),
+
+                  // SizedBox(height: 12),
+
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.calendar_month_rounded, color: Colors.green),
+                  //     SizedBox(width: 8),
+                  //     Text("${booking.date}"),
+                  //   ],
+                  // ),
+
+                  // SizedBox(height: 50),
+
+                  // if ( userRole.value!="Agent")
+                  //   Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: [
+                  //       Button(
+                  //         text: 'Delete',
+                  //         onTap: () async {
+                  //           ref
+                  //               .read(bookingRepoProvider)
+                  //               .deleteBooking(property.bookingid, property.id,loginName.value!);
+
+                  //           Navigator.pushReplacement(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => BottomNavigationWidget(
+                  //                 currentIndex: 1,
+                  //                 propertytype: [],
+                  //                 price: null,
+                  //                 sqft: null,
+                  //               ),
+                  //             ),
+                  //           );
+                  //         },
+                  //         icon: Icons.delete_outline_outlined,
+                  //       ),
+                  //       Button(
+                  //         text: 'Edit',
+                          // onTap: () async {
+                          //   final updatedBooking = await Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => BookingDetails(
+                          //         propertyId: property.id,
+                          //         bookedData: booking, // updated booking
+                          //       ),
+                          //     ),
+                          //   );
+                          //   if (updatedBooking != null) {
+                          //     ref
+                          //         .read(bookingRepoProvider)
+                          //         .updateBooking(booking.id, booking.toMap());
+                          //   }
+                          // },
+                  //         icon: Icons.edit_outlined,
+                  //       ),
+                  //     ],
+                  //   ),
+                  BookedDetailsCard(
+                    bookedData: bookedProperty,
+                    property: property,
+                    // userRole: userRole.value!,
+                    // loginName: loginanme.value!,
+                    // onDelete: (bookingId, propertyId, loginName) {
+                    //   repo.deleteBooking(bookingId, propertyId, loginName
+                    //   );
+                    // },
                   ),
-
-                  SizedBox(height: 12),
-
-                  Row(
-                    children: [
-                      Icon(Icons.phone_rounded, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text(booking.contact),
-                    ],
-                  ),
-
-                  SizedBox(height: 12),
-
-                  Row(
-                    children: [
-                      Icon(Icons.mail_rounded, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text(booking.email),
-                    ],
-                  ),
-
-                  SizedBox(height: 12),
-
-                  Row(
-                    children: [
-                      Icon(Icons.calendar_month_rounded, color: Colors.green),
-                      SizedBox(width: 8),
-                      Text("${booking.date}"),
-                    ],
-                  ),
-
-                  SizedBox(height: 50),
-
-                  if ( userRole.value!="Agent")
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Button(
-                          text: 'Delete',
-                          onTap: () async {
-                            ref
-                                .read(bookingRepoProvider)
-                                .deleteBooking(property.bookingid, property.id,loginName.value!);
-
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BottomNavigationWidget(
-                                  currentIndex: 1,
-                                  propertytype: [],
-                                  price: null,
-                                  sqft: null,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icons.delete_outline_outlined,
-                        ),
-
-                        Button(
-                          text: 'Edit',
-                          onTap: () async {
-                            final updatedBooking = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => BookingDetails(
-                                  propertyId: property.id,
-                                  bookedData: booking, // updated booking
-                                ),
-                              ),
-                            );
-
-                            if (updatedBooking != null) {
-                              ref
-                                  .read(bookingRepoProvider)
-                                  .updateBooking(booking.id, booking.toMap());
-                            }
-                          },
-                          icon: Icons.edit_outlined,
-                        ),
-                      ],
-                    ),
                 ],
               ),
             ),

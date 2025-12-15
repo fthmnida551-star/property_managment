@@ -40,6 +40,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       resizeToAvoidBottomInset: false,
       body: _pages[widget.currentIndex],
       bottomNavigationBar: SafeArea(
@@ -79,7 +80,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
                   icon: Padding(
                     padding: const EdgeInsets.only(top: 8),
                     // child: SvgPicture.asset(AssetResource.notification),
-                    child: Icon(Icons.message_outlined),
+                    child: Icon(Icons.notifications_outlined),
                   ),
                   label: '',
                 ),

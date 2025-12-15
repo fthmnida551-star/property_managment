@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:property_managment/core/constant/app_colors.dart';
 
@@ -38,7 +39,16 @@ class TextFieldContainer extends StatelessWidget {
       maxLines: (isMultiline ?? false) ? null : 1,
 // keyboardAppearance: TextInputType.,
 
-
+// inputFormatters: [
+//   text == "Contact"? LengthLimitingTextInputFormatter(10): LengthLimitingTextInputFormatter(300)
+// ],
+inputFormatters: keyboardType == TextInputType.phone ? [
+  FilteringTextInputFormatter.digitsOnly,
+  LengthLimitingTextInputFormatter(10),
+]
+:[
+  LengthLimitingTextInputFormatter(300),
+],
       decoration: InputDecoration(
 
         border: OutlineInputBorder(

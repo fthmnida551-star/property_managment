@@ -21,12 +21,12 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final thememode=ref.watch(themeProvider);
+  Widget build(BuildContext context) {
+    
     return ScreenUtilInit(
       designSize: const Size(
         390,
@@ -36,10 +36,8 @@ class MyApp extends ConsumerWidget {
       splitScreenMode: true, // handles tablet split screen
       builder: (context, child) {
         return MaterialApp(
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
-          themeMode: thememode,
-          home: BookedPropertiesPage(bookedItems: [ ],),
+          
+          home: Splashscreen(),
           debugShowCheckedModeBanner: false,
         );
       },

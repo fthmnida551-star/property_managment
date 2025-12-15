@@ -5,7 +5,7 @@ import 'package:property_managment/features/notification/repository/notification
 final notificationRepositoryProvider = Provider(
   (ref) => NotificationRepository(ref.watch(firebaseServiceProvider)),
 );
-final noticationProvider = StreamProvider(
+final notificationProvider = StreamProvider(
   (ref) => ref.watch(notificationRepositoryProvider).getNotifications(),
  
 );

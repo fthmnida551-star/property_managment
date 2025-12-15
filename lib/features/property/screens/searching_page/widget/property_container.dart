@@ -59,13 +59,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
-                    // child: Image.asset(
-                    //   // AssetResource.building,
-                    //   ('${widget.property.image}'),
-                    //   fit: BoxFit.cover,
-                    //   height: 209,
-                    //   width: 356,
-                    // ),
+                   
                     child: Image.network(
                       widget.property.image[0],
                       fit: BoxFit.cover,
@@ -189,7 +183,7 @@ class _PropertyContainerState extends State<PropertyContainer> {
                     ),
                   ],
                 ),
-
+      
                 widget.isShow
                     ? Align(
                         alignment: Alignment.bottomRight,

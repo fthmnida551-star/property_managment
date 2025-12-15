@@ -46,6 +46,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
     namectlr.clear();
     contactCtlr.clear();
     emailCtlr.clear();
+    datectlr.clear();
   }
 
   editBooking() {
@@ -164,7 +165,7 @@ class _BookingDetailsState extends ConsumerState<BookingDetails> {
                   hintText: 'Select date',
 
                   validator: (date) {
-                    if (date == null) {
+                    if (date == null&&datectlr.text.isEmpty) {
                       return 'Please select a date';
                     }
                     return null;

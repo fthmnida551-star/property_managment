@@ -8,29 +8,57 @@ import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/booking/screens/bookedpages.dart';
+import 'package:property_managment/features/booking/screens/nonbookedpage.dart';
 import 'package:property_managment/features/home/controller/dashboard_controller.dart';
-import 'package:property_managment/features/home/screens/widget/theme_pop.dart';
-import 'package:property_managment/features/notification/screens/notificationscreen.dart';
-import 'package:property_managment/features/profile/screens/profile.dart';
+import 'package:property_managment/features/property/screens/propertydetails/property_details/booked.dart';
+import 'package:property_managment/features/property/screens/propertydetails/property_details/not_booked.dart';
+import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
 import 'package:property_managment/modelClass/property_model.dart';
 import 'package:property_managment/features/home/screens/widget/bookingcontainer.dart';
 import 'package:property_managment/features/home/screens/widget/container_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   DashboardScreen({super.key});
 
+  @override
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   final FirebaseFirestore fdb = FirebaseFirestore.instance;
 
   List<BookingModel> bookedDetails = [];
+
   List<String> themelist = ["Light", "Dark"];
 
   PropertyModel? property;
 
+  String profilePic = "";
+  String userNme = "";
+  String userRole = "";
+
+  getProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    profilePic = prefs.getString("profilepic") ?? "";
+    userNme = prefs.getString("name") ?? "";
+    userRole = prefs.getString("role") ?? "";
+    setState(() {});
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProfileData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final bookedAsync = ref.watch(bookedpropertyListProvider);
     final propertyCountAsync = ref.watch(propertyListProvider);
     final bookedcountAsync = ref.watch(bookedListProvider);
@@ -39,8 +67,8 @@ class DashboardScreen extends ConsumerWidget {
     final vacant = (total - booked) < 0 ? 0 : (total - booked);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      // backgroundColor: Colors.white,
+      extendBody: true,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -48,15 +76,23 @@ class DashboardScreen extends ConsumerWidget {
             DrawerHeader(
               decoration: BoxDecoration(color: AppColors.greenColor),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 180),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage(AssetResource.plotX),
-                    ),
+                  CircleAvatar(
+                    radius: 30,
+                    child: profilePic.isNotEmpty
+                        ? Image.network(profilePic)
+                        : Icon(Icons.person),
                   ),
-                  // Image.asset(AssetResource.name),
+                  SizedBox(height: 10),
+                  Text(
+                    userNme,
+                    style: AppTextstyle.propertyMediumTextstyle(context),
+                  ),
+                  Text(
+                    userRole,
+                    style: AppTextstyle.propertyMediumTextstyle(context),
+                  ),
                 ],
               ),
             ),
@@ -110,8 +146,26 @@ class DashboardScreen extends ConsumerWidget {
                   fontColor: AppColors.black,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                //  Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (_) => BookedPropertyScreen(
+                //         property: Property,
+                //         bookedData: bookingData,
+                //       ),
+                //     ),
+                //   );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BookedPropertiesPage(bookedItems: []),
+                  ),
+                );
+              },
             ),
+            Divider(color: AppColors.black, thickness: 0.6),
             ListTile(
               leading: Icon(Icons.note_add),
               title: Text(
@@ -121,7 +175,22 @@ class DashboardScreen extends ConsumerWidget {
                   fontColor: AppColors.black,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                //      Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => NotBookedPropertyScreen(
+                //       userName: '',
+                //       property: property,
+                //     ),
+                //   ), //NotBookedPropertyScreen()),
+                // );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => NotBookedPropertiesPage()),
+                );
+              },
             ),
             Divider(color: AppColors.black, thickness: 0.6),
             ListTile(
@@ -147,60 +216,86 @@ class DashboardScreen extends ConsumerWidget {
                 );
               },
             ),
-            Divider(color: AppColors.black, thickness: 0.6),
-            ListTile(
-              leading: Icon(Icons.dark_mode),
-              title: Text(
-                "Theme",
-                style: AppTextstyle.propertyMediumTextstyle(
-                  context,
-                  fontColor: AppColors.black,
-                ),
-              ),
-              onTap: () {
-                showThemePop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.h),
+            Divider(thickness: 0.6, color: AppColors.black),
+            // Divider(color: AppColors.black, thickness: 0.6),
+            // ListTile(
+            //   leading: Icon(Icons.dark_mode),
+            //   title: Text("Theme"),
+            //   subtitle: Text(
+            //     isDark ? "Dark" : "Light",
+            //     style: Theme.of(context).textTheme.bodySmall,
+            //   ),
 
-        child: Stack(
-          children: [
-            AppbarWidget(
-              height: MediaQuery.of(context).size.height * .12,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, top: 60),
-                child: Column(
-                  children: [
-                    SvgPicture.asset(AssetResource.appLogo),
-                    Text(
-                      'Property Mangement',
-                      style: AppTextstyle.propertyMediumTextstyle(
-                        context,
-                        fontColor: AppColors.black,
-                        fontSize: 12.sp,
+            //   // style: AppTextstyle.propertyMediumTextstyle(
+            //   //   context,
+            //   //   fontColor: AppColors.black,
+            //   // ),
+            //   onTap: () {
+            //     showThemePop(context);
+            //   },
+            // ),
+            SizedBox(height: 140),
+            InkWell(
+              onTap: () {
+                logoutAlert(context);
+              },
+              child: Center(
+                child: Container(
+                  width: 120,
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.redcolor),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout, color: AppColors.redcolor),
+                      SizedBox(width: 10),
+                      Text(
+                        "Logout",
+                        style: AppTextstyle.propertyMediumTextstyle(
+                          context,
+                          fontColor: AppColors.redcolor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              child: Builder(
-                builder: (context) => IconButton(
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  icon: Icon(Icons.menu),
-                  color: AppColors.opacityGreyy,
-                  iconSize: 30,
+                    ],
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
+      appBar: AppbarWidget(
+        height: MediaQuery.of(context).size.height * .12,
+        child: Row(
+          children: [
+            Builder(
+              builder: (context) => IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: Icon(Icons.menu),
+                color: Colors.blueGrey.shade100,
+                iconSize: 30,
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(AssetResource.appLogo),
+                Text(
+                  'Property Mangement',
+                  style: AppTextstyle.propertyMediumTextstyle(
+                    context,
+                    fontColor: AppColors.black,
+                    fontSize: 12.sp,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
