@@ -23,7 +23,10 @@ class TextFieldContainer extends StatelessWidget {
     this.validator,
     required this.readOnly,
     this.isMultiline=false,
-    this.keyboardType,
+    this.keyboardType, 
+    // required TextEditingController controller, 
+    // required bool obscureText, 
+    // required InputDecoration decoration,
 
   });
 

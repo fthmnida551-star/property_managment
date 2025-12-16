@@ -1446,7 +1446,11 @@ class _ProfilescreenState extends ConsumerState<Profilescreen> {
                             backgroundColor: AppColors.opacityGrey,
                             child: CircleAvatar(
                               radius: 57,
-                              backgroundImage: AssetImage(AssetResource.profilepic),
+                              backgroundImage: (user.profileImage != null && 
+                              user.profileImage.isNotEmpty)
+                              ? NetworkImage(user.profileImage)
+                              : const AssetImage(AssetResource.profilepic)
+                              as ImageProvider,
                             ),
                           ),
 
