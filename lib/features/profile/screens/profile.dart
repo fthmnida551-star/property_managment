@@ -1398,8 +1398,7 @@ class Profilescreen extends ConsumerStatefulWidget {
 class _ProfilescreenState extends ConsumerState<Profilescreen> {
   @override
   Widget build(BuildContext context) {
-    final userdata = ref.watch(profileListProvider);
-
+    final userdata=ref.watch(profileListProvider);
     return Scaffold(
       appBar: AppbarWidget(
         child: Row(

@@ -13,7 +13,7 @@ class _PickLocationScreenState extends State<PickLocationScreen> {
   LatLng? selectedPoint;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pick Location"),

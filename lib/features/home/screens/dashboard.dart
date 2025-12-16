@@ -8,7 +8,11 @@ import 'package:property_managment/core/constant/app_textstyl.dart';
 import 'package:property_managment/core/constant/asset_resource.dart';
 import 'package:property_managment/core/utils/appbar_widget.dart';
 import 'package:property_managment/core/utils/bottom_navigation_bar.dart';
+import 'package:property_managment/features/booking/screens/bookedpages.dart';
+import 'package:property_managment/features/booking/screens/nonbookedpage.dart';
 import 'package:property_managment/features/home/controller/dashboard_controller.dart';
+import 'package:property_managment/features/property/screens/propertydetails/property_details/booked.dart';
+import 'package:property_managment/features/property/screens/propertydetails/property_details/not_booked.dart';
 import 'package:property_managment/features/property/screens/propertydetails/widget/logout_alert.dart';
 import 'package:property_managment/features/users/screens/users_screen.dart';
 import 'package:property_managment/modelClass/bookingmodel.dart';
@@ -61,7 +65,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final total = ref.watch(propertyListProvider).value ?? 0;
     final booked = ref.watch(bookedListProvider).value ?? 0;
     final vacant = (total - booked) < 0 ? 0 : (total - booked);
-   
 
     return Scaffold(
       // backgroundColor: Colors.white,
@@ -90,7 +93,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     userRole,
                     style: AppTextstyle.propertyMediumTextstyle(context),
                   ),
-                 
                 ],
               ),
             ),
@@ -144,7 +146,24 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   fontColor: AppColors.black,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                //  Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (_) => BookedPropertyScreen(
+                //         property: Property,
+                //         bookedData: bookingData,
+                //       ),
+                //     ),
+                //   );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BookedPropertiesPage(bookedItems: []),
+                  ),
+                );
+              },
             ),
             Divider(color: AppColors.black, thickness: 0.6),
             ListTile(
@@ -156,7 +175,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   fontColor: AppColors.black,
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                //      Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => NotBookedPropertyScreen(
+                //       userName: '',
+                //       property: property,
+                //     ),
+                //   ), //NotBookedPropertyScreen()),
+                // );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => NotBookedPropertiesPage()),
+                );
+              },
             ),
             Divider(color: AppColors.black, thickness: 0.6),
             ListTile(
@@ -182,10 +216,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 );
               },
             ),
-            Divider(
-              thickness: 0.6,
-              color: AppColors.black,
-            ),
+            Divider(thickness: 0.6, color: AppColors.black),
             // Divider(color: AppColors.black, thickness: 0.6),
             // ListTile(
             //   leading: Icon(Icons.dark_mode),
@@ -213,12 +244,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   width: 120,
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.redcolor),borderRadius: BorderRadius.circular(15)
+                    border: Border.all(color: AppColors.redcolor),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                   child: Row(
                     children: [
                       Icon(Icons.logout, color: AppColors.redcolor),
-                      SizedBox(width: 10,),
+                      SizedBox(width: 10),
                       Text(
                         "Logout",
                         style: AppTextstyle.propertyMediumTextstyle(
@@ -242,7 +274,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               builder: (context) => IconButton(
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 icon: Icon(Icons.menu),
-                color:Colors.blueGrey.shade100,
+                color: Colors.blueGrey.shade100,
                 iconSize: 30,
               ),
             ),
